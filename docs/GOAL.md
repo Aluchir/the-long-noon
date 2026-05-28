@@ -34,9 +34,9 @@ The loop's "done" = everything below is authored and committed, and `docs/tech/f
 
 ### B. Story & text (`docs/lore/`, `docs/design/`)
 - [x] Dialogue scripts per character (Tinker, Forager, Keeper, One Who Counts, Gardener, Rememberer)
-- [ ] Full codex fragment text per region (expand the catalogue into actual fragments)
+- [x] Full codex fragment text per region (expand the catalogue into actual fragments)
 - [x] Forgotten-script cipher mapping (a real substitution table)
-- [ ] The three ending scripts (Gift Returned / Long Noon Continues / Third Way)
+- [x] The three ending scripts (Gift Returned / Long Noon Continues / Third Way)
 - [ ] Per-region quest/beat flow (objectives, gates, lore beats)
 - [ ] Weapon/tool + material flavor finalized as data-ready entries
 
