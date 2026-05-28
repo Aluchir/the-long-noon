@@ -49,9 +49,9 @@ The loop's "done" = everything below is authored and committed, and `docs/tech/f
 - [x] Data authoring guide (how the CSVs map to the DataAsset/DataTable structs)
 
 ### D. Run-enablement (the bridge to a human-run build)
-- [ ] `docs/tech/first-playable-checklist.md` — exact ordered UE editor steps to first run
-- [ ] `docs/tech/build-and-run.md` — headless build commands (for when UE is installed) + CI notes
-- [ ] Final consistency pass (code references, doc links, Ithura sync of new work)
+- [x] `docs/tech/first-playable-checklist.md` — exact ordered UE editor steps to first run
+- [x] `docs/tech/build-and-run.md` — headless build commands (for when UE is installed) + CI notes
+- [x] Final consistency pass (code references, doc links, Ithura sync of new work)
 
 ---
 ### Done so far (prior turns)
