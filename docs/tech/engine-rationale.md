@@ -1,31 +1,39 @@
-# Engine Rationale — why Godot 4 (C#)
+# Engine Rationale — why Unreal Engine 5
 
-> The decision record for the engine choice. Confirmed: **Godot 4.x with C#.**
+> The decision record for the engine choice. Confirmed: **Unreal Engine 5 (5.4)**, C++ with Blueprints.
 
 ## The decision
-**Godot 4 (C#), Forward+ renderer, stylized 3D, third-person.** Steam on Windows first; Linux + macOS later.
+**Unreal Engine 5**, third-person, full 3D, for commercial Steam release (Windows first; Linux + macOS later). C++ for systems, Blueprints for content/iteration.
 
-## Why Godot 4
-- **Fit for the art:** the game is stylized/low-poly, not photoreal. Godot 4's Vulkan Forward+ renderer is more than sufficient for a cozy golden-hour look. We don't need Unreal-class fidelity, so its weight buys us nothing.
-- **Cost & ownership:** free, open-source (MIT), **no royalties, no per-seat fees, ever.** Important for an indie-scale project and removes licensing-policy risk.
-- **Cross-platform export is trivial:** one-click export templates for Windows, Linux, and macOS — directly serving the Steam-first, Linux/Mac-later plan.
-- **Steam integration:** mature community bindings (GodotSteam) cover achievements, cloud saves, rich presence, Steam Input, and Deck.
-- **Light builds & fast iteration:** small editor, fast open/run cycle, low-overhead exports — good for a small team.
-- **C# support:** lets us write typed, testable gameplay code (our preference) while keeping the option of GDScript for quick scene glue.
+## Why Unreal 5
+- **Built for full 3D third-person:** ships with a production-grade **Third Person template** (character, camera, Enhanced Input, sample map) — the playable base exists on day one rather than being hand-built.
+- **Proven on Steam for 3D:** Unreal powers a very large share of 3D Steam titles, AAA and indie. Strong, well-trodden shipping path with established export/packaging.
+- **Best-in-class 3D toolset:** rendering (Lumen GI, Nanite), animation (Control Rig, sequencer), world-building, and the Modeling Tools for greyboxing without external DCC tools early on.
+- **Blueprints + C++:** designers iterate in Blueprints; systems live in C++. Lets a small team move fast on content while keeping core logic robust and typed.
+- **Marketplace (Fab):** large library of stylized characters, environments, and tools to accelerate a small team.
+- **Hireable talent & tutorials:** deep pool of Unreal developers and learning material.
+
+## The tradeoffs we accept
+- **Heavier than we strictly need** for a cute/stylized look — Nanite/Lumen are more than this art demands. We mitigate by using stylized materials and only the features we need (Lumen optional; can bake/keep it light).
+- **Bigger builds and longer iteration/compile times** than a lightweight engine.
+- **Binary content:** all `.uasset`/`.umap` are binary, so **Git LFS is mandatory** and scenes do not text-merge (see [version control](version-control-and-branching.md)). This shapes our collaboration workflow.
+- **Royalty:** 5% on gross revenue above $1M per product (a good problem to have; negligible pre-success).
+- **Linux shipping** is more involved than on lighter engines; macOS is supported. Windows is the launch target regardless.
 
 ## Why not the others
-- **Unreal 5:** overkill for cozy stylized 3D; heavy builds; rougher Linux shipping story; 5% royalty after $1M. Its strengths (Nanite/Lumen, AAA fidelity) are irrelevant to our art direction.
-- **Unity:** genuinely viable and the only serious fallback — bigger ready-made-systems ecosystem (controllers, inventory kits). We pass for now on cost/ownership grounds and recent licensing-trust concerns, but it remains the documented alternative if we later want its asset ecosystem to move faster.
+- **Unity:** the close alternative — lighter, big asset ecosystem, also strong for stylized 3D on Steam. We chose Unreal for its superior out-of-the-box third-person 3D base, rendering/animation tooling, and 3D-on-Steam pedigree for a full-3D title. Unity remains a reasonable fallback if iteration speed/build weight become painful.
+- **Godot 4:** free, light, and great for 2D and lighter 3D, but its 3D ecosystem is less mature and its 3D-on-Steam track record is thinner. Not the safest pick for a full-3D third-person commercial release. (We briefly scaffolded in Godot, then switched after reconfirming the full-3D/third-person/Steam priorities.)
 
 ## Key technical choices that follow
-- **C# (.NET 8)** as the primary language; GDScript allowed for trivial scene glue.
-- **Forward+** renderer (desktop-class; we are not targeting mobile/web).
-- **Per-region baked lighting** rather than a runtime day/night cycle — matches the permanent-Long-Noon design ([Sprint 1 §5](../SPRINT-1-DECISIONS.md#5-time-of-day--the-permanent-long-noon)) and is cheaper and more art-directable.
-- **Data-driven content** (items, recipes, regions, lore fragments) so designers tune without code (see [architecture](coding-standards-and-architecture.md)).
+- **C++ primary for systems**, **Blueprints for content and rapid iteration.**
+- **Enhanced Input** (UE5) for all input + remapping + gamepad/Steam Input.
+- **Per-region baked/authored lighting** for the permanent-Long-Noon look ([Sprint 1 §5](../SPRINT-1-DECISIONS.md#5-time-of-day--the-permanent-long-noon)); Lumen used selectively, kept light to suit the stylized art and protect performance.
+- **Data-driven content** via DataAssets / DataTables so designers tune without C++ (see [architecture](coding-standards-and-architecture.md)).
+- **Online Subsystem Steam** for Steam integration (see [plugins](third-party-plugins.md)).
 
 ## Revisit conditions
-Reconsider only if: (a) we pivot to photoreal 3D, (b) we need a large library of off-the-shelf 3D gameplay systems and team velocity demands it (→ Unity), or (c) a hard platform requirement emerges that Godot can't export to.
+Reconsider only if: (a) iteration/build weight materially slows the small team (→ Unity), or (b) scope shrinks so far that a lightweight engine is clearly better. Neither is expected.
 
-## Target spec (stylized helps)
-- **Min:** integrated GPU, 8 GB RAM, 1080p30.
-- **Recommended:** entry discrete GPU, 16 GB RAM, 1080p60.
+## Target spec (stylized helps keep this modest)
+- **Min:** entry discrete GPU, 8 GB RAM, 1080p30 (Lumen off / low).
+- **Recommended:** mid discrete GPU, 16 GB RAM, 1080p60.

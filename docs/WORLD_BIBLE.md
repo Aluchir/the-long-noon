@@ -136,17 +136,17 @@ This keeps the game **non-lethal, gentle, and cozy** while preserving satisfying
 ## 10. Technical requirements (Steam-first)
 
 ### Engine
-- **Primary recommendation: Godot 4 (C#).** Free, MIT, light builds, one-click export to Windows/Linux/macOS, Steam via **GodotSteam**.
-- **Alternative: Unity** if we want the larger ready-made third-person/inventory ecosystem (Steamworks.NET for Steam).
-- _Decision pending final confirmation._
+- **Confirmed: Unreal Engine 5 (5.4), C++ with Blueprints.** Chosen for full-3D third-person on Steam: production-grade Third Person template, top 3D rendering/animation tooling, strongest 3D-on-Steam track record, deep talent pool. See [engine rationale](tech/engine-rationale.md).
+- **Fallback: Unity** if build weight/iteration speed become painful.
+- Tradeoffs accepted: heavier builds, longer iteration, binary content (Git LFS mandatory), 5% royalty above $1M.
 
 ### Target platforms
 1. **Windows (x64)** — launch target, Steam.
-2. **Linux (x64)** — later (Godot export + Proton fallback).
+2. **Linux (x64)** — later (native UE export + Proton fallback).
 3. **macOS (Apple Silicon + Intel)** — later; requires code-signing + notarization for distribution.
 
 ### Steam integration checklist (for later)
-- Steamworks SDK + GodotSteam/Steamworks.NET wrapper.
+- Online Subsystem Steam (UE built-in plugin) + Steamworks SDK.
 - Steam App ID (requires Steamworks partner account, ~$100 one-time per app).
 - Achievements, cloud saves, rich presence.
 - Steam Input for controller support.
@@ -172,7 +172,7 @@ This keeps the game **non-lethal, gentle, and cozy** while preserving satisfying
 You chose **doc-first**, so code comes later. When ready, the phase order:
 
 1. **Lock the World Bible** (this doc) — pin lore, the final choice, region count, weapon list.
-2. **Engine confirmation + repo scaffold** — empty Godot project, version control, folder structure.
+2. **Engine confirmation + repo scaffold** — Unreal 5 project (from Third Person template), version control + Git LFS, folder structure.
 3. **Greybox vertical slice** — Region 1 (Sunhollow): move, gather, one craft, one Bloom-prune. Proves the loop.
 4. **Core systems pass** — inventory/crafting/building/save.
 5. **Art & audio direction prototype** — nail the cozy look + the "forgetting" audio.

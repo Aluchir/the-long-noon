@@ -44,7 +44,7 @@ The ambience **degrades in liveliness** alongside the music — the world goes q
 - The Gardener may get a distinct, calm vocalization treatment for its climax (still wordless, paired with the now-readable script).
 
 ## 7. Adaptive / implementation approach
-- **Start with Godot-native audio** (AudioStreamPlayer + buses + simple crossfades). Sufficient for region-based music states and ambience.
+- **Start with Unreal's MetaSounds + audio buses** (procedural/layered audio, crossfades, submixes). Powerful enough for region-based music states and the adaptive layering the "forgetting" needs.
 - **Layered/adaptive design:** author the theme in stems so region states are achieved by **muting/adding layers**, not separate tracks — this makes the "hollowing" cheap and consistent.
 - **Move to FMOD/Wwise only if** native layering can't deliver the adaptive forgetting cleanly (decision deferred; see [plugins](../tech/third-party-plugins.md)).
 - Wrap audio behind an `AudioService` so region transitions just request a "theme state" and "ambience set."

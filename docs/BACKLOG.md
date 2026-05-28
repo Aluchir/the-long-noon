@@ -25,7 +25,7 @@
 - [x] Resource economy per region
 - [x] Fast-travel / outpost design
 
-## 3. Godot 4 project scaffold (repo root + `docs/tech/`)
+## 3. Engine project scaffold (repo root + `docs/tech/`) — pivoted Godot 4 → Unreal 5
 - [x] Engine rationale doc
 - [x] Folder structure + project files (`project.godot`, dirs)
 - [x] `.gitignore`

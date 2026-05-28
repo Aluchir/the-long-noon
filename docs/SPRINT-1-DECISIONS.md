@@ -76,9 +76,9 @@ See [`characters/player-character.md`](characters/player-character.md) for the f
 
 ---
 
-## 7. Engine — **confirmed: Godot 4 (C#)**
+## 7. Engine — **confirmed: Unreal Engine 5**
 
-Stylized non-photoreal art, small team, free-forever and royalty-free, light builds, painless Windows/Linux/macOS export, Steam via GodotSteam. The per-region baked lighting decision (§5) plays to Godot's strengths. Unity remains the only sane fallback if we later want its bigger ready-made-systems ecosystem.
+Chosen for full-3D third-person on Steam: a production-grade Third Person template (playable base on day one), best-in-class 3D rendering/animation tooling, the strongest 3D-on-Steam track record, C++ for systems with Blueprints for fast content iteration, and the Fab marketplace + deep talent pool for a small team. Tradeoffs accepted: heavier builds, longer iteration, binary content requiring Git LFS, and a 5% royalty above $1M. Unity is the documented fallback if build weight/iteration speed become painful. See [engine rationale](tech/engine-rationale.md). (An earlier draft recommended Godot 4; we switched after reconfirming the full-3D/third-person/commercial-Steam priorities.)
 
 ---
 
@@ -91,6 +91,6 @@ Stylized non-photoreal art, small team, free-forever and royalty-free, light bui
 | Decide survival mechanics scope | §4 — Tend, not Survive |
 | Time-of-day design | §5 — permanent Long Noon |
 | Core gameplay loop spec | §6 |
-| Confirm engine | §7 — Godot 4 (C#) |
+| Confirm engine | §7 — Unreal Engine 5 |
 
 Remaining Sprint 1 cards (metaphysics bible, Region 1 lore, tone guide, region-gating matrix, repo scaffold, version control, coding standards) are documentation/implementation tasks, not decisions — ready to action next.

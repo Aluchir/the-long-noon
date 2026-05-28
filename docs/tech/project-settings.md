@@ -1,49 +1,43 @@
 # Project Settings
 
-> The baseline Godot project configuration and the reasoning behind it. The canonical values live in `project.godot`; this doc explains them and lists settings to apply in-editor.
+> The baseline Unreal Engine 5 project configuration and the reasoning behind it. Canonical values live in `TheLongNoon.uproject` and `Config/*.ini`; this doc explains them and lists what to set in-editor.
 
-## 1. Application
-- **Name:** The Long Noon (working title). **Assembly:** `TheLongNoon`.
-- **Features:** `4.3`, `C#`, `Forward Plus`.
-- **Main scene:** intentionally empty in the scaffold; set to the boot/main-menu scene once it exists.
-- **Icon:** `res://icon.svg` (placeholder until key art).
+## 1. Project / module
+- **Name:** The Long Noon (working title). **Primary game module:** `TheLongNoon` (C++).
+- **Engine:** UE 5.4 (`EngineAssociation` in `TheLongNoon.uproject`).
+- **Plugins enabled** (in `.uproject`): **EnhancedInput**, **OnlineSubsystemSteam**, **ModelingToolsEditorMode** (editor-only, for greyboxing).
 
-## 2. Rendering
-- **Method:** `forward_plus` (desktop Vulkan; we don't target mobile/web). Best lighting/quality for our stylized look.
-- **Default environment:** `res://assets/materials/default_env.tres` — to be created; holds the baseline sky/ambient for the golden-hour mood.
-- **Texture filtering:** nearest/linear per art direction (stylized may favor crisp texels); set per-material.
-- **Lighting approach:** **baked, per-region** (LightmapGI or baked lighting), not a runtime sun cycle — matches the permanent Long Noon ([Sprint 1 §5](../SPRINT-1-DECISIONS.md#5-time-of-day--the-permanent-long-noon)). Each region authors its own golden-hour mood + a "wrongness" (desaturation/angle) parameter.
+## 2. Build targets (`Source/`)
+- `TheLongNoon.Target.cs` (Game) and `TheLongNoonEditor.Target.cs` (Editor), both `BuildSettingsVersion.V5`, include-order `Unreal5_4`.
+- Module deps (`TheLongNoon.Build.cs`): `Core`, `CoreUObject`, `Engine`, `InputCore`, `EnhancedInput`. Add `UMG` (HUD), `GameplayTags`, etc. as systems land.
 
-## 3. Display / window
-- **Reference resolution:** 1920×1080.
-- **Stretch mode:** `canvas_items`, aspect `expand` — UI scales cleanly across resolutions (cozy games need crisp, scalable UI).
-- Fullscreen/windowed and resolution exposed in the in-game settings menu (UI module).
+## 3. Rendering (`Config/DefaultEngine.ini`)
+- **DX12** default RHI on Windows.
+- **Lumen GI + reflections** available but used **selectively/lightly** — the stylized golden-hour look does not need full dynamic GI everywhere; keep it cheap to protect the modest target spec.
+- **Mesh distance fields** on (needed for Lumen/shadows).
+- **MotionBlur off**, **TSR/TAA** antialiasing — cozy, clean image.
+- **Lighting approach:** **per-region authored/baked** golden hour, not a runtime day/night cycle ([Sprint 1 §5](../SPRINT-1-DECISIONS.md#5-time-of-day--the-permanent-long-noon)). Each region authors its mood + a "wrongness" (desaturation/angle) via post-process volumes and light setup.
 
-## 4. Physics
-- **3D default gravity:** 9.8. Third-person character uses a `CharacterBody3D` controller (see [architecture](coding-standards-and-architecture.md)).
+## 4. Maps & modes
+- Default maps/GameMode are **unset until the first map exists** (`Content/Maps`). Once the greybox Sunhollow map is created, set Editor Startup Map and Game Default Map in Project Settings (writes to `DefaultEngine.ini`).
+- A `AGameModeBase` subclass (C++) defines default pawn/HUD/controller for the Sunhollow.
 
-## 5. Input map (actions)
-Defined as named actions (events bound in-editor / remappable in-game):
-`interact`, `prune`, `still_bloom`, `sprint`, `jump`, `open_inventory`, `open_codex`, `open_build`, `open_map`, `pause`.
-- Bind keyboard/mouse + gamepad for each; **all remappable** in the settings menu.
-- **Steam Input** layered on top for controller support and Deck (see [plugins](third-party-plugins.md)).
-- Reclamation "verbs" (still/settle/seal/quiet) map onto `prune`/`still_bloom` + context, not a key each.
+## 5. Input — Enhanced Input (`Config/DefaultInput.ini` + `Content/Input`)
+- Uses **Enhanced Input**: input is authored as **data assets** (InputActions + InputMappingContexts) in `Content/Input`, not legacy ini mappings.
+- Planned Input Actions: `IA_Move`, `IA_Look`, `IA_Jump`, `IA_Sprint`, `IA_Interact`, `IA_Prune`, `IA_Still`, `IA_OpenInventory`, `IA_OpenCodex`, `IA_OpenBuild`, `IA_OpenMap`, `IA_Pause`.
+- Bound via `IMC_Default`; **all remappable** in the settings menu (UI module). Gamepad + **Steam Input** layered for controller/Deck.
 
-## 6. Autoloads (singletons)
-| Autoload | Script | Role |
-|---|---|---|
-| `GameManager` | `src/core/GameManager.cs` | game phase, save slot, top-level state |
-| `EventBus` | `src/core/EventBus.cs` | decoupled global signals |
+## 6. Steam (platform milestone)
+- `OnlineSubsystemSteam` enabled; `SteamDevAppId=480` (Steam's test AppId) until a real AppId is provisioned via a Steamworks partner account. See [plugins](third-party-plugins.md).
 
-More autoloads (SaveService, RegionService, etc.) are added as systems land — keep the set small and justified (see [architecture](coding-standards-and-architecture.md)).
+## 7. Packaging (`Config/DefaultGame.ini`)
+- `Build=IfProjectHasCode`, Development config, pak files on. Distribution/shipping settings finalized at the Steam milestone.
 
-## 7. Localization
-- Settings prepared for localization from the start (the [forgotten script](../lore/forgotten-script.md) is a real cipher font, so in-world text and UI must both localize). Translation CSVs live in `localization/`.
-
-## 8. To apply in-editor (checklist)
-- [ ] Create the boot/main-menu scene; set `run/main_scene`.
-- [ ] Create `default_env.tres` (golden-hour baseline).
-- [ ] Bind input events for all actions (kb/mouse + gamepad).
-- [ ] Set up export presets for Windows (then Linux/macOS) — not committed (machine-specific).
-- [ ] Configure LightmapGI defaults for baked per-region lighting.
-- [ ] Add the forgotten-script font to `assets/fonts/` and register it.
+## 8. To set up in-editor (checklist)
+- [ ] Create the project from the **Third Person template (C++)** or open this `.uproject` and add the template character (see [unreal-setup.md](unreal-setup.md)).
+- [ ] Create the greybox **Sunhollow map** in `Content/Maps`; set as Editor Startup + Game Default Map.
+- [ ] Author Enhanced Input assets in `Content/Input` (actions above + `IMC_Default`).
+- [ ] Create the `AGameModeBase` subclass and assign default pawn/HUD.
+- [ ] Set up a per-region **PostProcessVolume** + lighting preset for the golden-hour look.
+- [ ] Add the forgotten-script font and a UMG HUD widget.
+- [ ] Configure Windows packaging preset (then Linux/macOS) — not committed (machine/path specific).

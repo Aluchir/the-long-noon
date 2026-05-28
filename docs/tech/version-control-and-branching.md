@@ -1,55 +1,56 @@
 # Version Control & Branching
 
-> How we manage the repo. Game projects add a wrinkle: large binary assets. This covers branching, commits, and Git LFS.
+> How we manage the repo. Unreal makes this higher-stakes than usual: content is **binary** (`.uasset`/`.umap`), large, and does **not** text-merge. Git LFS and a "lock-and-coordinate" content workflow are mandatory, not optional.
 
 ## 1. Repository
-- **Git**, hosted (GitHub or equivalent). The repo is currently not yet initialized for VCS — see "First-time setup" below.
-- **One repo** for the whole project (code + scenes + assets + docs). Monorepo is simplest at this scale.
+- **Git**, hosted (GitHub or equivalent). One monorepo: `Source/` + `Content/` + `Config/` + `docs/`.
+- The repo is initialized locally; remote/push pending explicit sign-off.
 
-## 2. Git LFS (important for a game)
-Binary game assets bloat Git history fast. Track them with **Git LFS** from day one:
+## 2. Git LFS (mandatory for Unreal)
+Unreal content is almost entirely binary. **Install and enable LFS before committing any `Content/`:**
 ```
 git lfs install
-git lfs track "*.png" "*.jpg" "*.tga" "*.wav" "*.ogg" "*.mp3" "*.glb" "*.gltf" "*.fbx" "*.blend" "*.res" "*.ttf" "*.otf"
-git add .gitattributes
+# Patterns are already declared in .gitattributes (*.uasset, *.umap, textures,
+# audio, fbx, fonts). Just ensure LFS is installed so they are filtered.
 ```
-- Commit `.gitattributes` so every collaborator uses LFS.
-- The `.gitignore` already excludes the `.godot/` import cache, build output, and exports (those are regenerated, never committed).
+- Commit `.gitattributes` (already present) so every collaborator uses LFS.
+- `.gitignore` excludes generated dirs (`Binaries/`, `Intermediate/`, `Saved/`, `DerivedDataCache/`) and IDE project files (`*.sln`, `.vs/`) — these are regenerated, never committed.
+- **What IS committed:** `TheLongNoon.uproject`, `Source/`, `Config/`, `Content/` (via LFS), `docs/`, `.gitattributes`, `.gitignore`.
 
-## 3. Branching model (lightweight GitHub Flow)
-- **`main`** — always buildable/openable in the Godot editor. Protected.
-- **`feature/<short-name>`** — all work branches off `main` (e.g., `feature/inventory-system`, `feature/sunhollow-greybox`).
+## 3. Binary content workflow (the important part)
+`.umap` and `.uasset` cannot be merged. Two people editing the same map/asset = a conflict only one can win. Mitigations:
+- **File locking:** use Git LFS file locking (`git lfs lock <file>`) for maps and shared assets, or a tool like Anchorpoint/Diversion on top. Lock before editing a map; unlock on push.
+- **Decompose maps with Level Instances / World Partition** so people work in different sub-levels instead of one giant `.umap`.
+- **Coordinate** on shared Blueprints/maps; prefer C++/DataAsset changes (text, mergeable) where possible.
+- **One-Blueprint-per-feature** discipline to reduce collisions.
+
+> If the team grows beyond ~3 content creators, evaluate **Unreal Diff tooling** and possibly Perforce (the UE industry standard for large binary projects). Git+LFS is fine at our current scale.
+
+## 4. Branching model (lightweight GitHub Flow)
+- **`main`** — always opens in the editor and compiles. Protected.
+- **`feature/<short-name>`** — all work (e.g., `feature/inventory-system`, `feature/sunhollow-greybox`).
 - **`fix/<short-name>`** — bug fixes.
-- Merge to `main` via pull request + review. Keep `main` green (opens, builds, runs).
-- Tag releases/milestones (`v0.1-vertical-slice`, etc.). A `release/*` branch only if/when we approach a Steam build.
+- Merge via PR + review; keep `main` green (opens, compiles, runs). Tag milestones (`v0.1-vertical-slice`).
+- Per house rules: never push to a `prod`/production branch without explicit sign-off; default pushes go to `main` only.
 
-> Per house rules: never push to a `prod`/production branch without explicit sign-off; default pushes go to `main` only.
-
-## 4. Commit conventions
-- Small, focused commits; present-tense imperative subject ("Add inventory storage network").
+## 5. Commit conventions
+- Small, focused commits; present-tense imperative subject.
 - Reference the Ithura card where relevant.
-- **House style:** no AI attribution / co-author lines; no em dashes in commit messages.
-- Don't commit: `.godot/`, `bin/`, `obj/`, `.mono/`, `export_presets.cfg` (machine-specific paths), exported builds — all already in `.gitignore`.
-
-## 5. Scene merge hygiene (Godot-specific)
-- `.tscn`/`.tres` are text and *can* merge, but conflicts are painful. Mitigations:
-  - **Keep scenes small and composed** (instanced sub-scenes) so two people rarely edit the same `.tscn`.
-  - Coordinate on shared scenes; prefer code/data changes over large scene edits where possible.
-  - Use stable UIDs (Godot 4 manages `.uid`/`uid://`); commit them.
-- Treat large `.tscn` conflicts as a signal to decompose the scene.
+- **House style:** no AI attribution / co-author lines; no em dashes in messages.
+- Never commit generated dirs or IDE solution files (all in `.gitignore`).
 
 ## 6. First-time setup (when leaving design phase)
 ```
+# 1. Create the playable base (see unreal-setup.md): either generate from the
+#    Third Person (C++) template into this folder, or open TheLongNoon.uproject
+#    and add the template content. This produces Content/ (binary) assets.
+
 cd survival-game
-git init
 git lfs install
-git lfs track "*.png" "*.jpg" "*.tga" "*.wav" "*.ogg" "*.glb" "*.gltf" "*.fbx" "*.blend" "*.ttf" "*.otf"
-git add .gitattributes .gitignore project.godot TheLongNoon.csproj TheLongNoon.sln src docs assets data scenes localization addons
-git commit -m "Scaffold The Long Noon (Godot 4, C#) project"
-git branch -M main
-git remote add origin <url>
-git push -u origin main
+git add .gitattributes .gitignore TheLongNoon.uproject Source Config Content docs
+git commit -m "Add Unreal 5 project base"
+git push -u origin main   # only after remote is set and you confirm
 ```
 
 ## 7. CI (later)
-A CI job (GitHub Actions) that, on PR to `main`: imports the project headless, builds the C# solution, and runs any tests. Catches "doesn't open / doesn't build" before merge. Detailed in the production module.
+A CI job (GitHub Actions or self-hosted with UE installed) that on PR to `main`: generates project files, compiles the C++ target, and runs automation tests. Catches "doesn't compile / doesn't open" before merge. UE CI needs an agent with the engine installed (heavier than typical CI); detailed in the production module.
