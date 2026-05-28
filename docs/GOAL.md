@@ -54,5 +54,26 @@ The loop's "done" = everything below is authored and committed, and `docs/tech/f
 - [x] Final consistency pass (code references, doc links, Ithura sync of new work)
 
 ---
+
+## Phase 2 — deeper headless work (no engine yet; all unverified until compiled)
+### E. Data registry + DataTable structs
+- [x] DataTable row structs mirroring the CSVs (`FItemRow`, `FToolRow`, `FRecipeRow`, `FRegionRow`, `FLoreFragmentRow`)
+- [x] `ULongNoonDataSettings` (DeveloperSettings) holding the five DataTable refs
+- [x] `ULongNoonDataRegistry` subsystem: load + index rows by id; verb/recipe-input parsers
+- [x] Wire crafting/reclamation/region lookups through the registry (crafting `CraftById`; region/reclamation follow same pattern)
+
+### F. Wire the code TODOs
+- [x] Crafting spends stamina on the Tend component
+- [ ] Reclamation spends stamina + applies tool durability
+- [ ] Equip the starting tool from data
+- [ ] Interact prompt -> HUD; Tend changes -> HUD; lore found -> HUD
+
+### G. More content + asset specs
+- [ ] NPC roster as data (the six characters + dialogue line ids)
+- [ ] Balance sheet (per-tier source rates vs sink costs)
+- [ ] Forgotten-script font glyph spec (for an artist)
+- [ ] Localization scaffolding + art/audio asset lists
+
+---
 ### Done so far (prior turns)
 World Bible, Sprint-1 decisions, full character bible, all lore + design specs, art/audio direction, UE5 scaffold + C++ system stubs, Ithura board (Unreal-consistent).

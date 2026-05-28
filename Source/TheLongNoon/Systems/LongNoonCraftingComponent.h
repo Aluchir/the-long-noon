@@ -29,6 +29,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Crafting")
 	bool Craft(const URecipeDef* Recipe);
 
+	/** Craft by recipe id, resolving the recipe from the data registry (CSV-backed path). */
+	UFUNCTION(BlueprintCallable, Category = "Crafting")
+	bool CraftById(FName RecipeId);
+
 protected:
 	ULongNoonInventoryComponent* GetInventory() const;
 };

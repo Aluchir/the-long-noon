@@ -1,5 +1,7 @@
 #include "Systems/LongNoonCraftingComponent.h"
 #include "Systems/LongNoonInventoryComponent.h"
+#include "Systems/LongNoonDataRegistry.h"
+#include "Systems/LongNoonTendComponent.h"
 #include "Core/LongNoonEventSubsystem.h"
 #include "Core/LongNoonLog.h"
 #include "Data/RecipeDef.h"
@@ -76,5 +78,60 @@ bool ULongNoonCraftingComponent::Craft(const URecipeDef* Recipe)
 	}
 
 	// TODO: spend Recipe->StaminaCost on the Tend component.
+	return true;
+}
+
+bool ULongNoonCraftingComponent::CraftById(FName RecipeId)
+{
+	const UWorld* World = GetWorld();
+	UGameInstance* GI = World ? World->GetGameInstance() : nullptr;
+	ULongNoonDataRegistry* Registry = GI ? GI->GetSubsystem<ULongNoonDataRegistry>() : nullptr;
+	ULongNoonInventoryComponent* Inv = GetInventory();
+	if (!Registry || !Inv)
+	{
+		return false;
+	}
+
+	const FRecipeRow* Recipe = Registry->GetRecipe(RecipeId);
+	if (!Recipe)
+	{
+		UE_LOG(LogLongNoon, Warning, TEXT("[Crafting] No recipe row '%s'."), *RecipeId.ToString());
+		return false;
+	}
+
+	if (!Recipe->RequiredStation.IsNone() && Recipe->RequiredStation != CurrentStation)
+	{
+		return false;
+	}
+
+	const TArray<FParsedRecipeInput> Inputs = ULongNoonDataRegistry::ParseRecipeInputs(Recipe->Inputs);
+	for (const FParsedRecipeInput& In : Inputs)
+	{
+		if (!Inv->HasItem(In.ItemId, In.Quantity))
+		{
+			return false;
+		}
+	}
+
+	for (const FParsedRecipeInput& In : Inputs)
+	{
+		Inv->RemoveItem(In.ItemId, In.Quantity);
+	}
+	Inv->AddItem(Recipe->Output, Recipe->OutputQuantity);
+
+	if (ULongNoonEventSubsystem* Events = GI->GetSubsystem<ULongNoonEventSubsystem>())
+	{
+		Events->BroadcastItemCrafted(Recipe->Output);
+	}
+
+	// Spend stamina on the Tend component if present.
+	if (Recipe->StaminaCost > 0.0f)
+	{
+		if (UActorComponent* TendComp = GetOwner() ? GetOwner()->FindComponentByClass(ULongNoonTendComponent::StaticClass()) : nullptr)
+		{
+			Cast<ULongNoonTendComponent>(TendComp)->SpendStamina(Recipe->StaminaCost);
+		}
+	}
+
 	return true;
 }
