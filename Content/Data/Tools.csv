@@ -1,0 +1,9 @@
+Name,DisplayName,Tier,Verbs,Reach,StillDurationSeconds,SettlePower,StaminaCost,MaxDurability,FlavorText
+tool_pruning_blade,"Pruning Blade",1,"Prune",2.0,0.0,0.0,5.0,100,"A simple curved blade for cutting back the gentle Bloom. The Tinker made you one without being asked."
+tool_stiller,"The Stiller",2,"Still",2.5,4.0,0.0,8.0,120,"Hum it against the Bloom and a patch goes briefly dormant, dreaming. The Forager has three names for what it does. None of them is kill."
+tool_resonance_hammer,"Resonance Hammer",2,"Settle",2.0,0.0,1.0,12.0,140,"For the animate growths that won't be reasoned with. It does not break them. It settles them. The head is cast from a swallowed home's doorframe."
+tool_sealing_spade,"Sealing Spade",3,"Seal|Prune",2.5,0.0,1.2,12.0,160,"Half tool, half key. Cuts, climbs, and seals the managed Bloom. Its haft bears a maker's mark you cannot yet read."
+tool_quieting_edge,"Quieting Edge",3,"Settle",2.2,0.0,1.6,14.0,160,"Forged from a Stillworks part built to help things end gently. The edge remembers a kinder job than tending overgrowth."
+tool_long_tool,"The Long Tool",4,"Quiet|Still|Settle",3.0,6.0,2.0,16.0,200,"The finest thing you will make and the one you will use least. In the Hush even the Bloom forgets to grow."
+util_field_hook,"Field Hook",1,"",2.0,0.0,0.0,3.0,100,"For gathering gentle Bloom. Take only what you'll use, the Forager says, and cannot recall why it mattered."
+util_climb_iron,"Climb-Iron",3,"",1.5,0.0,0.0,4.0,120,"For the old vertical works. Its grip is worn smooth by hands that climbed here long before yours."

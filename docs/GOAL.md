@@ -41,9 +41,9 @@ The loop's "done" = everything below is authored and committed, and `docs/tech/f
 - [x] Weapon/tool + material flavor finalized as data-ready entries (docs/lore/weapon-and-tool-lore.md)
 
 ### C. Data (authoring-ready, importable as UE DataTables — CSV is text)
-- [ ] `Content/Data/Items.csv`
-- [ ] `Content/Data/Tools.csv`
-- [ ] `Content/Data/Recipes.csv`
+- [x] `Content/Data/Items.csv`
+- [x] `Content/Data/Tools.csv`
+- [x] `Content/Data/Recipes.csv`
 - [ ] `Content/Data/Regions.csv`
 - [ ] `Content/Data/LoreFragments.csv`
 - [ ] Data authoring guide (how the CSVs map to the DataAsset/DataTable structs)
