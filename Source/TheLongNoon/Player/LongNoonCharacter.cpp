@@ -9,6 +9,8 @@
 
 #include "Systems/LongNoonInventoryComponent.h"
 #include "Systems/LongNoonReclamationComponent.h"
+#include "Core/Interactable.h"
+#include "Engine/World.h"
 
 ALongNoonCharacter::ALongNoonCharacter()
 {
@@ -118,8 +120,28 @@ void ALongNoonCharacter::StopSprint(const FInputActionValue& /*Value*/)
 
 void ALongNoonCharacter::Interact(const FInputActionValue& /*Value*/)
 {
-	// TODO: line-trace for interactables (NPCs, gather nodes, lore fragments).
-	// See docs/design/ and docs/lore/codex-catalogue.md.
+	if (!FollowCamera)
+	{
+		return;
+	}
+
+	// Trace ahead from the camera; interact with the first IInteractable hit
+	// (NPCs, gather nodes, lore fragments, gate-builds).
+	const FVector Start = FollowCamera->GetComponentLocation();
+	const FVector End = Start + FollowCamera->GetForwardVector() * InteractReach;
+
+	FHitResult Hit;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+
+	if (GetWorld() && GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params))
+	{
+		AActor* HitActor = Hit.GetActor();
+		if (HitActor && HitActor->Implements<UInteractable>())
+		{
+			IInteractable::Execute_OnInteract(HitActor, this);
+		}
+	}
 }
 
 void ALongNoonCharacter::Prune(const FInputActionValue& /*Value*/)

@@ -80,4 +80,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
 	float SprintSpeed = 650.0f;
+
+	/** Interact line-trace distance (cm). */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
+	float InteractReach = 300.0f;
 };
