@@ -1,0 +1,6 @@
+Name,DisplayName,RegionTier,RequiredToolTier,RequiredTraversal,RequiredGateBuild,ForgettingAmount
+region_sunhollow,"The Sunhollow",1,1,"","",0.0
+region_overgrowth,"The Overgrowth",2,1,"","gate_treeline_thicket",0.2
+region_stillworks,"The Stillworks",3,2,"","gate_the_choke",0.45
+region_hush,"The Hush",4,3,"Seal","gate_sealed_passage",0.75
+region_first_garden,"The First Garden",5,4,"","gate_threshold",1.0

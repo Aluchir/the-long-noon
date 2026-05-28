@@ -44,9 +44,9 @@ The loop's "done" = everything below is authored and committed, and `docs/tech/f
 - [x] `Content/Data/Items.csv`
 - [x] `Content/Data/Tools.csv`
 - [x] `Content/Data/Recipes.csv`
-- [ ] `Content/Data/Regions.csv`
-- [ ] `Content/Data/LoreFragments.csv`
-- [ ] Data authoring guide (how the CSVs map to the DataAsset/DataTable structs)
+- [x] `Content/Data/Regions.csv`
+- [x] `Content/Data/LoreFragments.csv`
+- [x] Data authoring guide (how the CSVs map to the DataAsset/DataTable structs)
 
 ### D. Run-enablement (the bridge to a human-run build)
 - [ ] `docs/tech/first-playable-checklist.md` — exact ordered UE editor steps to first run
