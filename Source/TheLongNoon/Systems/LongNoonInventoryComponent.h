@@ -34,6 +34,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Inventory")
 	bool HasItem(FName ItemId, int32 Count = 1) const { return GetCount(ItemId) >= Count; }
 
+	/** Save/restore hooks for the SaveService. */
+	const TMap<FName, int32>& GetStacks() const { return Stacks; }
+	void RestoreStacks(const TMap<FName, int32>& InStacks) { Stacks = InStacks; OnInventoryChanged.Broadcast(); }
+
 protected:
 	/** ItemId -> stack count. Saved/restored by the SaveService. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Inventory")

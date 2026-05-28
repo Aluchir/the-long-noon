@@ -23,6 +23,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reclamation")
 	TObjectPtr<UToolDef> EquippedTool;
 
+	/** Equip a tool (the gating tool tier comes from the GameInstance progression). */
+	UFUNCTION(BlueprintCallable, Category = "Reclamation")
+	void EquipTool(UToolDef* Tool) { EquippedTool = Tool; }
+
 	/** Trace ahead of the owner and reclaim the first Bloom target found. */
 	UFUNCTION(BlueprintCallable, Category = "Reclamation")
 	bool TryReclaimAhead();

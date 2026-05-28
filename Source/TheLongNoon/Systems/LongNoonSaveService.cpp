@@ -1,7 +1,24 @@
 #include "Systems/LongNoonSaveService.h"
 #include "Systems/LongNoonSaveGame.h"
+#include "Systems/LongNoonInventoryComponent.h"
+#include "Systems/LongNoonCodexSubsystem.h"
 #include "Core/LongNoonGameInstance.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/PlayerController.h"
+#include "GameFramework/Pawn.h"
+#include "Engine/World.h"
+
+namespace
+{
+	/** Find the local player's inventory component, if a pawn exists. */
+	ULongNoonInventoryComponent* FindPlayerInventory(const UWorld* World)
+	{
+		if (!World) { return nullptr; }
+		const APlayerController* PC = World->GetFirstPlayerController();
+		const APawn* Pawn = PC ? PC->GetPawn() : nullptr;
+		return Pawn ? Pawn->FindComponentByClass<ULongNoonInventoryComponent>() : nullptr;
+	}
+}
 
 namespace
 {
@@ -33,7 +50,14 @@ bool ULongNoonSaveService::SaveToSlot(const FString& SlotName)
 		Save->UnlockedRegions = GI->UnlockedRegions.Array();
 	}
 
-	// TODO: gather inventory stacks and found fragments from their owning systems.
+	if (const ULongNoonInventoryComponent* Inv = FindPlayerInventory(GetGameInstance()->GetWorld()))
+	{
+		Save->InventoryStacks = Inv->GetStacks();
+	}
+	if (const ULongNoonCodexSubsystem* Codex = GetGameInstance()->GetSubsystem<ULongNoonCodexSubsystem>())
+	{
+		Save->FoundFragments = Codex->GetFoundFragments();
+	}
 
 	return UGameplayStatics::SaveGameToSlot(Save, SlotName, UserIndex);
 }
@@ -79,5 +103,12 @@ void ULongNoonSaveService::ApplyLoadedSave(ULongNoonSaveGame* Save)
 		GI->UnlockedRegions = TSet<FName>(Save->UnlockedRegions);
 	}
 
-	// TODO: restore inventory stacks and found fragments into their owning systems.
+	if (ULongNoonInventoryComponent* Inv = FindPlayerInventory(GetGameInstance()->GetWorld()))
+	{
+		Inv->RestoreStacks(Save->InventoryStacks);
+	}
+	if (ULongNoonCodexSubsystem* Codex = GetGameInstance()->GetSubsystem<ULongNoonCodexSubsystem>())
+	{
+		Codex->RestoreFound(Save->FoundFragments);
+	}
 }

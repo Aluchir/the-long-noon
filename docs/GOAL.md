@@ -27,9 +27,9 @@ The loop's "done" = everything below is authored and committed, and `docs/tech/f
 - [x] `ULongNoonTendComponent` (Stamina/Focus/Comfort meters; no death)
 - [x] `ULongNoonDialogueComponent` (literacy-aware lines, codex hooks)
 - [x] `ULongNoonQuestSubsystem` (objective tracking)
-- [ ] Reclamation: equip tool from inventory by tier; resolve target verb
-- [ ] HUD base (`ALongNoonHUD` + UMG base widget); add `UMG` to Build.cs
-- [ ] Wire `SaveService` TODOs (gather/restore inventory + found fragments)
+- [x] Reclamation: equip tool from inventory by tier; resolve target verb
+- [x] HUD base (`ALongNoonHUD` + UMG base widget); add `UMG` to Build.cs
+- [x] Wire `SaveService` TODOs (gather/restore inventory + found fragments)
 - [x] Wire components onto the character / register subsystems
 
 ### B. Story & text (`docs/lore/`, `docs/design/`)

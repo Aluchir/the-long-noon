@@ -32,6 +32,10 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Codex")
 	FText GetReadableText(const ULoreFragmentDef* Fragment) const;
 
+	/** Save/restore hooks for the SaveService. */
+	const TSet<FName>& GetFoundFragments() const { return FoundFragments; }
+	void RestoreFound(const TSet<FName>& InFound) { FoundFragments = InFound; }
+
 private:
 	UPROPERTY()
 	TSet<FName> FoundFragments;
