@@ -22,15 +22,15 @@ The loop's "done" = everything below is authored and committed, and `docs/tech/f
 - [x] `IInteractable` interface + character interact trace implementation
 - [x] `ABloomActor` / reclamation target (dormant/settled states, required verb, drop table)
 - [x] `AGatherNode` actor (harvestable, regrows)
-- [ ] `ULongNoonCraftingComponent` (consume recipe inputs, produce output, station + stamina, broadcast)
-- [ ] `ULongNoonBuildingComponent` (placement, gate-build completion hooks)
-- [ ] `ULongNoonTendComponent` (Stamina/Focus/Comfort meters; no death)
-- [ ] `ULongNoonDialogueComponent` (literacy-aware lines, codex hooks)
-- [ ] `ULongNoonQuestSubsystem` (objective tracking)
+- [x] `ULongNoonCraftingComponent` (consume recipe inputs, produce output, station + stamina, broadcast)
+- [x] `ULongNoonBuildingComponent` (placement, gate-build completion hooks)
+- [x] `ULongNoonTendComponent` (Stamina/Focus/Comfort meters; no death)
+- [x] `ULongNoonDialogueComponent` (literacy-aware lines, codex hooks)
+- [x] `ULongNoonQuestSubsystem` (objective tracking)
 - [ ] Reclamation: equip tool from inventory by tier; resolve target verb
 - [ ] HUD base (`ALongNoonHUD` + UMG base widget); add `UMG` to Build.cs
 - [ ] Wire `SaveService` TODOs (gather/restore inventory + found fragments)
-- [ ] Wire components onto the character / register subsystems
+- [x] Wire components onto the character / register subsystems
 
 ### B. Story & text (`docs/lore/`, `docs/design/`)
 - [ ] Dialogue scripts per character (Tinker, Forager, Keeper, One Who Counts, Gardener, Rememberer)

@@ -9,6 +9,9 @@
 
 #include "Systems/LongNoonInventoryComponent.h"
 #include "Systems/LongNoonReclamationComponent.h"
+#include "Systems/LongNoonCraftingComponent.h"
+#include "Systems/LongNoonBuildingComponent.h"
+#include "Systems/LongNoonTendComponent.h"
 #include "Core/Interactable.h"
 #include "Engine/World.h"
 
@@ -42,6 +45,9 @@ ALongNoonCharacter::ALongNoonCharacter()
 
 	Inventory = CreateDefaultSubobject<ULongNoonInventoryComponent>(TEXT("Inventory"));
 	Reclamation = CreateDefaultSubobject<ULongNoonReclamationComponent>(TEXT("Reclamation"));
+	Crafting = CreateDefaultSubobject<ULongNoonCraftingComponent>(TEXT("Crafting"));
+	Building = CreateDefaultSubobject<ULongNoonBuildingComponent>(TEXT("Building"));
+	Tend = CreateDefaultSubobject<ULongNoonTendComponent>(TEXT("Tend"));
 }
 
 void ALongNoonCharacter::BeginPlay()

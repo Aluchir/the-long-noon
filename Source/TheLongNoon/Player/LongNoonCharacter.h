@@ -11,6 +11,9 @@ class UInputAction;
 class UInputMappingContext;
 class ULongNoonInventoryComponent;
 class ULongNoonReclamationComponent;
+class ULongNoonCraftingComponent;
+class ULongNoonBuildingComponent;
+class ULongNoonTendComponent;
 
 /**
  * Third-person player character: the Newcomer. Camera boom + follow camera and
@@ -44,6 +47,15 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Systems")
 	TObjectPtr<ULongNoonReclamationComponent> Reclamation;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Systems")
+	TObjectPtr<ULongNoonCraftingComponent> Crafting;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Systems")
+	TObjectPtr<ULongNoonBuildingComponent> Building;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Systems")
+	TObjectPtr<ULongNoonTendComponent> Tend;
 
 	// --- Enhanced Input (assets authored in Content/Input, assigned per-Blueprint) ---
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
