@@ -1,0 +1,45 @@
+# Godot 4 + .NET (C#) .gitignore
+
+# Godot-specific
+.godot/
+/android/
+/build/
+export.cfg
+export_presets.cfg
+
+# Imported assets cache (Godot 4 stores in .godot/imported)
+*.import.bak
+
+# .NET / C#
+.mono/
+data_*/
+*.csproj.user
+*.sln.DotSettings.user
+bin/
+obj/
+*.user
+
+# Exported builds
+/exports/
+*.exe
+*.pck
+*.zip
+*.dmg
+*.app/
+*.x86_64
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vs/
+.vscode/
+!.vscode/extensions.json
+
+# Secrets / local config
+*.env
+secrets.cfg
+
+# Claude Code session/harness state
+.claude/

@@ -1,0 +1,87 @@
+; Engine configuration file for The Long Noon.
+; Godot 4.3+, C# (.NET), Forward+ renderer, stylized 3D.
+; Most settings are managed via the in-editor Project Settings; see docs/tech/project-settings.md.
+
+config_version=5
+
+[application]
+
+config/name="The Long Noon"
+config/description="A cozy third-person survival/crafting game with a buried narrative. Working title."
+config/version="0.0.1"
+config/features=PackedStringArray("4.3", "C#", "Forward Plus")
+run/main_scene=""
+config/icon="res://icon.svg"
+
+[dotnet]
+
+project/assembly_name="TheLongNoon"
+
+[autoload]
+
+GameManager="*res://src/core/GameManager.cs"
+EventBus="*res://src/core/EventBus.cs"
+
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[input_devices]
+
+pointing/emulate_touch_from_mouse=false
+
+[input]
+
+interact={
+"deadzone": 0.5,
+"events": []
+}
+prune={
+"deadzone": 0.5,
+"events": []
+}
+still_bloom={
+"deadzone": 0.5,
+"events": []
+}
+sprint={
+"deadzone": 0.5,
+"events": []
+}
+jump={
+"deadzone": 0.5,
+"events": []
+}
+open_inventory={
+"deadzone": 0.5,
+"events": []
+}
+open_codex={
+"deadzone": 0.5,
+"events": []
+}
+open_build={
+"deadzone": 0.5,
+"events": []
+}
+open_map={
+"deadzone": 0.5,
+"events": []
+}
+pause={
+"deadzone": 0.5,
+"events": []
+}
+
+[physics]
+
+3d/default_gravity=9.8
+
+[rendering]
+
+renderer/rendering_method="forward_plus"
+textures/canvas_textures/default_texture_filter=1
+environment/defaults/default_environment="res://assets/materials/default_env.tres"
