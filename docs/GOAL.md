@@ -37,8 +37,8 @@ The loop's "done" = everything below is authored and committed, and `docs/tech/f
 - [x] Full codex fragment text per region (expand the catalogue into actual fragments)
 - [x] Forgotten-script cipher mapping (a real substitution table)
 - [x] The three ending scripts (Gift Returned / Long Noon Continues / Third Way)
-- [ ] Per-region quest/beat flow (objectives, gates, lore beats)
-- [ ] Weapon/tool + material flavor finalized as data-ready entries
+- [x] Per-region quest/beat flow (objectives, gates, lore beats)
+- [x] Weapon/tool + material flavor finalized as data-ready entries (docs/lore/weapon-and-tool-lore.md)
 
 ### C. Data (authoring-ready, importable as UE DataTables — CSV is text)
 - [ ] `Content/Data/Items.csv`
