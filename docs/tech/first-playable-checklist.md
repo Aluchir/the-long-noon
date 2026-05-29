@@ -33,11 +33,15 @@ The character/camera/input/sample assets are binary and come from Epic's templat
 - [ ] Set this map as Editor Startup Map and Game Default Map.
 
 ## 5. Import the data
-- [ ] Import `Content/Data/*.csv` (see `docs/tech/data-authoring-guide.md`): either as DataTables (define the mirror row structs) or generate DataAssets. At minimum import Items/Tools/Recipes so crafting and gathering have content.
-- [ ] Give the player's `ULongNoonReclamationComponent` a starting tool (the `tool_pruning_blade` ToolDef) via `EquipTool` or a default.
+- [ ] Import all **seven** `Content/Data/*.csv` as DataTables using the mirror row structs (see `docs/tech/data-authoring-guide.md`):
+  - `Items.csv` -> `FItemRow`, `Tools.csv` -> `FToolRow`, `Recipes.csv` -> `FRecipeRow`, `Regions.csv` -> `FRegionRow`, `LoreFragments.csv` -> `FLoreFragmentRow`, `NPCs.csv` -> `FNpcRow`, `DialogueLines.csv` -> `FDialogueLineRow`.
+  - At minimum Items/Tools/Recipes are needed for crafting + gathering; Tools is also required for the starting-tool equip (below).
+- [ ] Assign the imported tables in **Project Settings -> The Long Noon Data** (the `ULongNoonDataSettings` slots, incl. `NpcTable` and `DialogueLineTable`). `ULongNoonDataRegistry` loads them on init.
+- [ ] Starting tool is now **data-driven**: the character equips `StartingToolId` (default `tool_pruning_blade`) from the Tools table on BeginPlay, then reclamation spends stamina and wears durability automatically. Just ensure the Tools table is imported + assigned; no manual `EquipTool` needed (override `StartingToolId` on the character BP to change it).
 
 ## 6. HUD (optional for first run)
-- [ ] Create `WBP_HUD` deriving from `ULongNoonHUDWidget`; assign it to `ALongNoonHUD::HUDWidgetClass`. Implement `UpdateTend` / `SetInteractPrompt` in the widget graph.
+- [ ] Create `WBP_HUD` deriving from `ULongNoonHUDWidget`; assign it to `ALongNoonHUD::HUDWidgetClass`. Implement the `UpdateTend` / `SetInteractPrompt` / `OnLoreFound` events in the widget graph.
+- [ ] No manual wiring needed: the character drives the HUD on BeginPlay (Tend meters via `OnTendChanged`, interact prompt via a focus-trace poll, lore-found via the event subsystem). The widget just needs to render the three events.
 
 ## 7. Press Play
 - [ ] Play-in-Editor. Verify: move (WASD/stick), camera (mouse/stick), jump, sprint; walk to a gather node and Interact to gather; walk to the Bloom and Prune; open the build/inventory hooks as wired.
@@ -50,8 +54,9 @@ The character/camera/input/sample assets are binary and come from Epic's templat
 ## What is already done for you (committed on `feature/unreal-scaffold`)
 - Full design + lore + character bible (`docs/`), art/audio direction, the GOAL backlog.
 - UE5 project skeleton (`.uproject`, `Source/` C++ module, `Config/`, `Content/` layout, UE-aware `.gitignore`/`.gitattributes`).
-- C++ systems (stubs with working core logic): character + camera + Enhanced Input bindings, inventory, crafting, building, tend, reclamation (trace + subdue), dialogue, quest, codex, region gating, save/load, HUD base, interactable interface, Bloom + gather actors, and the Data structs.
+- C++ systems (working core logic): character + camera + Enhanced Input bindings; inventory; crafting (asset + data path, spends stamina); building; tend; reclamation (trace + subdue, spends stamina, wears tool durability with `Repair`); dialogue (with `LoadFromData`); quest; codex; region gating; save/load; HUD base + character-driven HUD link; interactable interface; Bloom + gather actors; the data registry; and the Data structs/row types.
 - Authored content: dialogue scripts, codex fragments, the cipher, endings, quest flow.
-- Data CSVs for items, tools, recipes, regions, lore fragments + the authoring guide.
+- Data CSVs for items, tools, recipes, regions, lore fragments, NPCs, and dialogue lines + the authoring guide.
+- Specs: balance sheet, forgotten-script font spec, localization scaffolding, art/audio asset lists.
 
 The gap between "this repo" and "a running game" is exactly steps 1 to 8 above: install the engine, graft the template's binary base, compile, and assemble the first map. Nothing in that gap could be done headlessly.
