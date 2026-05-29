@@ -28,6 +28,7 @@ public:
 	const FLoreFragmentRow* GetFragment(FName FragmentId) const;
 	const FNpcRow* GetNpc(FName NpcId) const;
 	const FDialogueLineRow* GetDialogueLine(FName LineId) const;
+	const FBuildRow* GetBuild(FName BuildId) const;
 
 	/** Resolve a pipe-separated list of dialogue line ids to their texts. */
 	UFUNCTION(BlueprintCallable, Category = "Data")
@@ -49,4 +50,5 @@ private:
 	UPROPERTY() TObjectPtr<UDataTable> LoreFragmentTable;
 	UPROPERTY() TObjectPtr<UDataTable> NpcTable;
 	UPROPERTY() TObjectPtr<UDataTable> DialogueLineTable;
+	UPROPERTY() TObjectPtr<UDataTable> BuildTable;
 };

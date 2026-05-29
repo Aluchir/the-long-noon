@@ -1,0 +1,5 @@
+Name,DisplayName,Inputs,RegionUnlocked,StaminaCost
+gate_treeline_thicket,"The Treeline Clearing","mat_gentlestone:4;mat_softfiber:4;mat_sunmoss:6",region_overgrowth,0.0
+gate_the_choke,"The Choke Passage","mat_swallowedwood:6;mat_resin:4;mat_glowcap:2;comp_binding:2;mat_stillsteel:1",region_stillworks,0.0
+gate_sealed_passage,"The Sealed Passage","mat_sealstone:6;mat_stillsteel:4;comp_fitting:2;mat_hushglass:1",region_hush,0.0
+gate_threshold,"The Threshold","mat_hushglass:4;mat_stillsteel:3;comp_fitting:2",region_first_garden,0.0

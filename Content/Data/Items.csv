@@ -12,3 +12,4 @@ mat_gardenlight,"Gardenlight",Material,5,1,false,"Not gathered. Given, or not, d
 comp_binding,"Binding",Component,1,99,true,"Fiber and resin, worked into something that holds."
 comp_fitting,"Stillworks Fitting",Component,3,99,true,"A salvaged part whose original purpose is labeled in a script no one can read."
 food_warmbroth,"Warm Broth",Consumable,1,20,true,"Restores stamina and a little of something the world forgot the name for."
+item_repair_kit,"Repair Kit",Consumable,1,20,true,"A tidy bundle for mending what the work wears down. Tools come back so easily, you almost forget the things that don't."

@@ -11,3 +11,4 @@ recipe_sealing_spade,station_stillworks_forge,"mat_stillsteel:2;comp_fitting:1;m
 recipe_quieting_edge,station_stillworks_forge,"mat_stillsteel:2;mat_sealstone:1",tool_quieting_edge,1,10.0
 recipe_climb_iron,station_stillworks_forge,"mat_stillsteel:1;comp_fitting:1",util_climb_iron,1,0.0
 recipe_long_tool,station_stillworks_forge,"mat_hushglass:2;mat_stillsteel:1;comp_fitting:1",tool_long_tool,1,12.0
+recipe_repair_kit,station_basic_bench,"mat_sunmoss:2",item_repair_kit,1,0.0

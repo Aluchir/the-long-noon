@@ -20,15 +20,17 @@ void ULongNoonDataRegistry::Initialize(FSubsystemCollectionBase& Collection)
 	LoreFragmentTable = Settings->LoreFragmentTable.LoadSynchronous();
 	NpcTable = Settings->NpcTable.LoadSynchronous();
 	DialogueLineTable = Settings->DialogueLineTable.LoadSynchronous();
+	BuildTable = Settings->BuildTable.LoadSynchronous();
 
-	UE_LOG(LogLongNoon, Log, TEXT("[DataRegistry] Tables loaded (items=%d, tools=%d, recipes=%d, regions=%d, fragments=%d, npcs=%d, lines=%d)."),
+	UE_LOG(LogLongNoon, Log, TEXT("[DataRegistry] Tables loaded (items=%d, tools=%d, recipes=%d, regions=%d, fragments=%d, npcs=%d, lines=%d, builds=%d)."),
 		ItemTable ? ItemTable->GetRowNames().Num() : 0,
 		ToolTable ? ToolTable->GetRowNames().Num() : 0,
 		RecipeTable ? RecipeTable->GetRowNames().Num() : 0,
 		RegionTable ? RegionTable->GetRowNames().Num() : 0,
 		LoreFragmentTable ? LoreFragmentTable->GetRowNames().Num() : 0,
 		NpcTable ? NpcTable->GetRowNames().Num() : 0,
-		DialogueLineTable ? DialogueLineTable->GetRowNames().Num() : 0);
+		DialogueLineTable ? DialogueLineTable->GetRowNames().Num() : 0,
+		BuildTable ? BuildTable->GetRowNames().Num() : 0);
 }
 
 const FItemRow* ULongNoonDataRegistry::GetItem(FName ItemId) const
@@ -64,6 +66,11 @@ const FNpcRow* ULongNoonDataRegistry::GetNpc(FName NpcId) const
 const FDialogueLineRow* ULongNoonDataRegistry::GetDialogueLine(FName LineId) const
 {
 	return DialogueLineTable ? DialogueLineTable->FindRow<FDialogueLineRow>(LineId, TEXT("GetDialogueLine"), false) : nullptr;
+}
+
+const FBuildRow* ULongNoonDataRegistry::GetBuild(FName BuildId) const
+{
+	return BuildTable ? BuildTable->FindRow<FBuildRow>(BuildId, TEXT("GetBuild"), false) : nullptr;
 }
 
 TArray<FText> ULongNoonDataRegistry::GetDialogueLines(const FString& PackedLineIds) const

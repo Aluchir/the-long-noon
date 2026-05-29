@@ -35,7 +35,7 @@ Where `<Platform>` is `Mac`, `Linux`, or (on Windows) use `Build.bat ... Win64`.
 ## Run headless tests (Automation)
 ```
 "$UE_ROOT/Engine/Binaries/<Platform>/UnrealEditor-Cmd" "$PROJECT" \
-  -ExecCmds="Automation RunTests LongNoon; Quit" -unattended -nop4 -nosplash -log
+  -ExecCmds="Automation RunTests TheLongNoon; Quit" -unattended -nop4 -nosplash -log
 ```
 Pure-logic tests (economy math, save versioning, literacy gating) should live under an automation spec so this stays meaningful.
 

@@ -12,10 +12,13 @@
 | `LoreFragments.csv` | `ULoreFragmentDef` | `Name` = `FragmentId` |
 | `NPCs.csv` | `FNpcRow` | `Name` = `NpcId` |
 | `DialogueLines.csv` | `FDialogueLineRow` | `Name` = `LineId` |
+| `Builds.csv` | `FBuildRow` | `Name` = `BuildId` |
 
 The first column is always `Name`, the stable id used as the DataTable RowName and as the lookup key elsewhere (recipes reference item ids, fragments reference threads, etc.).
 
 `NPCs.csv` and `DialogueLines.csv` are DataTable-only (`FNpcRow` / `FDialogueLineRow` in `LongNoonRowTypes.h`); there is no `U*Def` asset for them. The roster references lines by id, and the lines carry the actual text (narrative source of truth is `docs/lore/dialogue-scripts.md`). `ULongNoonDialogueComponent::LoadFromData()` reads an NPC's row and resolves its line ids into the spoken `Lines` array at runtime.
+
+`Builds.csv` is also DataTable-only (`FBuildRow` in `LongNoonRowTypes.h`); there is no `U*Def` asset for it. It holds the four gate-builds referenced by `Regions.RequiredGateBuild`; its `Inputs` use the same `itemId:qty;itemId:qty` encoding as `Recipes.csv` and parse with the registry's `ParseRecipeInputs`.
 
 ## Two ways to use them in UE
 
@@ -56,6 +59,9 @@ Use DataAssets where you need real asset pointers (recipes -> item assets, regio
 - `Recipes.Inputs` and `Recipes.Output` item ids must exist in `Items.csv`.
 - `Recipes.Output` for a tool must match a `Tools.csv` id (tools are items too at the inventory layer; keep ids consistent or map them).
 - `Regions.RequiredGateBuild` ids must match the gate-build ids used by `quest-flow.md` and the building system.
+- Every `Builds.RegionUnlocked` id must exist in `Regions.csv`.
+- Each `Builds` gate id (the `Name` column) must match a `Regions.RequiredGateBuild` value, and vice versa (every non-empty `Regions.RequiredGateBuild` must have a `Builds` row).
+- All `Builds.Inputs` item ids must exist in `Items.csv`.
 - `LoreFragments.RequiredLiteracyTier` (0..4) must line up with the [forgotten-script](../lore/forgotten-script.md) tiers; threads must match the codex thread set.
 - `NPCs.HomeRegion` ids must exist in `Regions.csv`; `NPCs.GrantsFragmentOnFirstTalk` must exist in `LoreFragments.csv`.
 - Every line id in `NPCs` (`FirstTalkLines`/`IdleLines`/`StoryBeatLines`/`DaggerLine`) must exist in `DialogueLines.csv`, and each `DialogueLines.Speaker` must match an `NPCs` id.

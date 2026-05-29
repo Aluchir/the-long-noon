@@ -1,0 +1,75 @@
+# CI: build the Unreal editor target and run Automation tests for The Long Noon.
+#
+# IMPORTANT - runner requirements:
+#   This workflow MUST run on a SELF-HOSTED Windows runner that has
+#   Unreal Engine 5.7 installed. GitHub-hosted runners cannot be used:
+#   the engine install is far too large to download/cache per run, and the
+#   editor build + headless automation pass needs the full engine present.
+#   See docs/tech/build-and-run.md (CI notes) for the rationale.
+#
+#   The runner must also have Git LFS available, since project content is
+#   stored in LFS and must be pulled before building.
+#
+# Engine location:
+#   The engine root is read from the UE_ROOT environment variable and
+#   defaults to "C:\Program Files\Epic Games\UE_5.7". Override it on the
+#   runner (machine env var or repo/org variable) if the engine lives
+#   elsewhere.
+
+name: Build and Test
+
+on:
+  pull_request:
+    branches:
+      - feature/unreal-scaffold
+      - main
+  push:
+    branches:
+      - feature/unreal-scaffold
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    # Self-hosted Windows runner with UE 5.7 installed (see notes above).
+    runs-on: [self-hosted, windows]
+
+    env:
+      # Engine install root. Overridable via repository/org variable UE_ROOT.
+      # Defaults to the standard Epic Games launcher install path for 5.7.
+      UE_ROOT: ${{ vars.UE_ROOT != '' && vars.UE_ROOT || 'C:\Program Files\Epic Games\UE_5.7' }}
+      # Project file lives at the repo root.
+      PROJECT: ${{ github.workspace }}\TheLongNoon.uproject
+
+    steps:
+      - name: Checkout (with LFS)
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Pull LFS content
+        # Content is stored in Git LFS; ensure it is present before building.
+        shell: pwsh
+        run: git lfs pull
+
+      - name: Generate project files
+        # Optional: Build.bat will compile regardless, but generating project
+        # files keeps the project graph in sync (matches the doc reference).
+        shell: pwsh
+        run: |
+          & "$env:UE_ROOT\Engine\Build\BatchFiles\GenerateProjectFiles.bat" -project="$env:PROJECT" -game -engine
+
+      - name: Build TheLongNoonEditor (Win64 Development)
+        # Compiles the C++ editor module. Fails the job on any compile error.
+        shell: pwsh
+        run: |
+          & "$env:UE_ROOT\Engine\Build\BatchFiles\Build.bat" TheLongNoonEditor Win64 Development "$env:PROJECT" -waitmutex
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Run Automation tests (headless)
+        # Runs the "TheLongNoon" automation test category headless and exits
+        # once the test queue is empty. Fails the job if tests fail.
+        shell: pwsh
+        run: |
+          & "$env:UE_ROOT\Engine\Binaries\Win64\UnrealEditor-Cmd.exe" "$env:PROJECT" -ExecCmds="Automation RunTests TheLongNoon; Quit" -unattended -nop4 -nosplash -log -testexit="Automation Test Queue Empty"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

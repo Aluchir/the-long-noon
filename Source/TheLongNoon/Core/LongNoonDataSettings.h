@@ -39,4 +39,7 @@ public:
 
 	UPROPERTY(Config, EditAnywhere, Category = "Data Tables", meta = (AllowedClasses = "/Script/Engine.DataTable"))
 	TSoftObjectPtr<UDataTable> DialogueLineTable;
+
+	UPROPERTY(Config, EditAnywhere, Category = "Data Tables", meta = (AllowedClasses = "/Script/Engine.DataTable"))
+	TSoftObjectPtr<UDataTable> BuildTable;
 };

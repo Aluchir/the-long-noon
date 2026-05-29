@@ -117,6 +117,19 @@ struct FDialogueLineRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) FText Text;
 };
 
+USTRUCT(BlueprintType)
+struct FBuildRow : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FText DisplayName;
+	/** "itemId:qty;itemId:qty" pairs, same encoding as recipes. Parse with ParseRecipeInputs. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FString Inputs;
+	/** Region id this gate-build unlocks (matches Regions.csv, and Regions.RequiredGateBuild references this row). */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName RegionUnlocked;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) float StaminaCost = 0.0f;
+};
+
 /** A parsed recipe input (registry output, not a DataTable column). */
 USTRUCT(BlueprintType)
 struct FParsedRecipeInput

@@ -72,8 +72,8 @@ Gate-builds are referenced by `Regions.RequiredGateBuild` but have no recipe row
 - **Reclamation** (`Tools.StaminaCost`): 5 (Pruning Blade) → 16 (Long Tool). At regen 12/s, the player can sustain roughly one reclaim every 1–1.5s indefinitely; bursts deplete and slow, never fail.
 
 ## 7. Open data tasks this sheet implies
-- [ ] `Builds.csv` (+ `FBuildRow` / building system) for the four gate-builds in §3.
-- [ ] `item_repair_kit` + `recipe_repair_kit` in `Items.csv` / `Recipes.csv` (§5).
+- [x] `Builds.csv` (+ `FBuildRow`, registry `GetBuild`, `BuildTable` setting) for the four gate-builds in §3. The building system still needs to consume them.
+- [x] `item_repair_kit` + `recipe_repair_kit` in `Items.csv` / `Recipes.csv` (§5). Wiring a consumable-use that calls `Repair()` is the remaining code step.
 - [ ] Node counts in §4 are placement targets for the greybox/level pass, not yet authored as actors.
 
 ## 8. Source of truth
