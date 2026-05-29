@@ -4,7 +4,7 @@
 
 ## 1. Project / module
 - **Name:** The Long Noon (working title). **Primary game module:** `TheLongNoon` (C++).
-- **Engine:** UE 5.4 (`EngineAssociation` in `TheLongNoon.uproject`).
+- **Engine:** UE 5.7 (`EngineAssociation` in `TheLongNoon.uproject`).
 - **Plugins enabled** (in `.uproject`): **EnhancedInput**, **OnlineSubsystemSteam**, **ModelingToolsEditorMode** (editor-only, for greyboxing).
 
 ## 2. Build targets (`Source/`)

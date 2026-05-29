@@ -1,6 +1,6 @@
 # Source/TheLongNoon — C++ module layout
 
-Stub C++ foundation for the game module. These compile under UE 5.4 once the project
+Stub C++ foundation for the game module. These compile under UE 5.7 once the project
 is opened/built (see `docs/tech/unreal-setup.md`). They establish the architecture from
 `docs/tech/coding-standards-and-architecture.md`: C++ for systems, Blueprints for content,
 data-driven via DataAssets, decoupled via the event subsystem.

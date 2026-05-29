@@ -11,7 +11,7 @@
 ## This machine's reality (discovered 2026-05-29)
 - ✅ **UE 5.7** installed at `C:\Program Files\Epic Games\UE_5.7` (Build.bat, UnrealBuildTool, UnrealEditor-Cmd all present). `dotnet` present.
 - ❌ **No C++ toolchain** — no Visual Studio, no MSVC, no Windows SDK. **This is the hard blocker: nothing compiles without it.**
-- ⚠️ Project targeted **5.4**, engine is **5.7** → retarget (one line). *(Default: use the 5.7 you have. Tell me if you'd rather install 5.4 to match the docs.)*
+- ✅ **Standardized on UE 5.7.** `.uproject` retargeted and all docs updated. (The project was originally authored to 5.4 conventions; nothing was ever compiled, so this is a clean target, not a port.)
 
 ---
 
@@ -21,11 +21,11 @@
   ! winget install --id Microsoft.VisualStudio.2022.Community -e --override "--quiet --wait --add Microsoft.VisualStudio.Workload.NativeGame --add Microsoft.VisualStudio.Workload.NativeDesktop --includeRecommended"
   ```
   (Community is free. If you have Pro/Enterprise already, just add the **"Game development with C++"** workload in the VS Installer instead.)
-- [x] 🤖 **Retarget engine** `TheLongNoon.uproject` `EngineAssociation` 5.4 → 5.7.
+- [x] 🤖 **Retarget engine** `TheLongNoon.uproject` `EngineAssociation` → 5.7 (and swept all docs to 5.7).
 - [ ] 🤖 Once VS is present: verify the toolchain (`cl.exe` + Windows SDK detected by UnrealBuildTool).
 
 ## P3.1 — Compile the C++ module (the autonomous fix loop)
-> This is where I run continuously: build → read errors → fix includes/API → rebuild, until green. The code is hand-authored to UE conventions and **has never been compiled**, so expect real fixups (missing includes, 5.4→5.7 API deltas).
+> This is where I run continuously: build → read errors → fix includes/API → rebuild, until green. The code is hand-authored to UE conventions and **has never been compiled**, so expect real fixups (missing includes, any 5.7 API deltas).
 - [ ] 🤖 Generate project files (`Build/BatchFiles/GenerateProjectFiles.bat`).
 - [ ] 🤖 Build `TheLongNoonEditor Win64 Development` via `Build.bat`.
 - [ ] 🤖 Fix every compile/link error iteratively; re-run until the module builds clean.

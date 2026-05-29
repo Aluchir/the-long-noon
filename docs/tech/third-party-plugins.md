@@ -38,8 +38,8 @@
 - **No dependency that pulls in cross-repo or undisclosed telemetry.**
 
 ## 4. Current dependency footprint
-- **Engine:** Unreal Engine 5.4.
+- **Engine:** Unreal Engine 5.7.
 - **Engine plugins:** Enhanced Input, Online Subsystem Steam, Modeling Tools (editor).
 - **Third-party code plugins:** none committed yet.
 
-Keeping the footprint minimal now is deliberate: the project should open and compile with a stock UE 5.4 install plus the built-in plugins above.
+Keeping the footprint minimal now is deliberate: the project should open and compile with a stock UE 5.7 install plus the built-in plugins above.

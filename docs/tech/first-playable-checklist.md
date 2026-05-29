@@ -1,11 +1,11 @@
 # First Playable Checklist (the human-at-the-editor steps)
 
-> This is the terminal deliverable of the headless build-out. Everything achievable without Unreal is done and committed on `feature/unreal-scaffold`. The steps below **require Unreal Engine 5.4 installed and the GUI editor**, because they produce binary content (`.uasset`/`.umap`) and need compilation and Play-in-Editor. Do these in order to reach the first playable Sunhollow slice.
+> This is the terminal deliverable of the headless build-out. Everything achievable without Unreal is done and committed on `feature/unreal-scaffold`. The steps below **require Unreal Engine 5.7 installed and the GUI editor**, because they produce binary content (`.uasset`/`.umap`) and need compilation and Play-in-Editor. Do these in order to reach the first playable Sunhollow slice.
 
 > Honest status: the C++ here is written to UE5 conventions but has **not been compiled** (no engine on the authoring host). Expect to fix a few includes on first build; that is normal for hand-authored UE C++.
 
 ## 0. Prerequisites
-- [ ] Install **Unreal Engine 5.4** (Epic Games Launcher) and a C++ toolchain (Visual Studio 2022 on Windows, Xcode on macOS).
+- [ ] Install **Unreal Engine 5.7** (Epic Games Launcher) and a C++ toolchain (Visual Studio 2022 on Windows, Xcode on macOS).
 - [ ] Install **Git LFS** and run `git lfs install` (mandatory before committing any `Content/`).
 - [ ] Clone the repo and check out `feature/unreal-scaffold`.
 

@@ -8,7 +8,7 @@ A cozy, sunny third-person survival/crafting/exploration game with a quietly dev
 **Target:** Steam (Windows first; Linux + macOS later).
 
 ## Engine
-**Unreal Engine 5 (5.4), C++ + Blueprints.** Skeleton on branch `feature/unreal-scaffold`. To get to a first playable build, follow [docs/tech/first-playable-checklist.md](docs/tech/first-playable-checklist.md) (requires UE5 installed).
+**Unreal Engine 5 (5.7), C++ + Blueprints.** Skeleton on branch `feature/unreal-scaffold`. To get to a first playable build, follow [docs/tech/first-playable-checklist.md](docs/tech/first-playable-checklist.md) (requires UE5 installed).
 
 ## Start here
 - 📖 [World Bible & Game Design Document](docs/WORLD_BIBLE.md) — the foundation. Read this first.

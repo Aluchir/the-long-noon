@@ -1,10 +1,10 @@
 # Build & Run (for when Unreal is installed)
 
-> Command-line build/run reference and CI notes. These require a machine with **Unreal Engine 5.4** installed; they cannot run on a host without the engine. For the first-time in-editor path, see [first-playable-checklist.md](first-playable-checklist.md).
+> Command-line build/run reference and CI notes. These require a machine with **Unreal Engine 5.7** installed; they cannot run on a host without the engine. For the first-time in-editor path, see [first-playable-checklist.md](first-playable-checklist.md).
 
 ## Paths (set per machine)
 ```
-UE_ROOT=/path/to/UE_5.4            # engine install
+UE_ROOT=/path/to/UE_5.7            # engine install
 PROJECT=/path/to/survival-game/TheLongNoon.uproject
 ```
 
@@ -40,7 +40,7 @@ Where `<Platform>` is `Mac`, `Linux`, or (on Windows) use `Build.bat ... Win64`.
 Pure-logic tests (economy math, save versioning, literacy gating) should live under an automation spec so this stays meaningful.
 
 ## CI notes
-- UE CI needs a runner with the engine installed (much heavier than typical CI). Options: a self-hosted runner with UE 5.4, or a container image with the engine.
+- UE CI needs a runner with the engine installed (much heavier than typical CI). Options: a self-hosted runner with UE 5.7, or a container image with the engine.
 - Suggested PR job: generate project files -> build `TheLongNoonEditor` (Development) -> run Automation tests. This catches "does not compile / does not open" before merge.
 - Keep `Binaries/`, `Intermediate/`, `Saved/`, `DerivedDataCache/` out of git (already in `.gitignore`); they are build outputs.
 - Content is LFS; CI must `git lfs pull` before building if any cooked content is needed.

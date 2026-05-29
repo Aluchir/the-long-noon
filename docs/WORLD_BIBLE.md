@@ -136,7 +136,7 @@ This keeps the game **non-lethal, gentle, and cozy** while preserving satisfying
 ## 10. Technical requirements (Steam-first)
 
 ### Engine
-- **Confirmed: Unreal Engine 5 (5.4), C++ with Blueprints.** Chosen for full-3D third-person on Steam: production-grade Third Person template, top 3D rendering/animation tooling, strongest 3D-on-Steam track record, deep talent pool. See [engine rationale](tech/engine-rationale.md).
+- **Confirmed: Unreal Engine 5 (5.7), C++ with Blueprints.** Chosen for full-3D third-person on Steam: production-grade Third Person template, top 3D rendering/animation tooling, strongest 3D-on-Steam track record, deep talent pool. See [engine rationale](tech/engine-rationale.md).
 - **Fallback: Unity** if build weight/iteration speed become painful.
 - Tradeoffs accepted: heavier builds, longer iteration, binary content (Git LFS mandatory), 5% royalty above $1M.
 

@@ -1,6 +1,6 @@
 # Engine Rationale — why Unreal Engine 5
 
-> The decision record for the engine choice. Confirmed: **Unreal Engine 5 (5.4)**, C++ with Blueprints.
+> The decision record for the engine choice. Confirmed: **Unreal Engine 5 (5.7)**, C++ with Blueprints. (Originally scaffolded against 5.4; standardized on 5.7 — the version installed on the build machine — before first compile.)
 
 ## The decision
 **Unreal Engine 5**, third-person, full 3D, for commercial Steam release (Windows first; Linux + macOS later). C++ for systems, Blueprints for content/iteration.

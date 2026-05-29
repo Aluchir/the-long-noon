@@ -6,7 +6,7 @@
 Take *The Long Noon* from "scaffold + stubs" to the **maximum state achievable without a running Unreal Engine install** — all code systems drafted into coherent, consistent, review-clean C++; all story/text/data authored; and a precise in-editor checklist that takes a human from this repo to the first playable run.
 
 ## The honest ceiling (what the loop CANNOT do)
-These require Unreal Engine 5.4 installed + the GUI editor, so they are **documented for the user, not done by the loop**:
+These require Unreal Engine 5.7 installed + the GUI editor, so they are **documented for the user, not done by the loop**:
 - Compile the C++ (needs UnrealBuildTool + engine headers).
 - Generate/author binary content (`.uasset`/`.umap`): the Third Person template character, Enhanced Input assets, materials, the Sunhollow map.
 - Launch/playtest the game.

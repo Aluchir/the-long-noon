@@ -3,7 +3,7 @@
 > Read this first when picking up on another machine (e.g. Windows 11). It tells a fresh Claude Code session, or a human, exactly where things stand and what to do next. The live Claude session does not transfer between machines; this file plus the docs carry the state.
 
 ## What this is
-**The Long Noon** (working title): a cozy third-person 3D survival/crafting game with a buried narrative. A sunny world where nobody can die, nobody has family, nobody remembers why, because an alien (the Gardener) removed death as an act of mercy. The player rediscovers the buried truth by crafting into older regions. Engine: **Unreal Engine 5.4, C++ + Blueprints.** Target: Steam (Windows first).
+**The Long Noon** (working title): a cozy third-person 3D survival/crafting game with a buried narrative. A sunny world where nobody can die, nobody has family, nobody remembers why, because an alien (the Gardener) removed death as an act of mercy. The player rediscovers the buried truth by crafting into older regions. Engine: **Unreal Engine 5.7, C++ + Blueprints.** Target: Steam (Windows first).
 
 ## Branch layout
 - **`main`** — the original project scaffold (one commit).
@@ -25,9 +25,9 @@ git checkout feature/unreal-scaffold
 ## The honest caveat (important)
 **None of the C++ has been compiled.** It was authored on a machine without Unreal installed, to UE5 conventions, but is unverified. Expect to fix a few `#include` lines on first build. This is normal for hand-authored UE C++.
 
-## Exact next steps to a running game (needs UE 5.4 installed)
+## Exact next steps to a running game (needs UE 5.7 installed)
 Follow **`docs/tech/first-playable-checklist.md`** in order:
-1. Install UE 5.4 + Git LFS (`git lfs install`).
+1. Install UE 5.7 + Git LFS (`git lfs install`).
 2. Generate a Third Person (C++) template project; copy its binary content (character, Enhanced Input assets, sample map) into this repo's `Content/`.
 3. Compile the `TheLongNoon` module; fix any includes.
 4. Set GameMode to `ALongNoonGameMode`, reparent the template character to `ALongNoonCharacter`, assign the `IMC_Default`/`IA_*` input assets.
@@ -38,7 +38,7 @@ Follow **`docs/tech/first-playable-checklist.md`** in order:
 Sections F and G in `docs/GOAL.md` are finished:
 - **F (code TODOs wired):** crafting + reclamation spend stamina; reclamation wears tool durability (`Repair()` restores it); the character equips its starting tool by id from data; the HUD is driven from the character (Tend meters, interact prompt via focus trace, lore-found toast).
 - **G (content + specs):** NPC roster + dialogue lines as data (`NPCs.csv`/`DialogueLines.csv` + `FNpcRow`/`FDialogueLineRow` + `ULongNoonDialogueComponent::LoadFromData`); `docs/design/balance-sheet.md`; `docs/art/forgotten-script-font-spec.md`; `docs/tech/localization.md` + `docs/art/asset-list.md` + `docs/audio/asset-list.md`.
-All remaining work now requires the UE 5.4 editor (compile + binary content + playtest) per the checklist above.
+All remaining work now requires the UE 5.7 editor (compile + binary content + playtest) per the checklist above.
 
 ## Not in this repo (machine-local, for awareness)
 - Auto-memory lives in the local Claude config, not the repo. Key facts: this project's Ithura tracker is "The Long Noon" (LONGNOON) in the anorph workspace; the board mirrors the docs.
