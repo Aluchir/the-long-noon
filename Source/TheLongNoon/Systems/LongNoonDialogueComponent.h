@@ -33,6 +33,21 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dialogue")
 	FName GrantsFragmentOnFirstTalk;
 
+	/**
+	 * Which NPC this component speaks for. If set, LoadFromData() pulls this NPC's
+	 * roster row + dialogue lines from the registry (NPCs.csv / DialogueLines.csv).
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dialogue")
+	FName NpcId;
+
+	/**
+	 * Populate Lines (and the first-talk fragment) from the data registry using NpcId.
+	 * Loads first-talk, idle, and story-beat lines in order, then the dagger line.
+	 * Returns false if the registry or the NPC row is unavailable.
+	 */
+	UFUNCTION(BlueprintCallable, Category = "Dialogue")
+	bool LoadFromData();
+
 	/** Begin (or restart) the conversation from the first line. */
 	UFUNCTION(BlueprintCallable, Category = "Dialogue")
 	void StartDialogue();

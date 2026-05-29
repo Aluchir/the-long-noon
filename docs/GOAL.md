@@ -64,15 +64,15 @@ The loop's "done" = everything below is authored and committed, and `docs/tech/f
 
 ### F. Wire the code TODOs
 - [x] Crafting spends stamina on the Tend component
-- [ ] Reclamation spends stamina + applies tool durability
-- [ ] Equip the starting tool from data
-- [ ] Interact prompt -> HUD; Tend changes -> HUD; lore found -> HUD
+- [x] Reclamation spends stamina + applies tool durability
+- [x] Equip the starting tool from data
+- [x] Interact prompt -> HUD; Tend changes -> HUD; lore found -> HUD
 
 ### G. More content + asset specs
-- [ ] NPC roster as data (the six characters + dialogue line ids)
-- [ ] Balance sheet (per-tier source rates vs sink costs)
-- [ ] Forgotten-script font glyph spec (for an artist)
-- [ ] Localization scaffolding + art/audio asset lists
+- [x] NPC roster as data (the six characters + dialogue line ids)
+- [x] Balance sheet (per-tier source rates vs sink costs)
+- [x] Forgotten-script font glyph spec (for an artist)
+- [x] Localization scaffolding + art/audio asset lists
 
 ---
 ### Done so far (prior turns)

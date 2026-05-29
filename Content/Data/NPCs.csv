@@ -1,0 +1,7 @@
+Name,DisplayName,HomeRegion,Role,GrantsFragmentOnFirstTalk,FirstTalkLines,IdleLines,StoryBeatLines,DaggerLine
+npc_tinker,"The Tinker",region_sunhollow,"Mentor",frag_tinker_kept_tool,"tinker_first1|tinker_first2","tinker_idle1|tinker_idle2|tinker_idle3","tinker_beat_firstcraft|tinker_beat_past",tinker_dagger
+npc_forager,"The Forager",region_overgrowth,"Gathering Guide",frag_morningspit_truename,"forager_first1|forager_first2","forager_idle1|forager_idle2|forager_idle3","forager_beat_truename",forager_dagger
+npc_keeper,"The Keeper",region_sunhollow,"Mourner",frag_sunhollow_monument,"keeper_first1|keeper_first2","keeper_idle1|keeper_idle2","keeper_beat_literacy",keeper_dagger
+npc_one_who_counts,"The One Who Counts",region_stillworks,"Accountant of Grief",frag_census_ledger,"counts_first1|counts_first2","counts_idle1|counts_idle2","counts_beat_meaning",counts_dagger
+npc_gardener,"The Gardener",region_first_garden,"Architect of the Mercy",frag_gardeners_word,"gardener_first1|gardener_first2","gardener_mid1|gardener_mid2","gardener_offer1",gardener_dagger
+npc_rememberer,"The Rememberer",region_hush,"The Unforgotten",frag_remembrancer_archive,"rememberer_first1|rememberer_first2","rememberer_idle1|rememberer_idle2","rememberer_beat_choice",rememberer_dagger

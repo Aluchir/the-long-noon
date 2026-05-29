@@ -84,6 +84,39 @@ struct FLoreFragmentRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) FText TranslatedText;
 };
 
+USTRUCT(BlueprintType)
+struct FNpcRow : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FText DisplayName;
+	/** Region id the NPC is first met in (matches Regions.csv). */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName HomeRegion;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FString Role;
+	/** Lore fragment granted on first talk (None = none). */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName GrantsFragmentOnFirstTalk;
+	/** Pipe-separated DialogueLines ids, e.g. "tinker_first1|tinker_first2". */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FString FirstTalkLines;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FString IdleLines;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FString StoryBeatLines;
+	/** The single line that, on reflection, guts the player. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName DaggerLine;
+};
+
+USTRUCT(BlueprintType)
+struct FDialogueLineRow : public FTableRowBase
+{
+	GENERATED_BODY()
+
+	/** NPC id this line belongs to (matches NPCs.csv Name). */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName Speaker;
+	/** FirstTalk | Idle | StoryBeat | Dagger. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName Category;
+	/** Freeform trigger token (first_talk, on_first_craft, the_offer, ...). */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName Trigger;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FText Text;
+};
+
 /** A parsed recipe input (registry output, not a DataTable column). */
 USTRUCT(BlueprintType)
 struct FParsedRecipeInput

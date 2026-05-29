@@ -13,7 +13,12 @@
 #include "Systems/LongNoonBuildingComponent.h"
 #include "Systems/LongNoonTendComponent.h"
 #include "Core/Interactable.h"
+#include "Core/LongNoonEventSubsystem.h"
+#include "UI/LongNoonHUD.h"
 #include "Engine/World.h"
+#include "Engine/GameInstance.h"
+#include "GameFramework/PlayerController.h"
+#include "TimerManager.h"
 
 ALongNoonCharacter::ALongNoonCharacter()
 {
@@ -64,6 +69,105 @@ void ALongNoonCharacter::BeginPlay()
 				Subsystem->AddMappingContext(DefaultMappingContext, 0);
 			}
 		}
+	}
+
+	// Equip the starting reclamation tool from the Tools DataTable.
+	if (Reclamation && !StartingToolId.IsNone())
+	{
+		Reclamation->EquipToolById(StartingToolId);
+	}
+
+	SetupHUDLink();
+}
+
+ALongNoonHUD* ALongNoonCharacter::ResolveHUD()
+{
+	// The HUD actor may spawn after this pawn's BeginPlay, so resolve lazily.
+	if (!HUD)
+	{
+		if (const APlayerController* PC = Cast<APlayerController>(GetController()))
+		{
+			HUD = Cast<ALongNoonHUD>(PC->GetHUD());
+		}
+	}
+	return HUD;
+}
+
+void ALongNoonCharacter::SetupHUDLink()
+{
+	ResolveHUD();
+
+	// Tend meters -> HUD.
+	if (Tend)
+	{
+		Tend->OnTendChanged.AddUniqueDynamic(this, &ALongNoonCharacter::HandleTendChanged);
+		HandleTendChanged(Tend->Stamina, Tend->Focus); // seed the initial display
+	}
+
+	// Lore fragments found -> HUD toast (routed through the global event hub).
+	if (const UWorld* World = GetWorld())
+	{
+		if (const UGameInstance* GI = World->GetGameInstance())
+		{
+			if (ULongNoonEventSubsystem* Events = GI->GetSubsystem<ULongNoonEventSubsystem>())
+			{
+				Events->OnLoreFragmentFound.AddUniqueDynamic(this, &ALongNoonCharacter::HandleLoreFound);
+			}
+		}
+
+		// Poll the interact focus on a gentle cadence and push the prompt to the HUD.
+		World->GetTimerManager().SetTimer(InteractFocusTimer, this,
+			&ALongNoonCharacter::UpdateInteractFocus, InteractFocusInterval, true);
+	}
+}
+
+void ALongNoonCharacter::HandleTendChanged(float Stamina, float Focus)
+{
+	if (ALongNoonHUD* H = ResolveHUD())
+	{
+		H->UpdateTend(Stamina, Focus, Tend ? Tend->Comfort : 0.0f);
+	}
+}
+
+void ALongNoonCharacter::HandleLoreFound(FName FragmentId)
+{
+	if (ALongNoonHUD* H = ResolveHUD())
+	{
+		H->NotifyLoreFound(FragmentId);
+	}
+}
+
+void ALongNoonCharacter::UpdateInteractFocus()
+{
+	ALongNoonHUD* H = ResolveHUD();
+	if (!H || !FollowCamera)
+	{
+		return;
+	}
+
+	FText Prompt = FText::GetEmpty();
+
+	const FVector Start = FollowCamera->GetComponentLocation();
+	const FVector End = Start + FollowCamera->GetForwardVector() * InteractReach;
+
+	FHitResult Hit;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+
+	if (GetWorld() && GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params))
+	{
+		AActor* HitActor = Hit.GetActor();
+		if (HitActor && HitActor->Implements<UInteractable>())
+		{
+			Prompt = IInteractable::Execute_GetInteractPrompt(HitActor);
+		}
+	}
+
+	// Only refresh the HUD when the prompt actually changes.
+	if (!Prompt.EqualTo(LastInteractPrompt))
+	{
+		LastInteractPrompt = Prompt;
+		H->SetInteractPrompt(Prompt);
 	}
 }
 

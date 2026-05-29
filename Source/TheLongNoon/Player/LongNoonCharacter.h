@@ -14,6 +14,7 @@ class ULongNoonReclamationComponent;
 class ULongNoonCraftingComponent;
 class ULongNoonBuildingComponent;
 class ULongNoonTendComponent;
+class ALongNoonHUD;
 
 /**
  * Third-person player character: the Newcomer. Camera boom + follow camera and
@@ -86,6 +87,40 @@ protected:
 	void StopSprint(const FInputActionValue& Value);
 	void Interact(const FInputActionValue& Value);
 	void Prune(const FInputActionValue& Value);
+
+	// --- HUD link (systems push display updates through ALongNoonHUD) ---
+	/** Subscribe components/events to the HUD and start the interact-focus poll. */
+	void SetupHUDLink();
+
+	/** Resolve (and cache) the player HUD; re-resolves if it spawned after this pawn. */
+	ALongNoonHUD* ResolveHUD();
+
+	/** Tend meters changed -> refresh the HUD (Comfort is read from the component). */
+	UFUNCTION()
+	void HandleTendChanged(float Stamina, float Focus);
+
+	/** A lore fragment was found -> gentle HUD toast. */
+	UFUNCTION()
+	void HandleLoreFound(FName FragmentId);
+
+	/** Poll the focus trace and push the interact prompt to the HUD. */
+	void UpdateInteractFocus();
+
+	UPROPERTY()
+	TObjectPtr<ALongNoonHUD> HUD;
+
+	FTimerHandle InteractFocusTimer;
+
+	/** Last prompt pushed, so we only refresh the HUD on change. */
+	FText LastInteractPrompt;
+
+	/** Reclamation tool equipped on spawn, looked up from the Tools DataTable. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Reclamation")
+	FName StartingToolId = TEXT("tool_pruning_blade");
+
+	/** Seconds between interact-focus polls (cozy game; no need for per-frame). */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
+	float InteractFocusInterval = 0.15f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
 	float WalkSpeed = 400.0f;

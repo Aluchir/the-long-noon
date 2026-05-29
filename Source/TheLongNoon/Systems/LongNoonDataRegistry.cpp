@@ -18,13 +18,17 @@ void ULongNoonDataRegistry::Initialize(FSubsystemCollectionBase& Collection)
 	RecipeTable = Settings->RecipeTable.LoadSynchronous();
 	RegionTable = Settings->RegionTable.LoadSynchronous();
 	LoreFragmentTable = Settings->LoreFragmentTable.LoadSynchronous();
+	NpcTable = Settings->NpcTable.LoadSynchronous();
+	DialogueLineTable = Settings->DialogueLineTable.LoadSynchronous();
 
-	UE_LOG(LogLongNoon, Log, TEXT("[DataRegistry] Tables loaded (items=%d, tools=%d, recipes=%d, regions=%d, fragments=%d)."),
+	UE_LOG(LogLongNoon, Log, TEXT("[DataRegistry] Tables loaded (items=%d, tools=%d, recipes=%d, regions=%d, fragments=%d, npcs=%d, lines=%d)."),
 		ItemTable ? ItemTable->GetRowNames().Num() : 0,
 		ToolTable ? ToolTable->GetRowNames().Num() : 0,
 		RecipeTable ? RecipeTable->GetRowNames().Num() : 0,
 		RegionTable ? RegionTable->GetRowNames().Num() : 0,
-		LoreFragmentTable ? LoreFragmentTable->GetRowNames().Num() : 0);
+		LoreFragmentTable ? LoreFragmentTable->GetRowNames().Num() : 0,
+		NpcTable ? NpcTable->GetRowNames().Num() : 0,
+		DialogueLineTable ? DialogueLineTable->GetRowNames().Num() : 0);
 }
 
 const FItemRow* ULongNoonDataRegistry::GetItem(FName ItemId) const
@@ -50,6 +54,41 @@ const FRegionRow* ULongNoonDataRegistry::GetRegion(FName RegionId) const
 const FLoreFragmentRow* ULongNoonDataRegistry::GetFragment(FName FragmentId) const
 {
 	return LoreFragmentTable ? LoreFragmentTable->FindRow<FLoreFragmentRow>(FragmentId, TEXT("GetFragment"), false) : nullptr;
+}
+
+const FNpcRow* ULongNoonDataRegistry::GetNpc(FName NpcId) const
+{
+	return NpcTable ? NpcTable->FindRow<FNpcRow>(NpcId, TEXT("GetNpc"), false) : nullptr;
+}
+
+const FDialogueLineRow* ULongNoonDataRegistry::GetDialogueLine(FName LineId) const
+{
+	return DialogueLineTable ? DialogueLineTable->FindRow<FDialogueLineRow>(LineId, TEXT("GetDialogueLine"), false) : nullptr;
+}
+
+TArray<FText> ULongNoonDataRegistry::GetDialogueLines(const FString& PackedLineIds) const
+{
+	TArray<FText> Result;
+	if (PackedLineIds.IsEmpty())
+	{
+		return Result;
+	}
+
+	TArray<FString> Ids;
+	PackedLineIds.ParseIntoArray(Ids, TEXT("|"), true);
+	for (FString& Id : Ids)
+	{
+		Id.TrimStartAndEndInline();
+		if (const FDialogueLineRow* Line = GetDialogueLine(FName(*Id)))
+		{
+			Result.Add(Line->Text);
+		}
+		else
+		{
+			UE_LOG(LogLongNoon, Warning, TEXT("[DataRegistry] Unknown dialogue line id '%s'."), *Id);
+		}
+	}
+	return Result;
 }
 
 TArray<EReclamationVerb> ULongNoonDataRegistry::ParseVerbs(const FString& Packed)

@@ -77,7 +77,15 @@ bool ULongNoonCraftingComponent::Craft(const URecipeDef* Recipe)
 		}
 	}
 
-	// TODO: spend Recipe->StaminaCost on the Tend component.
+	// Spend stamina on the Tend component if present (mirrors CraftById).
+	if (Recipe->StaminaCost > 0.0f)
+	{
+		if (ULongNoonTendComponent* Tend = GetOwner() ? GetOwner()->FindComponentByClass<ULongNoonTendComponent>() : nullptr)
+		{
+			Tend->SpendStamina(Recipe->StaminaCost);
+		}
+	}
+
 	return true;
 }
 

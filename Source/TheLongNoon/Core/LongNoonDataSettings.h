@@ -7,7 +7,7 @@
 class UDataTable;
 
 /**
- * Project Settings entry (Project -> The Long Noon) holding the five content
+ * Project Settings entry (Project -> The Long Noon) holding the content
  * DataTables. Assign the tables imported from Content/Data/*.csv here; the
  * ULongNoonDataRegistry reads them on init. See docs/tech/data-authoring-guide.md.
  */
@@ -33,4 +33,10 @@ public:
 
 	UPROPERTY(Config, EditAnywhere, Category = "Data Tables", meta = (AllowedClasses = "/Script/Engine.DataTable"))
 	TSoftObjectPtr<UDataTable> LoreFragmentTable;
+
+	UPROPERTY(Config, EditAnywhere, Category = "Data Tables", meta = (AllowedClasses = "/Script/Engine.DataTable"))
+	TSoftObjectPtr<UDataTable> NpcTable;
+
+	UPROPERTY(Config, EditAnywhere, Category = "Data Tables", meta = (AllowedClasses = "/Script/Engine.DataTable"))
+	TSoftObjectPtr<UDataTable> DialogueLineTable;
 };

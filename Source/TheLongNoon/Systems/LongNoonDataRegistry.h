@@ -26,6 +26,12 @@ public:
 	const FRecipeRow* GetRecipe(FName RecipeId) const;
 	const FRegionRow* GetRegion(FName RegionId) const;
 	const FLoreFragmentRow* GetFragment(FName FragmentId) const;
+	const FNpcRow* GetNpc(FName NpcId) const;
+	const FDialogueLineRow* GetDialogueLine(FName LineId) const;
+
+	/** Resolve a pipe-separated list of dialogue line ids to their texts. */
+	UFUNCTION(BlueprintCallable, Category = "Data")
+	TArray<FText> GetDialogueLines(const FString& PackedLineIds) const;
 
 	/** Parse a pipe-separated verb list ("Seal|Prune") into verbs. */
 	UFUNCTION(BlueprintCallable, Category = "Data")
@@ -41,4 +47,6 @@ private:
 	UPROPERTY() TObjectPtr<UDataTable> RecipeTable;
 	UPROPERTY() TObjectPtr<UDataTable> RegionTable;
 	UPROPERTY() TObjectPtr<UDataTable> LoreFragmentTable;
+	UPROPERTY() TObjectPtr<UDataTable> NpcTable;
+	UPROPERTY() TObjectPtr<UDataTable> DialogueLineTable;
 };

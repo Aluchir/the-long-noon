@@ -6,4 +6,5 @@ tool_sealing_spade,"Sealing Spade",3,"Seal|Prune",2.5,0.0,1.2,12.0,160,"Half too
 tool_quieting_edge,"Quieting Edge",3,"Settle",2.2,0.0,1.6,14.0,160,"Forged from a Stillworks part built to help things end gently. The edge remembers a kinder job than tending overgrowth."
 tool_long_tool,"The Long Tool",4,"Quiet|Still|Settle",3.0,6.0,2.0,16.0,200,"The finest thing you will make and the one you will use least. In the Hush even the Bloom forgets to grow."
 util_field_hook,"Field Hook",1,"",2.0,0.0,0.0,3.0,100,"For gathering gentle Bloom. Take only what you'll use, the Forager says, and cannot recall why it mattered."
+util_wayanchor,"Wayanchor",2,"",1.0,0.0,0.0,2.0,100,"Plant one and the world remembers the way back to it. Funny, that the markers remember better than the people do."
 util_climb_iron,"Climb-Iron",3,"",1.5,0.0,0.0,4.0,120,"For the old vertical works. Its grip is worn smooth by hands that climbed here long before yours."
