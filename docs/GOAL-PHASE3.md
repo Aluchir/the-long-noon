@@ -28,7 +28,9 @@
 > This is where I run continuously: build → read errors → fix includes/API → rebuild, until green. The code is hand-authored to UE conventions and **has never been compiled**, so expect real fixups (missing includes, any 5.7 API deltas).
 - [x] 🤖 Build `TheLongNoonEditor Win64 Development` via `Build.bat`. **Result: Succeeded (2026-05-29).**
 - [x] 🤖 Fix every compile/link error. Only two fixes were needed: (1) Target.cs build settings -> `BuildSettingsVersion.V6` + `EngineIncludeOrderVersion.Unreal5_7`; (2) `Build.cs` add `PublicIncludePaths.Add(ModuleDirectory)` for the flat module layout's root-relative includes. No actual code bugs in the hand-authored C++.
-- [ ] 🤖 Run the automation tests headless (`UnrealEditor-Cmd ... Automation RunTests TheLongNoon`) to verify the code executes, not just compiles.
+- [x] 🤖 Run the automation tests headless (`UnrealEditor-Cmd ... Automation RunTests TheLongNoon`). **Both pass (2026-05-29):** `ParseRecipeInputs` and `ParseVerbs` Result=Success; the editor loads the module and the code executes, not just compiles.
+
+**P3.1 COMPLETE.** The C++ compiles on UE 5.7, loads in-editor, and runs. Everything below this point needs the GUI editor (binary content) and is scripted in `docs/tech/editor-graft-guide.md`.
 
 ## P3.2 — Graft the Third Person template binary content
 > Character mesh/anim, Enhanced Input assets, and a sample map are binary (`.uasset`) and come from Epic's template — they can't be authored headlessly.
