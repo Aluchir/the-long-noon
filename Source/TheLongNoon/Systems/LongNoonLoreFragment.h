@@ -25,6 +25,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Lore")
 	FName FragmentId;
 
+	/** If true, reading this also marks the Rememberer found (unlocks the Third Way). */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Lore")
+	bool bGrantsRememberer = false;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Lore")
 	bool bFound = false;
 

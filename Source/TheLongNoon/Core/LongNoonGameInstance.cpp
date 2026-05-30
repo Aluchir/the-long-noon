@@ -1,5 +1,6 @@
 #include "Core/LongNoonGameInstance.h"
 #include "Core/LongNoonEventSubsystem.h"
+#include "Core/LongNoonLog.h"
 
 void ULongNoonGameInstance::SetScriptLiteracyTier(int32 NewTier)
 {
@@ -15,4 +16,14 @@ void ULongNoonGameInstance::SetScriptLiteracyTier(int32 NewTier)
 	{
 		Events->BroadcastScriptLiteracyChanged(ScriptLiteracyTier);
 	}
+}
+
+void ULongNoonGameInstance::SetRemembererFound()
+{
+	if (bRemembererFound)
+	{
+		return;
+	}
+	bRemembererFound = true;
+	UE_LOG(LogLongNoon, Log, TEXT("[Progression] The Rememberer is found. The Third Way opens."));
 }

@@ -29,7 +29,7 @@ Where `<Platform>` is `Mac`, `Linux`, or (on Windows) use `Build.bat ... Win64`.
 "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" BuildCookRun -project="$PROJECT" \
   -noP4 -platform=Win64 -clientconfig=Development -cook -build -stage -pak -archive \
   -archivedirectory=Packaged \
-  -map=/Game/Maps/L_Sunhollow_Greybox+/Game/Maps/L_Overgrowth_Greybox+/Game/Maps/L_Stillworks_Greybox
+  -map=/Game/Maps/L_Sunhollow_Greybox+/Game/Maps/L_Overgrowth_Greybox+/Game/Maps/L_Stillworks_Greybox+/Game/Maps/L_Hush_Greybox+/Game/Maps/L_FirstGarden_Greybox
 ```
 (Swap `-platform=Win64` for `Mac`/`Linux` as needed. Windows is the launch target.)
 

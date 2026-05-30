@@ -1,6 +1,7 @@
 #include "Systems/LongNoonLoreFragment.h"
 #include "Systems/LongNoonCodexSubsystem.h"
 #include "Components/StaticMeshComponent.h"
+#include "Core/LongNoonGameInstance.h"
 #include "Core/LongNoonLog.h"
 #include "Engine/World.h"
 #include "Engine/GameInstance.h"
@@ -28,6 +29,15 @@ void ALongNoonLoreFragment::OnInteract_Implementation(AActor* /*Interactor*/)
 				Codex->RegisterFound(FragmentId);
 				bFound = true;
 				UE_LOG(LogLongNoon, Log, TEXT("[Lore] Fragment read: %s."), *FragmentId.ToString());
+
+				if (bGrantsRememberer)
+				{
+					if (ULongNoonGameInstance* LNGI = Cast<ULongNoonGameInstance>(GI))
+					{
+						LNGI->SetRemembererFound();
+					}
+				}
+
 				SetActorHiddenInGame(true);
 				SetActorEnableCollision(false);
 			}

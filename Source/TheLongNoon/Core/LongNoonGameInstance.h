@@ -35,4 +35,8 @@ public:
 	/** Raise literacy and notify the event subsystem. */
 	UFUNCTION(BlueprintCallable, Category = "Progression")
 	void SetScriptLiteracyTier(int32 NewTier);
+
+	/** Mark the Rememberer found (unlocks the Third Way ending). Idempotent. */
+	UFUNCTION(BlueprintCallable, Category = "Progression")
+	void SetRemembererFound();
 };
