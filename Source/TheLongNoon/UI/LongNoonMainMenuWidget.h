@@ -22,6 +22,7 @@ public:
 	FName StartLevel = TEXT("L_Sunhollow_Greybox");
 
 protected:
+	virtual void NativeConstruct() override;
 	virtual TSharedRef<SWidget> RebuildWidget() override;
 	virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
 

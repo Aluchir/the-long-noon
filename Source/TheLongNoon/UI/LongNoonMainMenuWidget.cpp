@@ -10,6 +10,15 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+void ULongNoonMainMenuWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
+	// Without this the widget can't hold keyboard focus, so NativeOnKeyDown never fires
+	// and Enter/C/Q do nothing. Make it focusable and grab focus immediately.
+	SetIsFocusable(true);
+	SetKeyboardFocus();
+}
+
 TSharedRef<SWidget> ULongNoonMainMenuWidget::RebuildWidget()
 {
 	if (!TitleText)
@@ -71,6 +80,7 @@ void ULongNoonMainMenuWidget::BuildTree()
 FReply ULongNoonMainMenuWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
 {
 	const FKey Key = InKeyEvent.GetKey();
+	UE_LOG(LogTemp, Log, TEXT("[Menu] key received: %s"), *Key.ToString());
 	if (Key == EKeys::Enter || Key == EKeys::SpaceBar || Key == EKeys::Gamepad_FaceButton_Bottom)
 	{
 		UGameplayStatics::OpenLevel(this, StartLevel);
