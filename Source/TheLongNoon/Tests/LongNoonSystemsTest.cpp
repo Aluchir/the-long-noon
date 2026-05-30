@@ -10,6 +10,7 @@
 #include "Systems/LongNoonRegionSubsystem.h"
 #include "Systems/LongNoonCodexSubsystem.h"
 #include "Systems/LongNoonEndings.h"
+#include "Systems/LongNoonQuestSubsystem.h"
 #include "Data/ToolDef.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -199,6 +200,34 @@ bool FLongNoonEndingsTest::RunTest(const FString& Parameters)
 		(int32)ELongNoonEnding::ThirdWay);
 	TestFalse(TEXT("third way unavailable without Rememberer"), ULongNoonEndingLibrary::IsThirdWayAvailable(false));
 	TestTrue(TEXT("third way available with Rememberer"), ULongNoonEndingLibrary::IsThirdWayAvailable(true));
+	return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FLongNoonQuestFlowTest, "TheLongNoon.Systems.QuestFlow",
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+
+bool FLongNoonQuestFlowTest::RunTest(const FString& Parameters)
+{
+	TArray<FName> Quest = { TEXT("gather_sunmoss"), TEXT("craft_blade"), TEXT("prune_treeline"), TEXT("build_gate") };
+	TSet<FName> Done;
+
+	TestEqual(TEXT("active = first when none done"),
+		ULongNoonQuestSubsystem::ActiveObjective(Quest, Done), FName(TEXT("gather_sunmoss")));
+	TestFalse(TEXT("not all complete"), ULongNoonQuestSubsystem::AreAllComplete(Quest, Done));
+
+	Done.Add(TEXT("gather_sunmoss"));
+	TestEqual(TEXT("active advances to second"),
+		ULongNoonQuestSubsystem::ActiveObjective(Quest, Done), FName(TEXT("craft_blade")));
+
+	Done.Add(TEXT("craft_blade")); Done.Add(TEXT("prune_treeline")); Done.Add(TEXT("build_gate"));
+	TestEqual(TEXT("active = None when all done"),
+		ULongNoonQuestSubsystem::ActiveObjective(Quest, Done), FName(NAME_None));
+	TestTrue(TEXT("all complete"), ULongNoonQuestSubsystem::AreAllComplete(Quest, Done));
+
+	// Out-of-order completion still reports the earliest remaining as active.
+	TSet<FName> Skip; Skip.Add(TEXT("craft_blade"));
+	TestEqual(TEXT("earliest incomplete is active despite later done"),
+		ULongNoonQuestSubsystem::ActiveObjective(Quest, Skip), FName(TEXT("gather_sunmoss")));
 	return true;
 }
 #endif // WITH_AUTOMATION_TESTS

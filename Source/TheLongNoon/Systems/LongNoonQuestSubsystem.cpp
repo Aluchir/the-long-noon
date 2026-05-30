@@ -12,3 +12,27 @@ void ULongNoonQuestSubsystem::CompleteObjective(FName ObjectiveId)
 	OnObjectiveCompleted.Broadcast(ObjectiveId);
 	UE_LOG(LogLongNoon, Log, TEXT("[Quest] Objective complete: %s."), *ObjectiveId.ToString());
 }
+
+FName ULongNoonQuestSubsystem::ActiveObjective(const TArray<FName>& Ordered, const TSet<FName>& Completed)
+{
+	for (const FName& Obj : Ordered)
+	{
+		if (!Completed.Contains(Obj))
+		{
+			return Obj;
+		}
+	}
+	return NAME_None;
+}
+
+bool ULongNoonQuestSubsystem::AreAllComplete(const TArray<FName>& Ordered, const TSet<FName>& Completed)
+{
+	for (const FName& Obj : Ordered)
+	{
+		if (!Completed.Contains(Obj))
+		{
+			return false;
+		}
+	}
+	return true;
+}
