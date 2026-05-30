@@ -2,9 +2,11 @@
 #include "Systems/LongNoonEndings.h"
 #include "Core/LongNoonGameInstance.h"
 #include "Core/LongNoonLog.h"
+#include "UI/LongNoonHUD.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
 #include "Engine/GameInstance.h"
+#include "GameFramework/PlayerController.h"
 
 ALongNoonChoiceMarker::ALongNoonChoiceMarker()
 {
@@ -25,10 +27,26 @@ void ALongNoonChoiceMarker::OnInteract_Implementation(AActor* /*Interactor*/)
 	}
 
 	Resolved = ULongNoonEndingLibrary::ResolveEnding(Choice, bRemembererFound);
-	const UEnum* EndingEnum = StaticEnum<ELongNoonEnding>();
-	const FString Name = EndingEnum ? EndingEnum->GetDisplayNameTextByValue((int64)Resolved).ToString() : TEXT("?");
+
+	const FText Title = ULongNoonEndingLibrary::GetEndingTitle(Resolved);
+	const FText Body  = ULongNoonEndingLibrary::GetEndingText(Resolved);
+
 	UE_LOG(LogLongNoon, Log, TEXT("[Ending] Marker chosen -> %s (rememberer=%s)"),
-		*Name, bRemembererFound ? TEXT("yes") : TEXT("no"));
+		*Title.ToString(), bRemembererFound ? TEXT("yes") : TEXT("no"));
+	UE_LOG(LogLongNoon, Log, TEXT("[Ending] %s"), *Body.ToString());
+
+	// Surface the ending beat on the HUD if one is present.
+	if (const UWorld* World = GetWorld())
+	{
+		if (const APlayerController* PC = World->GetFirstPlayerController())
+		{
+			if (ALongNoonHUD* HUD = Cast<ALongNoonHUD>(PC->GetHUD()))
+			{
+				HUD->ShowToast(FText::Format(
+					NSLOCTEXT("LongNoon", "EndingToast", "{0}\n\n{1}"), Title, Body));
+			}
+		}
+	}
 }
 
 FText ALongNoonChoiceMarker::GetInteractPrompt_Implementation() const

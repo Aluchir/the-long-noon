@@ -32,6 +32,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "HUD")
 	void OnLoreFound(FName FragmentId);
 
+	/** Show arbitrary toast text (ending beats, hints); empty hides it. */
+	UFUNCTION(BlueprintCallable, Category = "HUD")
+	void ShowToast(const FText& Message);
+
 protected:
 	virtual TSharedRef<SWidget> RebuildWidget() override;
 

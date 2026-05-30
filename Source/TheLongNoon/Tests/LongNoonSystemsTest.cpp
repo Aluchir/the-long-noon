@@ -209,6 +209,20 @@ bool FLongNoonEndingsTest::RunTest(const FString& Parameters)
 		(int32)ELongNoonEnding::ThirdWay);
 	TestFalse(TEXT("third way unavailable without Rememberer"), ULongNoonEndingLibrary::IsThirdWayAvailable(false));
 	TestTrue(TEXT("third way available with Rememberer"), ULongNoonEndingLibrary::IsThirdWayAvailable(true));
+
+	// Every ending (including the locked None) has a non-empty title and beat text.
+	const ELongNoonEnding AllEndings[] = {
+		ELongNoonEnding::GiftReturned, ELongNoonEnding::LongNoonContinues,
+		ELongNoonEnding::ThirdWay, ELongNoonEnding::None };
+	for (ELongNoonEnding E : AllEndings)
+	{
+		TestFalse(TEXT("ending title is non-empty"), ULongNoonEndingLibrary::GetEndingTitle(E).IsEmpty());
+		TestFalse(TEXT("ending text is non-empty"), ULongNoonEndingLibrary::GetEndingText(E).IsEmpty());
+	}
+	// The three real endings have distinct titles.
+	TestNotEqual(TEXT("gift vs keep title"),
+		ULongNoonEndingLibrary::GetEndingTitle(ELongNoonEnding::GiftReturned).ToString(),
+		ULongNoonEndingLibrary::GetEndingTitle(ELongNoonEnding::LongNoonContinues).ToString());
 	return true;
 }
 

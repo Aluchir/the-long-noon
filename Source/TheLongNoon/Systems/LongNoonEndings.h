@@ -39,4 +39,16 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Endings")
 	static ELongNoonEnding ResolveEnding(ELongNoonChoice Choice, bool bRemembererFound);
+
+	/** Short title for an ending (or the "not yet" title when the Third Way is locked). */
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Endings")
+	static FText GetEndingTitle(ELongNoonEnding Ending);
+
+	/**
+	 * The scripted ending beat + epilogue, condensed from docs/lore/endings.md.
+	 * For None (Third Way attempted without the Rememberer) returns the gentle
+	 * "the way is not open to you yet" text rather than empty.
+	 */
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Endings")
+	static FText GetEndingText(ELongNoonEnding Ending);
 };

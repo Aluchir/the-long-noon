@@ -88,3 +88,13 @@ void ULongNoonHUDWidget::OnLoreFound(FName FragmentId)
 	ToastText->SetText(FText::Format(NSLOCTEXT("LongNoon", "LoreToast", "A fragment surfaces: {0}"), FText::FromName(FragmentId)));
 	ToastText->SetVisibility(ESlateVisibility::HitTestInvisible);
 }
+
+void ULongNoonHUDWidget::ShowToast(const FText& Message)
+{
+	if (!ToastText)
+	{
+		return;
+	}
+	ToastText->SetText(Message);
+	ToastText->SetVisibility(Message.IsEmpty() ? ESlateVisibility::Collapsed : ESlateVisibility::HitTestInvisible);
+}

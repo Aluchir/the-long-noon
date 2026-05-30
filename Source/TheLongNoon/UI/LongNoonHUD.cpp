@@ -45,3 +45,11 @@ void ALongNoonHUD::NotifyLoreFound(FName FragmentId)
 		HUDWidget->OnLoreFound(FragmentId);
 	}
 }
+
+void ALongNoonHUD::ShowToast(const FText& Message)
+{
+	if (HUDWidget)
+	{
+		HUDWidget->ShowToast(Message);
+	}
+}

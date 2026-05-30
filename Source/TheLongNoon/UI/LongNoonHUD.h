@@ -32,6 +32,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "HUD")
 	void NotifyLoreFound(FName FragmentId);
 
+	/** Show arbitrary toast text on the widget (ending beats, hints). */
+	UFUNCTION(BlueprintCallable, Category = "HUD")
+	void ShowToast(const FText& Message);
+
 protected:
 	virtual void BeginPlay() override;
 
