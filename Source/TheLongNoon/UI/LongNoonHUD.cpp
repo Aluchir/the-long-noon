@@ -53,3 +53,11 @@ void ALongNoonHUD::ShowToast(const FText& Message)
 		HUDWidget->ShowToast(Message);
 	}
 }
+
+void ALongNoonHUD::SetObjective(const FText& Objective)
+{
+	if (HUDWidget)
+	{
+		HUDWidget->SetObjective(Objective);
+	}
+}

@@ -12,6 +12,7 @@
 #include "Systems/LongNoonCraftingComponent.h"
 #include "Systems/LongNoonBuildingComponent.h"
 #include "Systems/LongNoonTendComponent.h"
+#include "Systems/LongNoonQuestSubsystem.h"
 #include "Core/Interactable.h"
 #include "Core/LongNoonEventSubsystem.h"
 #include "Core/LongNoonLog.h"
@@ -114,12 +115,23 @@ void ALongNoonCharacter::SetupHUDLink()
 			{
 				Events->OnLoreFragmentFound.AddUniqueDynamic(this, &ALongNoonCharacter::HandleLoreFound);
 			}
+
+			// Quest progress -> HUD objective tracker.
+			if (ULongNoonQuestSubsystem* Quests = GI->GetSubsystem<ULongNoonQuestSubsystem>())
+			{
+				Quests->OnObjectiveCompleted.AddUniqueDynamic(this, &ALongNoonCharacter::HandleObjectiveCompleted);
+				Quests->OnActiveQuestCompleted.AddUniqueDynamic(this, &ALongNoonCharacter::HandleQuestCompleted);
+				Quests->OnQuestStarted.AddUniqueDynamic(this, &ALongNoonCharacter::HandleQuestStarted);
+			}
 		}
 
 		// Poll the interact focus on a gentle cadence and push the prompt to the HUD.
 		World->GetTimerManager().SetTimer(InteractFocusTimer, this,
 			&ALongNoonCharacter::UpdateInteractFocus, InteractFocusInterval, true);
 	}
+
+	// Seed the objective tracker (the quest board may have started a quest already).
+	RefreshObjectiveDisplay();
 }
 
 void ALongNoonCharacter::HandleTendChanged(float Stamina, float Focus)
@@ -136,6 +148,50 @@ void ALongNoonCharacter::HandleLoreFound(FName FragmentId)
 	{
 		H->NotifyLoreFound(FragmentId);
 	}
+}
+
+void ALongNoonCharacter::HandleObjectiveCompleted(FName /*ObjectiveId*/)
+{
+	RefreshObjectiveDisplay();
+}
+
+void ALongNoonCharacter::HandleQuestStarted()
+{
+	RefreshObjectiveDisplay();
+}
+
+void ALongNoonCharacter::HandleQuestCompleted()
+{
+	if (ALongNoonHUD* H = ResolveHUD())
+	{
+		H->SetObjective(FText::GetEmpty());
+		H->ShowToast(NSLOCTEXT("LongNoon", "QuestDone", "The way is open. (Region quest complete.)"));
+	}
+}
+
+void ALongNoonCharacter::RefreshObjectiveDisplay()
+{
+	ALongNoonHUD* H = ResolveHUD();
+	if (!H)
+	{
+		return;
+	}
+
+	FName Active = NAME_None;
+	if (const UWorld* World = GetWorld())
+	{
+		if (const UGameInstance* GI = World->GetGameInstance())
+		{
+			if (const ULongNoonQuestSubsystem* Quests = GI->GetSubsystem<ULongNoonQuestSubsystem>())
+			{
+				Active = Quests->GetActiveQuestObjective();
+			}
+		}
+	}
+
+	H->SetObjective(Active.IsNone()
+		? FText::GetEmpty()
+		: FText::Format(NSLOCTEXT("LongNoon", "ObjectiveLine", "Objective: {0}"), FText::FromName(Active)));
 }
 
 void ALongNoonCharacter::UpdateInteractFocus()

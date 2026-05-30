@@ -6,6 +6,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnObjectiveCompleted, FName, ObjectiveId);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnActiveQuestCompleted);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQuestStarted);
 
 /**
  * Lightweight objective tracking. Quests/beats are authored as objective ids per
@@ -24,6 +25,10 @@ public:
 	/** Fires once when every objective of the active quest has been completed. */
 	UPROPERTY(BlueprintAssignable, Category = "Quest")
 	FOnActiveQuestCompleted OnActiveQuestCompleted;
+
+	/** Fires when a new quest is seeded (so UI can show the first objective). */
+	UPROPERTY(BlueprintAssignable, Category = "Quest")
+	FOnQuestStarted OnQuestStarted;
 
 	UFUNCTION(BlueprintCallable, Category = "Quest")
 	void CompleteObjective(FName ObjectiveId);

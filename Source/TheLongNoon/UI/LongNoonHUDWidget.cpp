@@ -60,6 +60,16 @@ void ULongNoonHUDWidget::BuildTree()
 		CS->SetAlignment(FVector2D(0.5f, 0.5f));
 		CS->SetAutoSize(true);
 	}
+
+	// Persistent objective tracker, upper-left under the meters.
+	ObjectiveText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("ObjectiveText"));
+	ObjectiveText->SetText(FText::GetEmpty());
+	ObjectiveText->SetVisibility(ESlateVisibility::Collapsed);
+	if (UCanvasPanelSlot* CS = Root->AddChildToCanvas(ObjectiveText))
+	{
+		CS->SetPosition(FVector2D(40.0f, 92.0f));
+		CS->SetAutoSize(true);
+	}
 }
 
 void ULongNoonHUDWidget::UpdateTend(float Stamina, float Focus, float Comfort)
@@ -97,4 +107,14 @@ void ULongNoonHUDWidget::ShowToast(const FText& Message)
 	}
 	ToastText->SetText(Message);
 	ToastText->SetVisibility(Message.IsEmpty() ? ESlateVisibility::Collapsed : ESlateVisibility::HitTestInvisible);
+}
+
+void ULongNoonHUDWidget::SetObjective(const FText& Objective)
+{
+	if (!ObjectiveText)
+	{
+		return;
+	}
+	ObjectiveText->SetText(Objective);
+	ObjectiveText->SetVisibility(Objective.IsEmpty() ? ESlateVisibility::Collapsed : ESlateVisibility::HitTestInvisible);
 }

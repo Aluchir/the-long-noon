@@ -25,6 +25,7 @@ void ULongNoonQuestSubsystem::StartQuest(const TArray<FName>& Ordered)
 {
 	ActiveQuest = Ordered;
 	bActiveQuestBroadcast = false;
+	OnQuestStarted.Broadcast();
 	UE_LOG(LogLongNoon, Log, TEXT("[Quest] Quest started with %d objectives; active=%s."),
 		ActiveQuest.Num(), *GetActiveQuestObjective().ToString());
 }

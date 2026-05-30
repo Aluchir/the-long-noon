@@ -36,6 +36,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "HUD")
 	void ShowToast(const FText& Message);
 
+	/** Set the persistent objective tracker line; empty hides it. */
+	UFUNCTION(BlueprintCallable, Category = "HUD")
+	void SetObjective(const FText& Objective);
+
 protected:
 	virtual TSharedRef<SWidget> RebuildWidget() override;
 
@@ -45,6 +49,7 @@ protected:
 	UPROPERTY(Transient) TObjectPtr<UProgressBar> FocusBar;
 	UPROPERTY(Transient) TObjectPtr<UTextBlock> PromptText;
 	UPROPERTY(Transient) TObjectPtr<UTextBlock> ToastText;
+	UPROPERTY(Transient) TObjectPtr<UTextBlock> ObjectiveText;
 
 	/** Max meter value the bars normalise against (matches ULongNoonTendComponent). */
 	float MaxMeter = 100.0f;

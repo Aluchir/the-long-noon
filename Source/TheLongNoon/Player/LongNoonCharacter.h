@@ -103,6 +103,21 @@ protected:
 	UFUNCTION()
 	void HandleLoreFound(FName FragmentId);
 
+	/** A quest objective completed -> refresh the HUD objective tracker. */
+	UFUNCTION()
+	void HandleObjectiveCompleted(FName ObjectiveId);
+
+	/** The active quest finished -> celebrate on the HUD. */
+	UFUNCTION()
+	void HandleQuestCompleted();
+
+	/** A quest was seeded -> show its first objective. */
+	UFUNCTION()
+	void HandleQuestStarted();
+
+	/** Push the current active quest objective to the HUD tracker. */
+	void RefreshObjectiveDisplay();
+
 	/** Poll the focus trace and push the interact prompt to the HUD. */
 	void UpdateInteractFocus();
 

@@ -36,6 +36,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "HUD")
 	void ShowToast(const FText& Message);
 
+	/** Set the persistent objective tracker line (empty hides it). */
+	UFUNCTION(BlueprintCallable, Category = "HUD")
+	void SetObjective(const FText& Objective);
+
 protected:
 	virtual void BeginPlay() override;
 
