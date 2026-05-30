@@ -53,7 +53,7 @@ Legend: 🤖 I drive headlessly/CLI/Python · 🤝 I scaffold, human decides/sup
 - [ ] 🤝 First-pass cozy art/lighting on Sunhollow (greybox → light art pass; needs assets).
 
 ### Phase 5 — Full game content (all five regions, progression, endings)
-- [ ] 🤖 Greybox levels R2 Overgrowth, R3 Stillworks, R4 The Hush, R5 First Garden.
+- [x] 🤖 Greybox levels R2 Overgrowth, R3 Stillworks, R4 The Hush, R5 First Garden (`Tools/build_regions.py`): each a plain level with ground, proven golden-hour sun, region signature material gather nodes, the region's NPC, PlayerStart, GameMode override. Stillworks screenshot-verified rendering (others identical). Per-region light-dial/palette is a deferred art pass.
 - [ ] 🤖 Region gating wired end to end (tool tier + traversal + gate-build) per `progression-and-gating.md`.
 - [ ] 🤖 All six NPCs placed with their data-driven dialogue + beats; the Rememberer in R4.
 - [ ] 🤖 Forgotten-script reveal across regions (glyph→translated by literacy tier); codex complete.
