@@ -23,12 +23,12 @@ namespace
 namespace
 {
 	constexpr int32 CurrentSaveVersion = 1;
-	constexpr int32 UserIndex = 0;
+	constexpr int32 SaveUserIndex = 0;
 }
 
 bool ULongNoonSaveService::DoesSlotExist(const FString& SlotName) const
 {
-	return UGameplayStatics::DoesSaveGameExist(SlotName, UserIndex);
+	return UGameplayStatics::DoesSaveGameExist(SlotName, SaveUserIndex);
 }
 
 bool ULongNoonSaveService::SaveToSlot(const FString& SlotName)
@@ -59,7 +59,7 @@ bool ULongNoonSaveService::SaveToSlot(const FString& SlotName)
 		Save->FoundFragments = Codex->GetFoundFragments();
 	}
 
-	return UGameplayStatics::SaveGameToSlot(Save, SlotName, UserIndex);
+	return UGameplayStatics::SaveGameToSlot(Save, SlotName, SaveUserIndex);
 }
 
 bool ULongNoonSaveService::LoadFromSlot(const FString& SlotName)
@@ -70,7 +70,7 @@ bool ULongNoonSaveService::LoadFromSlot(const FString& SlotName)
 	}
 
 	ULongNoonSaveGame* Save = Cast<ULongNoonSaveGame>(
-		UGameplayStatics::LoadGameFromSlot(SlotName, UserIndex));
+		UGameplayStatics::LoadGameFromSlot(SlotName, SaveUserIndex));
 	if (!Save)
 	{
 		return false;
