@@ -28,9 +28,16 @@ Where `<Platform>` is `Mac`, `Linux`, or (on Windows) use `Build.bat ... Win64`.
 ```
 "$UE_ROOT/Engine/Build/BatchFiles/RunUAT.sh" BuildCookRun -project="$PROJECT" \
   -noP4 -platform=Win64 -clientconfig=Development -cook -build -stage -pak -archive \
-  -archivedirectory=Packaged
+  -archivedirectory=Packaged \
+  -map=/Game/Maps/L_Sunhollow_Greybox+/Game/Maps/L_Overgrowth_Greybox
 ```
 (Swap `-platform=Win64` for `Mac`/`Linux` as needed. Windows is the launch target.)
+
+There is no `MapsToCook` in `Config/DefaultGame.ini`, so cooked maps must be listed
+explicitly via `-map=` (join multiple with `+`). Add every level reachable in-game
+(e.g. region transitions opened by `ALongNoonGateBuild.TargetLevel`) or `OpenLevel`
+will fail in the packaged build with a missing-map error. The proven local run also
+uses `-nocompileeditor` to skip the editor recompile.
 
 ## Run headless tests (Automation)
 ```
