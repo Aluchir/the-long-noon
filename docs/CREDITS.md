@@ -18,8 +18,12 @@ scripts.
 
 - **Kenney Mini Characters** (12 humanoid characters + accessibility props) — by Kenney (kenney.nl). CC0.
   - Source: https://kenney.nl/assets/mini-characters
-  - Imported to `Content/ThirdParty/Characters/` via `Tools/import_characters.py`.
-  - Used for NPCs (Tinker, Keeper, Gardener, ...). Imported as static (bind-pose) meshes.
+  - Imported to `Content/ThirdParty/Characters/` via `Tools/import_characters.py` (static meshes; superseded for NPCs by the animated pack below).
+
+- **Kenney Animated Characters 3** (rigged character + idle/run/jump clips) — by Kenney. CC0.
+  - Source: https://kenney.nl/assets/animated-characters-3 (mirror: archive.org/details/kenney_animated-characters-3)
+  - Imported to `Content/ThirdParty/CharAnim/` via `Tools/import_animated_character.py` as a skeletal mesh + AnimSequences.
+  - Drives the NPCs: `ALongNoonNpc` plays the looping `idle` clip (see `LongNoonNpc.cpp`).
 
 ## Audio
 

@@ -1,42 +1,56 @@
 #include "Systems/LongNoonNpc.h"
 #include "Systems/LongNoonDialogueComponent.h"
-#include "Components/StaticMeshComponent.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "Engine/SkeletalMesh.h"
+#include "Animation/AnimSequence.h"
 #include "Core/LongNoonLog.h"
 #include "UI/LongNoonHUD.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
+#include "UObject/ConstructorHelpers.h"
 
 ALongNoonNpc::ALongNoonNpc()
 {
-	// A gentle idle bob keeps the (static-mesh) characters from looking frozen.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
-	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NpcMesh"));
+	Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("NpcMesh"));
 	SetRootComponent(Mesh);
 
-	Dialogue = CreateDefaultSubobject<ULongNoonDialogueComponent>(TEXT("Dialogue"));
-}
-
-void ALongNoonNpc::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-
-	if (!Mesh)
+	// Default body + idle clip: Kenney Animated Characters 3 (CC0). Editable per instance.
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> Body(TEXT("/Game/ThirdParty/CharAnim/characterMedium.characterMedium"));
+	if (Body.Succeeded())
 	{
-		return;
+		Mesh->SetSkeletalMeshAsset(Body.Object);
 	}
-	// Slow vertical breathing bob, phase-offset per actor so a crowd is not in sync.
-	const float T = GetWorld() ? GetWorld()->GetTimeSeconds() : 0.0f;
-	const float Phase = static_cast<float>(GetUniqueID() % 360);
-	const float Bob = FMath::Sin((T * 1.6f) + Phase) * 4.0f; // +/- 4 units
-	FVector Loc = Mesh->GetRelativeLocation();
-	Loc.Z = Bob;
-	Mesh->SetRelativeLocation(Loc);
+	static ConstructorHelpers::FObjectFinder<UAnimSequence> Idle(TEXT("/Game/ThirdParty/CharAnim/idleRoot_Idle.idleRoot_Idle"));
+	if (Idle.Succeeded())
+	{
+		IdleAnim = Idle.Object;
+	}
+	Mesh->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+
+	Dialogue = CreateDefaultSubobject<ULongNoonDialogueComponent>(TEXT("Dialogue"));
 }
 
 void ALongNoonNpc::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Play the looping idle and auto-scale to a sane on-screen height (the placed
+	// instances carry stale scales from the old static-mesh swap).
+	if (Mesh)
+	{
+		if (IdleAnim)
+		{
+			Mesh->PlayAnimation(IdleAnim, true);
+		}
+		if (USkeletalMesh* Skm = Mesh->GetSkeletalMeshAsset())
+		{
+			const float H = FMath::Max(1.0f, Skm->GetBounds().BoxExtent.Z * 2.0f);
+			const float S = TargetHeight / H;
+			SetActorScale3D(FVector(S));
+		}
+	}
 
 	if (Dialogue && !NpcId.IsNone())
 	{

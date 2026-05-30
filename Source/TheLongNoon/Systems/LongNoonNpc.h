@@ -5,7 +5,8 @@
 #include "Core/Interactable.h"
 #include "LongNoonNpc.generated.h"
 
-class UStaticMeshComponent;
+class USkeletalMeshComponent;
+class UAnimSequence;
 class ULongNoonDialogueComponent;
 
 /**
@@ -29,8 +30,6 @@ public:
 	virtual void OnInteract_Implementation(AActor* Interactor) override;
 	virtual FText GetInteractPrompt_Implementation() const override;
 
-	virtual void Tick(float DeltaSeconds) override;
-
 protected:
 	virtual void BeginPlay() override;
 
@@ -43,7 +42,15 @@ protected:
 	void HandleDialogueEnded();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "NPC")
-	TObjectPtr<UStaticMeshComponent> Mesh;
+	TObjectPtr<USkeletalMeshComponent> Mesh;
+
+	/** Looping idle animation played on BeginPlay (CC0 Kenney clip). */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "NPC")
+	TObjectPtr<UAnimSequence> IdleAnim;
+
+	/** Target on-screen height (cm); the mesh auto-scales to it on BeginPlay. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "NPC")
+	float TargetHeight = 180.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "NPC")
 	TObjectPtr<ULongNoonDialogueComponent> Dialogue;

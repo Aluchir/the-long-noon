@@ -24,9 +24,8 @@ EXACT = {
     "Choice_Give":   (NK + "statue_ring", 220.0),
     "Choice_Keep":   (NK + "statue_obelisk", 220.0),
     "Choice_Third":  (NK + "statue_head", 220.0),
-    "Tinker":        (CH + "character-male-a", 180.0),
-    "Keeper":        (CH + "character-female-b", 180.0),
-    "Gardener":      (CH + "character-female-d", 190.0),
+    # NPCs (Tinker/Keeper/Gardener) are now skeletal + animated; ALongNoonNpc owns its
+    # own mesh in C++, so they are intentionally NOT swapped here.
 }
 # Prefix rules (label.startswith -> mesh, height).
 PREFIX = [
