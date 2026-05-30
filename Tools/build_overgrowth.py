@@ -51,10 +51,14 @@ for (x, y) in [(300, 400), (300, -400)]:
     n = eas.spawn_actor_from_class(unreal.GatherNode, unreal.Vector(float(x), float(y), 90.0))
     set_mesh(n, SPHERE)
     n.set_actor_scale3d(unreal.Vector(2.2, 2.2, 2.2))
-    n.set_actor_label("GatherNode_%d" % gi); gi += 1
-    for prop, val in [("item_id", "mat_swallowedwood"), ("quantity", 2), ("regrow_seconds", 30.0)]:
+    n.set_actor_label("GatherNode_%d" % gi)
+    props = [("item_id", "mat_swallowedwood"), ("quantity", 2), ("regrow_seconds", 30.0)]
+    if gi == 0:
+        props.append(("completes_objective", "gather_swallowedwood"))
+    for prop, val in props:
         try: n.set_editor_property(prop, val)
         except Exception as e: warn("gather %s failed: %s" % (prop, e))
+    gi += 1
 log("placed %d gather nodes" % gi)
 
 bloom = eas.spawn_actor_from_class(unreal.BloomActor, unreal.Vector(320.0, 0.0, 80.0))
@@ -66,7 +70,31 @@ try: bloom.set_editor_property("bloom_tier", 2)
 except Exception as e: warn("bloom tier failed: %s" % e)
 try: bloom.set_editor_property("drop_table", {"mat_swallowedwood": 2})
 except Exception as e: warn("bloom drop_table failed: %s" % e)
+try: bloom.set_editor_property("completes_objective", "settle_overgrowth")
+except Exception as e: warn("bloom completes_objective failed: %s" % e)
 log("placed bloom")
+
+# A gate onward (toward the Stillworks). No target level yet (R3 stub TBD), so it
+# just completes the region's terminal objective for now.
+gate = eas.spawn_actor_from_class(unreal.LongNoonGateBuild, unreal.Vector(700.0, 0.0, 90.0))
+set_mesh(gate, CUBE)
+gate.set_actor_scale3d(unreal.Vector(0.6, 3.0, 1.4))
+gate.set_actor_label("GateBuild_0")
+for prop, val in [("gate_build_id", "gate_stillworks"), ("completes_objective", "build_gate_2")]:
+    try: gate.set_editor_property(prop, val)
+    except Exception as e: warn("gate %s failed: %s" % (prop, e))
+log("placed gate build")
+
+# Quest board: seeds the R2 quest (gather -> settle -> build onward).
+board = eas.spawn_actor_from_class(unreal.LongNoonQuestBoard, unreal.Vector(120.0, 0.0, 90.0))
+set_mesh(board, CUBE)
+board.set_actor_scale3d(unreal.Vector(0.3, 1.2, 1.6))
+board.set_actor_label("QuestBoard")
+try:
+    board.set_editor_property("objectives", ["gather_swallowedwood", "settle_overgrowth", "build_gate_2"])
+except Exception as e:
+    warn("quest board objectives failed: %s" % e)
+log("placed quest board")
 
 # A lore fragment hinting at the deeper regions.
 lf = eas.spawn_actor_from_class(unreal.LongNoonLoreFragment, unreal.Vector(420.0, 160.0, 95.0))
