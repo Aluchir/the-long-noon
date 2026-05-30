@@ -95,6 +95,19 @@ except Exception as e:
 keeper.set_actor_label("Keeper")
 log("placed Keeper NPC")
 
+# Findable lore fragments (interact -> codex -> literacy).
+for i, (fx, fy, frag) in enumerate([(420.0, 160.0, "frag_sunhollow_monument"),
+                                     (420.0, -160.0, "frag_shadow_wrong")]):
+    lf = eas.spawn_actor_from_class(unreal.LongNoonLoreFragment, unreal.Vector(fx, fy, 95.0))
+    set_mesh(lf, CUBE)
+    lf.set_actor_scale3d(unreal.Vector(0.5, 0.5, 0.8))
+    try:
+        lf.set_editor_property("fragment_id", frag)
+    except Exception as e:
+        warn("fragment_id failed: %s" % e)
+    lf.set_actor_label("Lore_%d" % i)
+log("placed lore fragments")
+
 eas.spawn_actor_from_class(unreal.PlayerStart, unreal.Vector(0.0, 0.0, 150.0)).set_actor_label("PlayerStart")
 
 # GameMode override.
