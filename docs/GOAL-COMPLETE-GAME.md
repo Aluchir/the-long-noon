@@ -16,8 +16,12 @@ Each work cycle:
 1. Pick the next unchecked task, lowest phase first, preferring 🤖 (automatable) tasks.
 2. Do it end to end: implement (code/data/Python) → build (`Build.bat TheLongNoonEditor`) → fix until green → **verify** (automation test for logic; headless `-game -sm6` launch + window screenshot for anything visual/behavioral) → commit with a clear message.
 3. Keep `docs/GOAL-COMPLETE-GAME.md` checkboxes current; update phase docs.
-4. Stop only for 🧑 items (human/art/creative/business) or a real blocker; for those, state exactly what's needed.
+4. **Do not block on 🧑/🤝 items.** When the next item needs human art/audio/business judgment, do the automatable part (greybox placeholder, scaffold, data, code), move the item to the **Deferred** list below with a one-line note of what a human must supply, and immediately pick the next 🤖 task. The loop never idles waiting on a human.
+5. **NEVER STOP, NEVER IDLE.** Run continuously, cycle after cycle, re-arming the wake every turn, until the game is complete. No checkpoints, no asking for confirmation, no pausing at milestones. Only a genuine hard blocker (e.g. toolchain absent) pauses — and even then keep doing other automatable work first and record the blocker in Deferred.
 Legend: 🤖 I drive headlessly/CLI/Python · 🤝 I scaffold, human decides/supplies · 🧑 human or artist only.
+
+## Deferred (parked, NOT blocking — needs human art/audio/business; loop keeps moving)
+- (items land here as the loop reaches them)
 
 ### Hard-won launch/build facts (do not relearn these)
 - Build editor: `UE_5.7\Engine\Build\BatchFiles\Build.bat TheLongNoonEditor Win64 Development -Project=<uproject> -WaitMutex`.
