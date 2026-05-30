@@ -3,6 +3,7 @@
 #include "Systems/LongNoonDataRegistry.h"
 #include "Systems/LongNoonTendComponent.h"
 #include "Core/LongNoonEventSubsystem.h"
+#include "Core/LongNoonGameInstance.h"
 #include "Core/LongNoonLog.h"
 #include "Data/RecipeDef.h"
 #include "Data/ItemDef.h"
@@ -126,6 +127,18 @@ bool ULongNoonCraftingComponent::CraftById(FName RecipeId)
 		Inv->RemoveItem(In.ItemId, In.Quantity);
 	}
 	Inv->AddItem(Recipe->Output, Recipe->OutputQuantity);
+
+	// If the crafted item is a reclamation tool, raise the player's max tool tier
+	// (this is what gates region progression; see ULongNoonRegionSubsystem).
+	if (const FToolRow* ToolRow = Registry->GetTool(Recipe->Output))
+	{
+		if (ULongNoonGameInstance* LNGI = Cast<ULongNoonGameInstance>(GI))
+		{
+			LNGI->MaxToolTier = FMath::Max(LNGI->MaxToolTier, ToolRow->Tier);
+			UE_LOG(LogLongNoon, Log, TEXT("[Crafting] Crafted tool '%s' (tier %d); MaxToolTier now %d."),
+				*Recipe->Output.ToString(), ToolRow->Tier, LNGI->MaxToolTier);
+		}
+	}
 
 	if (ULongNoonEventSubsystem* Events = GI->GetSubsystem<ULongNoonEventSubsystem>())
 	{
