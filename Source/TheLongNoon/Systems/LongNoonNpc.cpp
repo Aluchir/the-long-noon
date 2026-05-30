@@ -8,12 +8,30 @@
 
 ALongNoonNpc::ALongNoonNpc()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	// A gentle idle bob keeps the (static-mesh) characters from looking frozen.
+	PrimaryActorTick.bCanEverTick = true;
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("NpcMesh"));
 	SetRootComponent(Mesh);
 
 	Dialogue = CreateDefaultSubobject<ULongNoonDialogueComponent>(TEXT("Dialogue"));
+}
+
+void ALongNoonNpc::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (!Mesh)
+	{
+		return;
+	}
+	// Slow vertical breathing bob, phase-offset per actor so a crowd is not in sync.
+	const float T = GetWorld() ? GetWorld()->GetTimeSeconds() : 0.0f;
+	const float Phase = static_cast<float>(GetUniqueID() % 360);
+	const float Bob = FMath::Sin((T * 1.6f) + Phase) * 4.0f; // +/- 4 units
+	FVector Loc = Mesh->GetRelativeLocation();
+	Loc.Z = Bob;
+	Mesh->SetRelativeLocation(Loc);
 }
 
 void ALongNoonNpc::BeginPlay()
