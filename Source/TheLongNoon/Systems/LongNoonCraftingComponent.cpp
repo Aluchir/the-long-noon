@@ -2,6 +2,7 @@
 #include "Systems/LongNoonInventoryComponent.h"
 #include "Systems/LongNoonDataRegistry.h"
 #include "Systems/LongNoonTendComponent.h"
+#include "Systems/LongNoonQuestSubsystem.h"
 #include "Core/LongNoonEventSubsystem.h"
 #include "Core/LongNoonGameInstance.h"
 #include "Core/LongNoonLog.h"
@@ -143,6 +144,15 @@ bool ULongNoonCraftingComponent::CraftById(FName RecipeId)
 	if (ULongNoonEventSubsystem* Events = GI->GetSubsystem<ULongNoonEventSubsystem>())
 	{
 		Events->BroadcastItemCrafted(Recipe->Output);
+	}
+
+	// Advance the quest if this recipe completes an objective (mirrors AGatherNode).
+	if (!Recipe->CompletesObjective.IsNone())
+	{
+		if (ULongNoonQuestSubsystem* Quests = GI->GetSubsystem<ULongNoonQuestSubsystem>())
+		{
+			Quests->CompleteObjective(Recipe->CompletesObjective);
+		}
 	}
 
 	// Spend stamina on the Tend component if present.

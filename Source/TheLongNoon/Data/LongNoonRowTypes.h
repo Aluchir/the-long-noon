@@ -56,6 +56,8 @@ struct FRecipeRow : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName Output;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) int32 OutputQuantity = 1;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly) float StaminaCost = 0.0f;
+	/** Optional quest objective id completed the first time this recipe is crafted. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly) FName CompletesObjective;
 };
 
 USTRUCT(BlueprintType)
