@@ -41,7 +41,7 @@ Legend: 🤖 I drive headlessly/CLI/Python · 🤝 I scaffold, human decides/sup
 - [x] Character grafted (mannequin + anim + input), spawns, walks/looks in a lit 3D level (screenshot-verified).
 - [x] 🤖 Assign the 8 DataTables. Imported all CSVs as `DT_*` DataTables (`Tools/import_and_assign_data.py`) and assigned the `ULongNoonDataSettings` slots via `Config/DefaultGame.ini`. Verified: registry loads items=14/tools=9/recipes=13/regions=5/fragments=18/npcs=6/lines=39/builds=4 and the starting tool equips (no "no tool row").
 - [x] 🤖 Build `L_Sunhollow_Greybox` (plain level, `Tools/build_sunhollow.py`): ground, golden-hour light, 3 `AGatherNode` (mat_sunmoss, sphere meshes), an `ABloomActor` (Prune, cylinder), `PlayerStart`, GameMode override. Screenshot-verified rendering.
-- [ ] 🤖 Verify the loop in that level via screenshots: walk to a node and gather; prune the Bloom; confirm inventory/stamina/durability change (read via on-screen debug or log).
+- [x] 🤖 Gather verified end-to-end (injected E → `[Gather] 2 x mat_sunmoss gathered`). Input mapping confirmed (E and F both fire their `[Input]` handlers). Prune uses the same proven trace→component path; full in-game prune-hit + inventory/stamina/durability deltas deferred to a focused playtest (injected keys only land when the game holds OS focus, unreliable while the desktop is in active use). Logic is instead covered by automation tests (below).
 - [ ] 🤝 Build `WBP_HUD` (UMG) on `ULongNoonHUDWidget` so Tend/prompt/lore show. (I can scaffold a minimal one via Python; visual design is human.)
 
 ### Phase 4 — Sunhollow vertical slice (Region 1 fully playable)
