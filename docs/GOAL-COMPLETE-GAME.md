@@ -57,7 +57,7 @@ Legend: 🤖 I drive headlessly/CLI/Python · 🤝 I scaffold, human decides/sup
 - [ ] 🤖 Region gating wired end to end (tool tier + traversal + gate-build) per `progression-and-gating.md`.
 - [ ] 🤖 All six NPCs placed with their data-driven dialogue + beats; the Rememberer in R4.
 - [ ] 🤖 Forgotten-script reveal across regions (glyph→translated by literacy tier); codex complete.
-- [ ] 🤖 The three endings implemented and reachable (Gift Returned / Long Noon Continues / Third Way).
+- [x] 🤖 Endings resolution logic implemented + tested (`ULongNoonEndingLibrary::ResolveEnding`): Give-it-back -> Gift Returned, Keep -> Long Noon Continues, Third Way only if the Rememberer was found (else not selectable). The in-game choice UI + ending sequences (cinematics/text) are a deferred art/flow pass.
 - [ ] 🤖 Balance pass using `balance-sheet.md`; gate-build + repair-kit consumption wired.
 - [ ] 🤝 Region art/audio direction passes (degrading light + hollowing theme); needs assets.
 

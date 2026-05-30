@@ -9,6 +9,7 @@
 #include "Systems/LongNoonSaveGame.h"
 #include "Systems/LongNoonRegionSubsystem.h"
 #include "Systems/LongNoonCodexSubsystem.h"
+#include "Systems/LongNoonEndings.h"
 #include "Data/ToolDef.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -176,6 +177,28 @@ bool FLongNoonLiteracyTest::RunTest(const FString& Parameters)
 	// The Gardener's word (tier 4) only at full literacy.
 	TestFalse(TEXT("tier-4 unreadable at literacy 3"), ULongNoonCodexSubsystem::IsLiteracyEnough(4, 3));
 	TestTrue(TEXT("tier-4 readable at literacy 4"), ULongNoonCodexSubsystem::IsLiteracyEnough(4, 4));
+	return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FLongNoonEndingsTest, "TheLongNoon.Systems.Endings",
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+
+bool FLongNoonEndingsTest::RunTest(const FString& Parameters)
+{
+	TestEqual(TEXT("give it back -> Gift Returned"),
+		(int32)ULongNoonEndingLibrary::ResolveEnding(ELongNoonChoice::GiveItBack, false),
+		(int32)ELongNoonEnding::GiftReturned);
+	TestEqual(TEXT("keep the noon -> Long Noon Continues"),
+		(int32)ULongNoonEndingLibrary::ResolveEnding(ELongNoonChoice::KeepTheNoon, false),
+		(int32)ELongNoonEnding::LongNoonContinues);
+	TestEqual(TEXT("third way without Rememberer -> None"),
+		(int32)ULongNoonEndingLibrary::ResolveEnding(ELongNoonChoice::TheThirdWay, false),
+		(int32)ELongNoonEnding::None);
+	TestEqual(TEXT("third way with Rememberer -> Third Way"),
+		(int32)ULongNoonEndingLibrary::ResolveEnding(ELongNoonChoice::TheThirdWay, true),
+		(int32)ELongNoonEnding::ThirdWay);
+	TestFalse(TEXT("third way unavailable without Rememberer"), ULongNoonEndingLibrary::IsThirdWayAvailable(false));
+	TestTrue(TEXT("third way available with Rememberer"), ULongNoonEndingLibrary::IsThirdWayAvailable(true));
 	return true;
 }
 #endif // WITH_AUTOMATION_TESTS
