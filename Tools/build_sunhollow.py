@@ -55,7 +55,8 @@ for (x, y) in gather_spots:
     set_mesh(n, SPHERE)
     n.set_actor_scale3d(unreal.Vector(2.2, 2.2, 2.2))  # tall enough to intersect the eye-line trace
     n.set_actor_label("GatherNode_%d" % gi); gi += 1
-    for prop, val in [("item_id", "mat_sunmoss"), ("quantity", 2), ("regrow_seconds", 30.0)]:
+    for prop, val in [("item_id", "mat_sunmoss"), ("quantity", 2), ("regrow_seconds", 30.0),
+                      ("completes_objective", "gather_sunmoss")]:
         try: n.set_editor_property(prop, val)
         except Exception as e: warn("gather %s failed: %s" % (prop, e))
 log("placed %d gather nodes" % gi)

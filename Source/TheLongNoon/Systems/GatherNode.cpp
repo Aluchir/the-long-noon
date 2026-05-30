@@ -1,9 +1,11 @@
 #include "Systems/GatherNode.h"
 #include "Systems/LongNoonInventoryComponent.h"
+#include "Systems/LongNoonQuestSubsystem.h"
 #include "Components/StaticMeshComponent.h"
 #include "Core/LongNoonLog.h"
 #include "TimerManager.h"
 #include "Engine/World.h"
+#include "Engine/GameInstance.h"
 
 AGatherNode::AGatherNode()
 {
@@ -32,6 +34,21 @@ void AGatherNode::OnInteract_Implementation(AActor* Interactor)
 		}
 
 		UE_LOG(LogLongNoon, Log, TEXT("[Gather] %d x %s gathered."), Quantity, *ItemId.ToString());
+
+		// Advance the quest if this node completes an objective.
+		if (!CompletesObjective.IsNone())
+		{
+			if (const UWorld* World = GetWorld())
+			{
+				if (UGameInstance* GI = World->GetGameInstance())
+				{
+					if (ULongNoonQuestSubsystem* Quests = GI->GetSubsystem<ULongNoonQuestSubsystem>())
+					{
+						Quests->CompleteObjective(CompletesObjective);
+					}
+				}
+			}
+		}
 	}
 }
 

@@ -29,6 +29,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gather")
 	float RegrowSeconds = 30.0f;
 
+	/** Optional quest objective id completed the first time this node is gathered. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gather")
+	FName CompletesObjective;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gather")
 	bool bAvailable = true;
 
