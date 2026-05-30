@@ -28,6 +28,14 @@ namespace
 	}
 }
 
+void ULongNoonPauseWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
+	// Must be focusable + hold keyboard focus or NativeOnKeyDown never fires (Esc/S/L/Q).
+	SetIsFocusable(true);
+	SetKeyboardFocus();
+}
+
 TSharedRef<SWidget> ULongNoonPauseWidget::RebuildWidget()
 {
 	if (!TitleText)
