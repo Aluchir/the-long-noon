@@ -121,6 +121,18 @@ for prop, val in [("gate_build_id", "gate_overgrowth"), ("completes_objective", 
     except Exception as e: warn("gate %s failed: %s" % (prop, e))
 log("placed gate build")
 
+# Quest board: seeds the region quest (gather -> craft -> prune -> build) on BeginPlay
+# so the journal/HUD can track the active step and fire OnActiveQuestCompleted.
+board = eas.spawn_actor_from_class(unreal.LongNoonQuestBoard, unreal.Vector(120.0, 0.0, 90.0))
+set_mesh(board, CUBE)
+board.set_actor_scale3d(unreal.Vector(0.3, 1.2, 1.6))
+board.set_actor_label("QuestBoard")
+try:
+    board.set_editor_property("objectives", ["gather_sunmoss", "craft_blade", "prune_bloom", "build_gate"])
+except Exception as e:
+    warn("quest board objectives failed: %s" % e)
+log("placed quest board")
+
 eas.spawn_actor_from_class(unreal.PlayerStart, unreal.Vector(0.0, 0.0, 150.0)).set_actor_label("PlayerStart")
 
 # GameMode override.

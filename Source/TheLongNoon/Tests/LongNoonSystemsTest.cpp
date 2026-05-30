@@ -13,6 +13,7 @@
 #include "Systems/LongNoonQuestSubsystem.h"
 #include "Data/ToolDef.h"
 #include "Kismet/GameplayStatics.h"
+#include "Engine/GameInstance.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FLongNoonInventoryTest, "TheLongNoon.Systems.Inventory",
 	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
@@ -251,6 +252,24 @@ bool FLongNoonQuestFlowTest::RunTest(const FString& Parameters)
 	TSet<FName> Skip; Skip.Add(TEXT("craft_blade"));
 	TestEqual(TEXT("earliest incomplete is active despite later done"),
 		ULongNoonQuestSubsystem::ActiveObjective(Quest, Skip), FName(TEXT("gather_sunmoss")));
+
+	// Seeded-quest path on a live subsystem instance (the Sunhollow loop).
+	// The subsystem's ClassWithin is UGameInstance, so it must be created within one.
+	UGameInstance* GI = NewObject<UGameInstance>(GetTransientPackage());
+	ULongNoonQuestSubsystem* QS = NewObject<ULongNoonQuestSubsystem>(GI);
+	TArray<FName> Sunhollow = { TEXT("gather_sunmoss"), TEXT("craft_blade"), TEXT("prune_bloom"), TEXT("build_gate") };
+	QS->StartQuest(Sunhollow);
+	TestEqual(TEXT("seeded active = first"), QS->GetActiveQuestObjective(), FName(TEXT("gather_sunmoss")));
+	TestFalse(TEXT("seeded quest not complete at start"), QS->IsActiveQuestComplete());
+
+	QS->CompleteObjective(TEXT("gather_sunmoss"));
+	QS->CompleteObjective(TEXT("craft_blade"));
+	TestEqual(TEXT("seeded active advances to prune"), QS->GetActiveQuestObjective(), FName(TEXT("prune_bloom")));
+
+	QS->CompleteObjective(TEXT("prune_bloom"));
+	QS->CompleteObjective(TEXT("build_gate"));
+	TestTrue(TEXT("seeded quest complete after all four"), QS->IsActiveQuestComplete());
+	TestEqual(TEXT("seeded active = None when done"), QS->GetActiveQuestObjective(), FName(NAME_None));
 	return true;
 }
 #endif // WITH_AUTOMATION_TESTS
