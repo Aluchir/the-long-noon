@@ -18,6 +18,8 @@ class THELONGNOON_API ALongNoonHUD : public AHUD
 	GENERATED_BODY()
 
 public:
+	ALongNoonHUD();
+
 	/** Push the Tend meters to the widget (no-op until the widget exists). */
 	UFUNCTION(BlueprintCallable, Category = "HUD")
 	void UpdateTend(float Stamina, float Focus, float Comfort);

@@ -20,17 +20,23 @@ Each work cycle:
 5. **NEVER STOP, NEVER IDLE.** Run continuously, cycle after cycle, re-arming the wake every turn, until the game is complete. No checkpoints, no asking for confirmation, no pausing at milestones. Only a genuine hard blocker (e.g. toolchain absent) pauses — and even then keep doing other automatable work first and record the blocker in Deferred.
 Legend: 🤖 I drive headlessly/CLI/Python · 🤝 I scaffold, human decides/supplies · 🧑 human or artist only.
 
-## Deferred (parked — needs human art/audio/UMG/business; not automatable headless)
-The mechanical/greybox game is built and test-covered (9 automation tests; all 5 regions playable greyboxes; gather/prune/data/NPC/save/gating/literacy/endings all implemented and verified). What remains to reach a *shippable* game is fundamentally human or art-tool work I cannot originate headlessly:
-- **3D art, animation, VFX** — replace greybox shapes with real cozy stylized assets per `docs/art/` (or licensed packs). The whole visual identity.
-- **Music + SFX** — the one "hollowing" theme in stems + cozy SFX library per `docs/audio/`.
-- **HUD / menus (UMG)** — `WBP_HUD` visual design (the C++ events are ready: `UpdateTend`/`SetInteractPrompt`/`OnLoreFound`); settings/options/accessibility UI.
-- **In-game choice UI + ending sequences** — the Gardener choice screen and the three ending cinematics/text (resolution logic is done + tested).
-- **Per-region art light-dial / palette** — the degrading golden-hour look (greybox uses one safe daylight setup).
-- **Forgotten-script font** — per `docs/art/forgotten-script-font-spec.md` (type designer).
-- **Playtest feel/balance tuning** — human judgment on game feel.
-- **Steam / business** — real AppId, store page, capsule art, trailer, ratings, pricing, release (`Phase 7`).
-- **Engine-GUI-only verification** — interactive prune/talk feel (injected input is unreliable under desktop focus; logic is symmetric to verified gather).
+## Scope split (corrected): what I take end-to-end vs. true external limits
+The mechanical/greybox game is built + test-covered (9 tests; 5 region greyboxes; gather/prune/data/NPC/save/gating/literacy/endings). Going for the FULL game, I take on far more than "greybox":
+
+### 🤖 I CAN build (autonomously, C++/Python, screenshot-verified) — IN SCOPE
+- **HUD + menus** — functional UMG built in C++ (Tend bars, interact prompt, lore toast, pause/settings). No hand-drawn WBP needed.
+- **Choice UI + ending sequences** — the Gardener choice screen + three ending text/flow (logic already tested).
+- **Full quest/beat flow** per region (`docs/design/quest-flow.md`): objectives, gates, lore beats, region transitions wired end to end.
+- **Visual polish without bespoke art** — procedural/colored materials, the per-region light-dial (golden->bronze->pale->restored), fog, post-process palette, VFX from particles/material effects.
+- **Crafting/building/repair loops** fully wired in-level; stations; gate-build -> region unlock.
+- **More automation tests + CI**; **package a playable build** (`BuildCookRun`).
+
+### 🧑 True external limits (need you / an artist / a composer) — I integrate, can't originate
+- **Bespoke 3D models, rigged characters, hand animation** — I use the Epic mannequin + primitives + procedural materials; original sculpted/rigged art needs an artist or licensed packs you approve.
+- **Original music + recorded SFX** — I can build the MetaSound/AudioService SYSTEM, but the actual composed score / recorded sounds need a composer or licensed audio you provide.
+- **Forgotten-script font** — a type designer (spec authored).
+- **Steam account / store page / AppId / ratings / pricing / release** — legally yours; I configure + package once you provide the AppId.
+- **Final feel/balance judgment** — I tune to the balance sheet; "does it feel cozy" is yours.
 
 ### Hard-won launch/build facts (do not relearn these)
 - Build editor: `UE_5.7\Engine\Build\BatchFiles\Build.bat TheLongNoonEditor Win64 Development -Project=<uproject> -WaitMutex`.

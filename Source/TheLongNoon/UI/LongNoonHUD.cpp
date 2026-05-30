@@ -2,6 +2,12 @@
 #include "UI/LongNoonHUDWidget.h"
 #include "Blueprint/UserWidget.h"
 
+ALongNoonHUD::ALongNoonHUD()
+{
+	// Default to the functional C++ HUD widget; a WBP child can override this later.
+	HUDWidgetClass = ULongNoonHUDWidget::StaticClass();
+}
+
 void ALongNoonHUD::BeginPlay()
 {
 	Super::BeginPlay();
