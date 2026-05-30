@@ -1,4 +1,6 @@
 #include "UI/LongNoonPauseWidget.h"
+#include "UI/LongNoonSettingsWidget.h"
+#include "UI/LongNoonSaveMenuWidget.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
@@ -7,6 +9,23 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "GameFramework/PlayerController.h"
+
+namespace
+{
+	template <typename T>
+	void OpenSubMenu(APlayerController* PC, int32 ZOrder)
+	{
+		if (!PC) { return; }
+		if (T* W = CreateWidget<T>(PC, T::StaticClass()))
+		{
+			W->AddToViewport(ZOrder);
+			FInputModeUIOnly Mode;
+			Mode.SetWidgetToFocus(W->TakeWidget());
+			Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+			PC->SetInputMode(Mode);
+		}
+	}
+}
 
 TSharedRef<SWidget> ULongNoonPauseWidget::RebuildWidget()
 {
@@ -46,7 +65,7 @@ void ULongNoonPauseWidget::BuildTree()
 	}
 
 	HintText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("PauseHint"));
-	HintText->SetText(NSLOCTEXT("LongNoon", "PauseHint", "[Esc] resume     [Q] quit to desktop"));
+	HintText->SetText(NSLOCTEXT("LongNoon", "PauseHint", "[Esc] resume     [S] settings     [L] save / load     [Q] quit"));
 	if (UCanvasPanelSlot* CS = Root->AddChildToCanvas(HintText))
 	{
 		CS->SetAnchors(FAnchors(0.5f, 0.52f));
@@ -66,6 +85,16 @@ FReply ULongNoonPauseWidget::NativeOnKeyDown(const FGeometry& InGeometry, const 
 	if (Key == EKeys::Q)
 	{
 		UKismetSystemLibrary::QuitGame(this, GetOwningPlayer(), EQuitPreference::Quit, false);
+		return FReply::Handled();
+	}
+	if (Key == EKeys::S)
+	{
+		OpenSubMenu<ULongNoonSettingsWidget>(GetOwningPlayer(), 110);
+		return FReply::Handled();
+	}
+	if (Key == EKeys::L)
+	{
+		OpenSubMenu<ULongNoonSaveMenuWidget>(GetOwningPlayer(), 110);
 		return FReply::Handled();
 	}
 	return Super::NativeOnKeyDown(InGeometry, InKeyEvent);
