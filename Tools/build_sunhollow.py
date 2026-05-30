@@ -110,6 +110,17 @@ for i, (fx, fy, frag) in enumerate([(420.0, 160.0, "frag_sunhollow_monument"),
     lf.set_actor_label("Lore_%d" % i)
 log("placed lore fragments")
 
+# A buildable gate (the "build" leg of the loop): completes 'build_gate' and opens
+# the way to the Overgrowth. A wide low slab off to the far side.
+gate = eas.spawn_actor_from_class(unreal.LongNoonGateBuild, unreal.Vector(700.0, 0.0, 90.0))
+set_mesh(gate, CUBE)
+gate.set_actor_scale3d(unreal.Vector(0.6, 3.0, 1.4))
+gate.set_actor_label("GateBuild_0")
+for prop, val in [("gate_build_id", "gate_overgrowth"), ("completes_objective", "build_gate")]:
+    try: gate.set_editor_property(prop, val)
+    except Exception as e: warn("gate %s failed: %s" % (prop, e))
+log("placed gate build")
+
 eas.spawn_actor_from_class(unreal.PlayerStart, unreal.Vector(0.0, 0.0, 150.0)).set_actor_label("PlayerStart")
 
 # GameMode override.

@@ -1,5 +1,6 @@
 #include "Systems/LongNoonBuildingComponent.h"
 #include "Systems/LongNoonRegionSubsystem.h"
+#include "Systems/LongNoonQuestSubsystem.h"
 #include "Core/LongNoonLog.h"
 #include "Engine/World.h"
 #include "Engine/GameInstance.h"
@@ -18,7 +19,7 @@ bool ULongNoonBuildingComponent::PlacePiece(FName PieceId, const FTransform& Whe
 	return true;
 }
 
-void ULongNoonBuildingComponent::CompleteGateBuild(FName GateBuildId)
+void ULongNoonBuildingComponent::CompleteGateBuild(FName GateBuildId, FName CompletesObjective)
 {
 	if (GateBuildId.IsNone())
 	{
@@ -32,6 +33,15 @@ void ULongNoonBuildingComponent::CompleteGateBuild(FName GateBuildId)
 			if (ULongNoonRegionSubsystem* Regions = GI->GetSubsystem<ULongNoonRegionSubsystem>())
 			{
 				Regions->MarkGateBuildComplete(GateBuildId);
+			}
+
+			// Advance the quest if this gate-build completes an objective.
+			if (!CompletesObjective.IsNone())
+			{
+				if (ULongNoonQuestSubsystem* Quests = GI->GetSubsystem<ULongNoonQuestSubsystem>())
+				{
+					Quests->CompleteObjective(CompletesObjective);
+				}
 			}
 		}
 	}

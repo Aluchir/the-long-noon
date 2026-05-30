@@ -24,8 +24,9 @@ public:
 
 	/**
 	 * Mark a region gate-build complete (the Tinker's bridge/clearing/seal). Notifies
-	 * the region subsystem so the matching region can be entered.
+	 * the region subsystem so the matching region can be entered, and optionally
+	 * completes a quest objective.
 	 */
 	UFUNCTION(BlueprintCallable, Category = "Building")
-	void CompleteGateBuild(FName GateBuildId);
+	void CompleteGateBuild(FName GateBuildId, FName CompletesObjective);
 };
