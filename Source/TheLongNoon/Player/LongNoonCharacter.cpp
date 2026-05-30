@@ -17,6 +17,8 @@
 #include "Core/LongNoonEventSubsystem.h"
 #include "Core/LongNoonLog.h"
 #include "UI/LongNoonHUD.h"
+#include "UI/LongNoonPauseWidget.h"
+#include "Blueprint/UserWidget.h"
 #include "Engine/World.h"
 #include "Engine/GameInstance.h"
 #include "GameFramework/PlayerController.h"
@@ -260,6 +262,7 @@ void ALongNoonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		                       Input->BindAction(SprintAction, ETriggerEvent::Completed, this, &ALongNoonCharacter::StopSprint); }
 		if (InteractAction) { Input->BindAction(InteractAction, ETriggerEvent::Started, this, &ALongNoonCharacter::Interact); }
 		if (PruneAction)    { Input->BindAction(PruneAction, ETriggerEvent::Started, this, &ALongNoonCharacter::Prune); }
+		if (PauseAction)    { Input->BindAction(PauseAction, ETriggerEvent::Started, this, &ALongNoonCharacter::Pause); }
 	}
 }
 
@@ -338,4 +341,30 @@ void ALongNoonCharacter::Prune(const FInputActionValue& /*Value*/)
 		const bool bReclaimed = Reclamation->TryReclaimAhead();
 		UE_LOG(LogLongNoon, Log, TEXT("[Input] Prune reclaim result = %s"), bReclaimed ? TEXT("true") : TEXT("false"));
 	}
+}
+
+void ALongNoonCharacter::Pause(const FInputActionValue& /*Value*/)
+{
+	APlayerController* PC = Cast<APlayerController>(GetController());
+	if (!PC || UGameplayStatics::IsGamePaused(GetWorld()))
+	{
+		return; // The pause widget handles resume via its own key input.
+	}
+
+	UE_LOG(LogLongNoon, Log, TEXT("[Input] Pause pressed"));
+
+	ULongNoonPauseWidget* Menu = CreateWidget<ULongNoonPauseWidget>(PC, ULongNoonPauseWidget::StaticClass());
+	if (!Menu)
+	{
+		return;
+	}
+	Menu->AddToViewport(100);
+
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+
+	FInputModeUIOnly Mode;
+	Mode.SetWidgetToFocus(Menu->TakeWidget());
+	Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	PC->SetInputMode(Mode);
+	PC->bShowMouseCursor = true;
 }

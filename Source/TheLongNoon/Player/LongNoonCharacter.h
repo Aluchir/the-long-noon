@@ -81,6 +81,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	TObjectPtr<UInputAction> PruneAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	TObjectPtr<UInputAction> PauseAction;
+
 	// Input handlers
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
@@ -88,6 +91,7 @@ protected:
 	void StopSprint(const FInputActionValue& Value);
 	void Interact(const FInputActionValue& Value);
 	void Prune(const FInputActionValue& Value);
+	void Pause(const FInputActionValue& Value);
 
 	// --- HUD link (systems push display updates through ALongNoonHUD) ---
 	/** Subscribe components/events to the HUD and start the interact-focus poll. */

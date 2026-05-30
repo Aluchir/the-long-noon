@@ -19,6 +19,8 @@ public class TheLongNoon : ModuleRules
 			"InputCore",
 			"EnhancedInput",
 			"UMG",
+			"Slate",
+			"SlateCore",
 			"DeveloperSettings"
 		});
 

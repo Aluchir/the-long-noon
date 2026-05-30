@@ -14,6 +14,7 @@ new_actions = [
     ("IA_Sprint",   "LeftShift", "sprint_action"),
     ("IA_Interact", "E",         "interact_action"),
     ("IA_Prune",    "F",         "prune_action"),
+    ("IA_Pause",    "Escape",    "pause_action"),
 ]
 
 # 1. Create + SAVE the action assets.
