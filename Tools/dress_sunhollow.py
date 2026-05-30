@@ -74,11 +74,42 @@ for (name, x, y, h) in import_scatter:
 # A cozy campfire between the two NPCs.
 place("campfire_logs", 250.0, 0.0, 80.0)
 
+# A forest backdrop directly ahead (the camera faces +X toward the gather/bloom area),
+# so the scene reads as a clearing in the woods rather than an empty plain.
+for (x, y, h) in [(1050.0, 250.0, 360.0), (1050.0, -250.0, 360.0), (1250.0, 0.0, 440.0),
+                  (950.0, 480.0, 320.0), (950.0, -480.0, 320.0), (1200.0, 380.0, 380.0),
+                  (1200.0, -380.0, 380.0)]:
+    place("tree_pineTallA", x, y, h, yaw=(int(x + y)) % 360)
+
 log("placed %d decor actors" % decor_n)
+
+# Swap the central gameplay props from primitives to nature meshes. Keep BlockAll so
+# the gather/prune/interact line traces still hit them, and auto-scale to a height
+# that intersects the eye-line.
+def swap(label, mesh_name, target_h):
+    mesh = unreal.load_asset(NK + mesh_name)
+    if not isinstance(mesh, unreal.StaticMesh):
+        warn("swap skip (not a mesh): " + mesh_name); return
+    for a in eas.get_all_level_actors():
+        if a.get_actor_label() == label:
+            smc = a.get_component_by_class(unreal.StaticMeshComponent)
+            if smc:
+                smc.set_static_mesh(mesh)
+                s = target_h / mesh_height(mesh)
+                a.set_actor_scale3d(unreal.Vector(s, s, s))
+                smc.set_collision_enabled(unreal.CollisionEnabled.QUERY_AND_PHYSICS)
+                smc.set_collision_profile_name("BlockAll")
+                log("swapped %s -> %s" % (label, mesh_name))
+            return
+
+swap("GatherNode_0", "mushroom_redGroup", 170.0)
+swap("GatherNode_1", "mushroom_redGroup", 170.0)
+swap("GatherNode_2", "mushroom_tanGroup", 170.0)
+swap("Bloom_0", "plant_bushLargeTriangle", 190.0)
 
 # Tint the ground: find a green Nature Kit material and assign it to the Ground slab.
 green_mat = None
-for cand in ["grass", "leafsGreen", "leafs", "grass_large"]:
+for cand in ["leafsGreen", "grass", "leafs", "grass_large"]:
     asset = unreal.load_asset(NK + cand)
     if asset and isinstance(asset, unreal.MaterialInterface):
         green_mat = asset; log("ground material = " + cand); break
