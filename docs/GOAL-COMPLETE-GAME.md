@@ -72,7 +72,7 @@ The mechanical/greybox game is built + test-covered (9 tests; 5 region greyboxes
 - [ ] 🤖 Region gating wired end to end (tool tier + traversal + gate-build) per `progression-and-gating.md`.
 - [ ] 🤖 All six NPCs placed with their data-driven dialogue + beats; the Rememberer in R4.
 - [ ] 🤖 Forgotten-script reveal across regions (glyph→translated by literacy tier); codex complete.
-- [x] 🤖 Endings resolution logic implemented + tested (`ULongNoonEndingLibrary::ResolveEnding`): Give-it-back -> Gift Returned, Keep -> Long Noon Continues, Third Way only if the Rememberer was found (else not selectable). The in-game choice UI + ending sequences (cinematics/text) are a deferred art/flow pass.
+- [x] 🤖 Endings resolution logic (`ULongNoonEndingLibrary::ResolveEnding`, tested) AND in-game choice **placed**: three `ALongNoonChoiceMarker` world-interactables in the First Garden (Give-it-back / Keep / Third Way) resolve the ending on interact (Third Way gated on the Rememberer), screenshot-verified rendering. The ending *sequences* (cinematic text/visuals) are a deferred art/flow pass.
 - [ ] 🤖 Balance pass using `balance-sheet.md`; gate-build + repair-kit consumption wired.
 - [ ] 🤝 Region art/audio direction passes (degrading light + hollowing theme); needs assets.
 
