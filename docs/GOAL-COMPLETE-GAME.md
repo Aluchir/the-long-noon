@@ -48,7 +48,7 @@ Legend: 🤖 I drive headlessly/CLI/Python · 🤝 I scaffold, human decides/sup
 - [ ] 🤖 Full gather → craft → prune → build loop wired and tested in Sunhollow greybox.
 - [x] 🤖 `ALongNoonNpc` class (interactable, dialogue from data on BeginPlay). Tinker placed in Sunhollow; verified `[NPC] npc_tinker LoadFromData=ok lines=8`. First-talk fragment grant is wired via `StartDialogue` (roster `GrantsFragmentOnFirstTalk`); the "Tinker hands you the blade" beat is cosmetic (player already equips the tool from data at spawn).
 - [ ] 🤖 First codex fragments findable; literacy tier 0→1 path; HUD lore toast.
-- [ ] 🤖 Save/load round-trip verified (inventory, progression, found fragments).
+- [x] 🤖 Save/load round-trip verified via automation (`TheLongNoon.Systems.SaveRoundTrip`): literacy, tool tier, rememberer flag, inventory stacks, found fragments, unlocked regions, current region all round-trip through a slot. Suite now 6/6 green.
 - [ ] 🤖 The R1→R2 gate-build (`gate_treeline_thicket`) buildable and opens a stub R2.
 - [ ] 🤝 First-pass cozy art/lighting on Sunhollow (greybox → light art pass; needs assets).
 

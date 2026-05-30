@@ -6,7 +6,9 @@
 #include "Systems/LongNoonInventoryComponent.h"
 #include "Systems/LongNoonTendComponent.h"
 #include "Systems/LongNoonReclamationComponent.h"
+#include "Systems/LongNoonSaveGame.h"
 #include "Data/ToolDef.h"
+#include "Kismet/GameplayStatics.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FLongNoonInventoryTest, "TheLongNoon.Systems.Inventory",
 	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
@@ -84,6 +86,44 @@ bool FLongNoonReclamationTest::RunTest(const FString& Parameters)
 	TestFalse(TEXT("unequip clears tool"), Recl->HasTool());
 	TestFalse(TEXT("cannot perform with no tool"), Recl->CanPerform(EReclamationVerb::Prune));
 
+	return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FLongNoonSaveTest, "TheLongNoon.Systems.SaveRoundTrip",
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+
+bool FLongNoonSaveTest::RunTest(const FString& Parameters)
+{
+	const FString Slot = TEXT("TLN_AutomationTest");
+	ULongNoonSaveGame* Save = Cast<ULongNoonSaveGame>(
+		UGameplayStatics::CreateSaveGameObject(ULongNoonSaveGame::StaticClass()));
+	TestNotNull(TEXT("save object created"), Save);
+	if (!Save) { return false; }
+
+	Save->ScriptLiteracyTier = 3;
+	Save->MaxToolTier = 2;
+	Save->bRemembererFound = true;
+	Save->InventoryStacks.Add(TEXT("mat_sunmoss"), 5);
+	Save->FoundFragments.Add(TEXT("frag_sunhollow_monument"));
+	Save->UnlockedRegions.Add(TEXT("region_overgrowth"));
+	Save->CurrentRegionId = TEXT("region_sunhollow");
+
+	TestTrue(TEXT("saved to slot"), UGameplayStatics::SaveGameToSlot(Save, Slot, 0));
+	TestTrue(TEXT("slot exists"), UGameplayStatics::DoesSaveGameExist(Slot, 0));
+
+	ULongNoonSaveGame* Loaded = Cast<ULongNoonSaveGame>(UGameplayStatics::LoadGameFromSlot(Slot, 0));
+	TestNotNull(TEXT("loaded back"), Loaded);
+	if (Loaded)
+	{
+		TestEqual(TEXT("literacy round-trips"), Loaded->ScriptLiteracyTier, 3);
+		TestEqual(TEXT("tool tier round-trips"), Loaded->MaxToolTier, 2);
+		TestTrue(TEXT("rememberer flag round-trips"), Loaded->bRemembererFound);
+		TestEqual(TEXT("inventory stack round-trips"), Loaded->InventoryStacks.FindRef(TEXT("mat_sunmoss")), 5);
+		TestTrue(TEXT("found fragment round-trips"), Loaded->FoundFragments.Contains(TEXT("frag_sunhollow_monument")));
+		TestTrue(TEXT("unlocked region round-trips"), Loaded->UnlockedRegions.Contains(TEXT("region_overgrowth")));
+		TestEqual(TEXT("current region round-trips"), Loaded->CurrentRegionId, FName(TEXT("region_sunhollow")));
+	}
+	UGameplayStatics::DeleteGameInSlot(Slot, 0);
 	return true;
 }
 #endif // WITH_AUTOMATION_TESTS
