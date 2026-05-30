@@ -72,6 +72,17 @@ try: bloom.set_editor_property("drop_table", {"mat_sunmoss": 2})
 except Exception as e: warn("bloom drop_table failed: %s" % e)
 log("placed bloom")
 
+# The Tinker NPC (data-driven dialogue loads on BeginPlay).
+tinker = eas.spawn_actor_from_class(unreal.LongNoonNpc, unreal.Vector(250.0, 280.0, 90.0))
+set_mesh(tinker, CYL)
+tinker.set_actor_scale3d(unreal.Vector(1.0, 1.0, 1.8))
+try:
+    tinker.set_editor_property("npc_id", "npc_tinker")
+except Exception as e:
+    warn("npc_id set failed: %s" % e)
+tinker.set_actor_label("Tinker")
+log("placed Tinker NPC")
+
 eas.spawn_actor_from_class(unreal.PlayerStart, unreal.Vector(0.0, 0.0, 150.0)).set_actor_label("PlayerStart")
 
 # GameMode override.

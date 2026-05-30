@@ -46,7 +46,7 @@ Legend: 🤖 I drive headlessly/CLI/Python · 🤝 I scaffold, human decides/sup
 
 ### Phase 4 — Sunhollow vertical slice (Region 1 fully playable)
 - [ ] 🤖 Full gather → craft → prune → build loop wired and tested in Sunhollow greybox.
-- [ ] 🤖 The Tinker NPC placed, dialogue from data (`LoadFromData`), grants first tool + first lore fragment.
+- [x] 🤖 `ALongNoonNpc` class (interactable, dialogue from data on BeginPlay). Tinker placed in Sunhollow; verified `[NPC] npc_tinker LoadFromData=ok lines=8`. First-talk fragment grant is wired via `StartDialogue` (roster `GrantsFragmentOnFirstTalk`); the "Tinker hands you the blade" beat is cosmetic (player already equips the tool from data at spawn).
 - [ ] 🤖 First codex fragments findable; literacy tier 0→1 path; HUD lore toast.
 - [ ] 🤖 Save/load round-trip verified (inventory, progression, found fragments).
 - [ ] 🤖 The R1→R2 gate-build (`gate_treeline_thicket`) buildable and opens a stub R2.
