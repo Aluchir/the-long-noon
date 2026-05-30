@@ -74,11 +74,11 @@ The mechanical/greybox game is built + test-covered (9 tests; 5 region greyboxes
 - [ ] 🤖 Forgotten-script reveal across regions (glyph→translated by literacy tier); codex complete.
 - [x] 🤖 Endings resolution logic (`ULongNoonEndingLibrary::ResolveEnding`, tested) AND in-game choice **placed**: three `ALongNoonChoiceMarker` world-interactables in the First Garden (Give-it-back / Keep / Third Way) resolve the ending on interact (Third Way gated on the Rememberer), screenshot-verified rendering. The ending *sequences* (cinematic text/visuals) are a deferred art/flow pass.
 - [ ] 🤖 Balance pass using `balance-sheet.md`; gate-build + repair-kit consumption wired.
-- [ ] 🤝 Region art/audio direction passes (degrading light + hollowing theme); needs assets.
+- [~] 🤝 Region art/audio direction passes: CC0 reskin + interaction audio done (above); the degrading per-region light-dial (golden->bronze->pale->restored) + a lighting build are the next automatable polish, with final direction a human call.
 
 ### Phase 6 — Production polish (shippable quality)
-- [ ] 🧑 Real 3D art, animation, VFX per `art/` (or curated asset packs); replace greybox.
-- [ ] 🧑 Music (the one hollowing theme, in stems) + cozy SFX library per `audio/`.
+- [~] 🤖 Real 3D art (curated CC0 packs): Kenney Nature Kit (329 meshes) integrated; all five regions reskinned with biome-specific decor + gameplay-prop meshes (`dress_sunhollow.py`, `dress_regions.py`), screenshot-verified. Remaining 🧑: bespoke/rigged characters + animation, VFX, and the final aesthetic pass (the greybox primitives for NPCs still need a humanoid mesh).
+- [~] 🤖 Audio (curated CC0 packs): Kenney RPG Audio + Music Jingles imported (`Tools/import_audio.py`); interaction SFX wired (gather `chop`, lore `bookOpen`) + quest stingers (pizzicato per objective, sax on quest-complete). Remaining 🧑: the bespoke hollowing theme in stems + a fuller SFX/ambient-bed pass.
 - [ ] 🤖 Localization pipeline run (per `localization.md`); pseudoloc pass; EFIGS.
 - [ ] 🤝 Accessibility, settings menu, options; UI art pass.
 - [ ] 🤝 Performance + scalability; re-enable/tune Lumen for the golden-hour look.
