@@ -14,8 +14,13 @@
 git checkout feature/unreal-scaffold
 ```
 
+## CURRENT STATE (2026-05-30): playable greybox, mechanically complete
+The game **compiles, runs, and plays** on UE 5.7. A character walks/looks/gathers in a lit Sunhollow greybox; all five regions have runnable greybox levels; data tables load; NPCs load dialogue from data; save/load, region gating, literacy reveal, and endings logic are implemented. **9 automation tests pass** (`UnrealEditor-Cmd ... -ExecCmds="Automation RunTests TheLongNoon"`). Drive it with `Tools/*.py` + the launch facts in `docs/GOAL-COMPLETE-GAME.md`. To play: `UnrealEditor.exe TheLongNoon.uproject /Game/Maps/L_Sunhollow_Greybox -game -sm6 -windowed`. What remains to *ship* is human art/audio/UMG/Steam — see the Deferred list in `docs/GOAL-COMPLETE-GAME.md`.
+
 ## Where state is captured
-- `docs/GOAL.md` — the build-out backlog with checkboxes. **Sections A to G are all done.** The full headless build-out is complete; what remains needs the UE editor.
+- `docs/GOAL-COMPLETE-GAME.md` — **the north-star goal + phase backlog + the Deferred (human) list + hard-won build/launch facts. Start here.**
+- `docs/GOAL.md` — the original headless build-out backlog (A–G, all done).
+- `docs/GOAL-PHASE3.md` — first-playable detail (done).
 - `docs/BACKLOG.md` — the earlier pre-production backlog (all complete).
 - `docs/WORLD_BIBLE.md`, `docs/SPRINT-1-DECISIONS.md`, `docs/characters/`, `docs/lore/`, `docs/design/`, `docs/art/`, `docs/audio/` — the full design + narrative bible.
 - `docs/tech/` — engine rationale, project settings, coding standards, version control, third-party plugins, data authoring, build/run, and **`first-playable-checklist.md`**.

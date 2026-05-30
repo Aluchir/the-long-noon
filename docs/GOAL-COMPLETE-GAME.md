@@ -20,8 +20,17 @@ Each work cycle:
 5. **NEVER STOP, NEVER IDLE.** Run continuously, cycle after cycle, re-arming the wake every turn, until the game is complete. No checkpoints, no asking for confirmation, no pausing at milestones. Only a genuine hard blocker (e.g. toolchain absent) pauses — and even then keep doing other automatable work first and record the blocker in Deferred.
 Legend: 🤖 I drive headlessly/CLI/Python · 🤝 I scaffold, human decides/supplies · 🧑 human or artist only.
 
-## Deferred (parked, NOT blocking — needs human art/audio/business; loop keeps moving)
-- (items land here as the loop reaches them)
+## Deferred (parked — needs human art/audio/UMG/business; not automatable headless)
+The mechanical/greybox game is built and test-covered (9 automation tests; all 5 regions playable greyboxes; gather/prune/data/NPC/save/gating/literacy/endings all implemented and verified). What remains to reach a *shippable* game is fundamentally human or art-tool work I cannot originate headlessly:
+- **3D art, animation, VFX** — replace greybox shapes with real cozy stylized assets per `docs/art/` (or licensed packs). The whole visual identity.
+- **Music + SFX** — the one "hollowing" theme in stems + cozy SFX library per `docs/audio/`.
+- **HUD / menus (UMG)** — `WBP_HUD` visual design (the C++ events are ready: `UpdateTend`/`SetInteractPrompt`/`OnLoreFound`); settings/options/accessibility UI.
+- **In-game choice UI + ending sequences** — the Gardener choice screen and the three ending cinematics/text (resolution logic is done + tested).
+- **Per-region art light-dial / palette** — the degrading golden-hour look (greybox uses one safe daylight setup).
+- **Forgotten-script font** — per `docs/art/forgotten-script-font-spec.md` (type designer).
+- **Playtest feel/balance tuning** — human judgment on game feel.
+- **Steam / business** — real AppId, store page, capsule art, trailer, ratings, pricing, release (`Phase 7`).
+- **Engine-GUI-only verification** — interactive prune/talk feel (injected input is unreliable under desktop focus; logic is symmetric to verified gather).
 
 ### Hard-won launch/build facts (do not relearn these)
 - Build editor: `UE_5.7\Engine\Build\BatchFiles\Build.bat TheLongNoonEditor Win64 Development -Project=<uproject> -WaitMutex`.
