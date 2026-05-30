@@ -116,7 +116,8 @@ gate = eas.spawn_actor_from_class(unreal.LongNoonGateBuild, unreal.Vector(700.0,
 set_mesh(gate, CUBE)
 gate.set_actor_scale3d(unreal.Vector(0.6, 3.0, 1.4))
 gate.set_actor_label("GateBuild_0")
-for prop, val in [("gate_build_id", "gate_overgrowth"), ("completes_objective", "build_gate")]:
+for prop, val in [("gate_build_id", "gate_overgrowth"), ("completes_objective", "build_gate"),
+                  ("target_level", "L_Overgrowth_Greybox")]:
     try: gate.set_editor_property(prop, val)
     except Exception as e: warn("gate %s failed: %s" % (prop, e))
 log("placed gate build")

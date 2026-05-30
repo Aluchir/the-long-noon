@@ -30,6 +30,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Building")
 	FName CompletesObjective;
 
+	/** Optional level to open once built (the region beyond the gate). None = stay. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Building")
+	FName TargetLevel;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Building")
 	bool bBuilt = false;
 

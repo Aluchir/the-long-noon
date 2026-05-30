@@ -2,6 +2,7 @@
 #include "Systems/LongNoonBuildingComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Core/LongNoonLog.h"
+#include "Kismet/GameplayStatics.h"
 
 ALongNoonGateBuild::ALongNoonGateBuild()
 {
@@ -25,6 +26,13 @@ void ALongNoonGateBuild::OnInteract_Implementation(AActor* Interactor)
 		UE_LOG(LogLongNoon, Log, TEXT("[GateBuild] Built %s."), *GateBuildId.ToString());
 		SetActorHiddenInGame(true);
 		SetActorEnableCollision(false);
+
+		// Walk through the gate into the region beyond, if one is set.
+		if (!TargetLevel.IsNone())
+		{
+			UE_LOG(LogLongNoon, Log, TEXT("[GateBuild] Opening level %s."), *TargetLevel.ToString());
+			UGameplayStatics::OpenLevel(this, TargetLevel);
+		}
 	}
 }
 
