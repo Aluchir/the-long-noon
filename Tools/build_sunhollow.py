@@ -48,7 +48,7 @@ eas.spawn_actor_from_class(unreal.SkyLight, unreal.Vector(0.0, 0.0, 600.0)).set_
 eas.spawn_actor_from_class(unreal.SkyAtmosphere, unreal.Vector(0.0, 0.0, 0.0)).set_actor_label("SkyAtmosphere")
 
 # Gather nodes (visible spheres) carrying mat_sunmoss.
-gather_spots = [(300, 450), (300, -450), (650, 320)]  # off to the sides; the Bloom sits directly ahead
+gather_spots = [(250, 200), (250, -200), (440, 0)]  # a near arc ahead, a step from spawn
 gi = 0
 for (x, y) in gather_spots:
     n = eas.spawn_actor_from_class(unreal.GatherNode, unreal.Vector(float(x), float(y), 90.0))
@@ -62,7 +62,7 @@ for (x, y) in gather_spots:
 log("placed %d gather nodes" % gi)
 
 # A Bloom patch to prune (visible cylinder).
-bloom = eas.spawn_actor_from_class(unreal.BloomActor, unreal.Vector(320.0, 0.0, 80.0))
+bloom = eas.spawn_actor_from_class(unreal.BloomActor, unreal.Vector(150.0, 0.0, 80.0))  # dead ahead, inside the 2m prune reach
 set_mesh(bloom, CYL)
 bloom.set_actor_label("Bloom_0")
 try: bloom.set_editor_property("required_verb", unreal.ReclamationVerb.PRUNE)
