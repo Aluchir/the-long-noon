@@ -1,4 +1,7 @@
 #include "UI/LongNoonMainMenuWidget.h"
+#include "UI/LongNoonUIStyle.h"
+#include "Systems/LongNoonSaveService.h"
+#include "Engine/GameInstance.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
@@ -27,7 +30,7 @@ void ULongNoonMainMenuWidget::BuildTree()
 	WidgetTree->RootWidget = Root;
 
 	UBorder* Bg = WidgetTree->ConstructWidget<UBorder>(UBorder::StaticClass(), TEXT("MenuBg"));
-	Bg->SetBrushColor(FLinearColor(0.03f, 0.03f, 0.05f, 1.0f));
+	Bg->SetBrushColor(LongNoonUI::Ink());
 	if (UCanvasPanelSlot* CS = Root->AddChildToCanvas(Bg))
 	{
 		CS->SetAnchors(FAnchors(0.0f, 0.0f, 1.0f, 1.0f));
@@ -36,6 +39,7 @@ void ULongNoonMainMenuWidget::BuildTree()
 
 	TitleText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("Title"));
 	TitleText->SetText(NSLOCTEXT("LongNoon", "GameTitle", "THE LONG NOON"));
+	LongNoonUI::StyleText(TitleText, LongNoonUI::TitleFont(64.0f), LongNoonUI::Gold());
 	if (UCanvasPanelSlot* CS = Root->AddChildToCanvas(TitleText))
 	{
 		CS->SetAnchors(FAnchors(0.5f, 0.38f));
@@ -45,6 +49,7 @@ void ULongNoonMainMenuWidget::BuildTree()
 
 	SubtitleText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("Subtitle"));
 	SubtitleText->SetText(NSLOCTEXT("LongNoon", "GameSubtitle", "a cozy garden at the end of dying"));
+	LongNoonUI::StyleText(SubtitleText, LongNoonUI::HeadingFont(24.0f), LongNoonUI::Cream());
 	if (UCanvasPanelSlot* CS = Root->AddChildToCanvas(SubtitleText))
 	{
 		CS->SetAnchors(FAnchors(0.5f, 0.46f));
@@ -53,7 +58,8 @@ void ULongNoonMainMenuWidget::BuildTree()
 	}
 
 	PromptText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("Prompt"));
-	PromptText->SetText(NSLOCTEXT("LongNoon", "MenuPrompt", "[Enter] begin     [Q] quit"));
+	PromptText->SetText(NSLOCTEXT("LongNoon", "MenuPrompt", "[Enter] begin     [C] continue     [Q] quit"));
+	LongNoonUI::StyleText(PromptText, LongNoonUI::BodyFont(22.0f), LongNoonUI::Cream());
 	if (UCanvasPanelSlot* CS = Root->AddChildToCanvas(PromptText))
 	{
 		CS->SetAnchors(FAnchors(0.5f, 0.6f));
@@ -67,6 +73,23 @@ FReply ULongNoonMainMenuWidget::NativeOnKeyDown(const FGeometry& InGeometry, con
 	const FKey Key = InKeyEvent.GetKey();
 	if (Key == EKeys::Enter || Key == EKeys::SpaceBar || Key == EKeys::Gamepad_FaceButton_Bottom)
 	{
+		UGameplayStatics::OpenLevel(this, StartLevel);
+		return FReply::Handled();
+	}
+	if (Key == EKeys::C)
+	{
+		// Continue: restore slot 1 into the GameInstance (progression persists across the
+		// OpenLevel), then enter the world.
+		if (UGameInstance* GI = GetGameInstance())
+		{
+			if (ULongNoonSaveService* Save = GI->GetSubsystem<ULongNoonSaveService>())
+			{
+				if (Save->DoesSlotExist(TEXT("Slot1")))
+				{
+					Save->LoadFromSlot(TEXT("Slot1"));
+				}
+			}
+		}
 		UGameplayStatics::OpenLevel(this, StartLevel);
 		return FReply::Handled();
 	}

@@ -1,4 +1,6 @@
 #include "UI/LongNoonSettingsWidget.h"
+#include "UI/LongNoonUIStyle.h"
+#include "Core/LongNoonUserSettings.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
@@ -14,6 +16,16 @@ void ULongNoonSettingsWidget::NativeConstruct()
 	// Make sure the overlay can receive keyboard focus (so the arrow keys land here,
 	// not in the game). The owning code is expected to also SetWidgetToFocus on it.
 	bIsFocusable = true;
+
+	// Seed from the persisted settings (volume stored normalized 0..1; UI uses 0..100).
+	if (ULongNoonUserSettings* S = ULongNoonUserSettings::Load())
+	{
+		MasterVolume = S->MasterVolume * 100.0f;
+		MouseSensitivity = S->MouseSensitivity;
+	}
+	ApplyMasterVolume();
+	ApplyMouseSensitivity();
+	RefreshRows();
 }
 
 TSharedRef<SWidget> ULongNoonSettingsWidget::RebuildWidget()
@@ -37,7 +49,7 @@ void ULongNoonSettingsWidget::BuildTree()
 
 	// Full-screen dim, matching the pause menu.
 	UBorder* Dim = WidgetTree->ConstructWidget<UBorder>(UBorder::StaticClass(), TEXT("Dim"));
-	Dim->SetBrushColor(FLinearColor(0.02f, 0.02f, 0.03f, 0.6f));
+	Dim->SetBrushColor(LongNoonUI::PanelTint());
 	if (UCanvasPanelSlot* CS = Root->AddChildToCanvas(Dim))
 	{
 		CS->SetAnchors(FAnchors(0.0f, 0.0f, 1.0f, 1.0f));
@@ -46,6 +58,7 @@ void ULongNoonSettingsWidget::BuildTree()
 
 	TitleText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("SettingsTitle"));
 	TitleText->SetText(NSLOCTEXT("LongNoon", "SettingsTitle", "Settings"));
+	LongNoonUI::StyleText(TitleText, LongNoonUI::HeadingFont(36.0f), LongNoonUI::Gold());
 	if (UCanvasPanelSlot* CS = Root->AddChildToCanvas(TitleText))
 	{
 		CS->SetAnchors(FAnchors(0.5f, 0.34f));
@@ -57,6 +70,7 @@ void ULongNoonSettingsWidget::BuildTree()
 	{
 		UTextBlock* Row = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), Name);
 		Row->SetText(FText::GetEmpty());
+		LongNoonUI::StyleText(Row, LongNoonUI::BodyFont(24.0f), LongNoonUI::Cream());
 		if (UCanvasPanelSlot* CS = Root->AddChildToCanvas(Row))
 		{
 			CS->SetAnchors(FAnchors(0.5f, Y));
@@ -71,6 +85,7 @@ void ULongNoonSettingsWidget::BuildTree()
 
 	HintText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("SettingsHint"));
 	HintText->SetText(NSLOCTEXT("LongNoon", "SettingsHint", "[Up/Down] select     [Left/Right] adjust     [Esc] back"));
+	LongNoonUI::StyleText(HintText, LongNoonUI::BodyFont(18.0f), LongNoonUI::Cream());
 	if (UCanvasPanelSlot* CS = Root->AddChildToCanvas(HintText))
 	{
 		CS->SetAnchors(FAnchors(0.5f, 0.68f));
@@ -199,6 +214,14 @@ FReply ULongNoonSettingsWidget::NativeOnKeyDown(const FGeometry& InGeometry, con
 
 void ULongNoonSettingsWidget::Close()
 {
+	// Persist so the choices survive a relaunch (convert UI percent back to 0..1).
+	if (ULongNoonUserSettings* S = ULongNoonUserSettings::Load())
+	{
+		S->MasterVolume = MasterVolume / 100.0f;
+		S->MouseSensitivity = MouseSensitivity;
+		ULongNoonUserSettings::Save(S);
+	}
+
 	RemoveFromParent();
 
 	// Hand keyboard focus back to whatever invoked us (e.g. the pause menu). The opener

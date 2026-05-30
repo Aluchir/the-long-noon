@@ -1,4 +1,5 @@
 #include "UI/LongNoonPauseWidget.h"
+#include "UI/LongNoonUIStyle.h"
 #include "UI/LongNoonSettingsWidget.h"
 #include "UI/LongNoonSaveMenuWidget.h"
 #include "Blueprint/WidgetTree.h"
@@ -48,7 +49,7 @@ void ULongNoonPauseWidget::BuildTree()
 
 	// Full-screen dim.
 	UBorder* Dim = WidgetTree->ConstructWidget<UBorder>(UBorder::StaticClass(), TEXT("Dim"));
-	Dim->SetBrushColor(FLinearColor(0.02f, 0.02f, 0.03f, 0.6f));
+	Dim->SetBrushColor(LongNoonUI::PanelTint());
 	if (UCanvasPanelSlot* CS = Root->AddChildToCanvas(Dim))
 	{
 		CS->SetAnchors(FAnchors(0.0f, 0.0f, 1.0f, 1.0f));
@@ -57,6 +58,7 @@ void ULongNoonPauseWidget::BuildTree()
 
 	TitleText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("PauseTitle"));
 	TitleText->SetText(NSLOCTEXT("LongNoon", "Paused", "The Long Noon holds its breath."));
+	LongNoonUI::StyleText(TitleText, LongNoonUI::HeadingFont(34.0f), LongNoonUI::Gold());
 	if (UCanvasPanelSlot* CS = Root->AddChildToCanvas(TitleText))
 	{
 		CS->SetAnchors(FAnchors(0.5f, 0.42f));
@@ -66,6 +68,7 @@ void ULongNoonPauseWidget::BuildTree()
 
 	HintText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("PauseHint"));
 	HintText->SetText(NSLOCTEXT("LongNoon", "PauseHint", "[Esc] resume     [S] settings     [L] save / load     [Q] quit"));
+	LongNoonUI::StyleText(HintText, LongNoonUI::BodyFont(20.0f), LongNoonUI::Cream());
 	if (UCanvasPanelSlot* CS = Root->AddChildToCanvas(HintText))
 	{
 		CS->SetAnchors(FAnchors(0.5f, 0.52f));
