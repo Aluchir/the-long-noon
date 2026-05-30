@@ -33,7 +33,7 @@ Legend: 🤖 I drive headlessly/CLI/Python · 🤝 I scaffold, human decides/sup
 ### Phase 3 — First playable (the core loop in a real level)  [IN PROGRESS]
 - [x] C++ compiles on 5.7; module loads; automation tests pass.
 - [x] Character grafted (mannequin + anim + input), spawns, walks/looks in a lit 3D level (screenshot-verified).
-- [ ] 🤖 Assign the 8 DataTables in Project Settings (fixes "no tool row"); starting tool equips. (Script it like `configure_firstplayable.py`, setting `ULongNoonDataSettings` slots via Python.)
+- [x] 🤖 Assign the 8 DataTables. Imported all CSVs as `DT_*` DataTables (`Tools/import_and_assign_data.py`) and assigned the `ULongNoonDataSettings` slots via `Config/DefaultGame.ini`. Verified: registry loads items=14/tools=9/recipes=13/regions=5/fragments=18/npcs=6/lines=39/builds=4 and the starting tool equips (no "no tool row").
 - [ ] 🤖 Build `L_Sunhollow_Greybox` as a plain level via Python: ground, golden-hour light, a few `AGatherNode` (mat_sunmoss), an `ABloomActor` (Prune), a `PlayerStart`, GameMode override.
 - [ ] 🤖 Verify the loop in that level via screenshots: walk to a node and gather; prune the Bloom; confirm inventory/stamina/durability change (read via on-screen debug or log).
 - [ ] 🤝 Build `WBP_HUD` (UMG) on `ULongNoonHUDWidget` so Tend/prompt/lore show. (I can scaffold a minimal one via Python; visual design is human.)
