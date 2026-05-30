@@ -46,6 +46,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Bloom")
 	EBloomState State = EBloomState::Active;
 
+	/** Optional quest objective id completed the first time this patch is reclaimed. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Bloom")
+	FName CompletesObjective;
+
 	/**
 	 * Attempt to reclaim with the given verb. Returns true and fills OutDrops if the
 	 * verb matches and the patch was Active. Never destroys the actor.

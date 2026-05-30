@@ -1,8 +1,10 @@
 #include "Systems/BloomActor.h"
+#include "Systems/LongNoonQuestSubsystem.h"
 #include "Components/StaticMeshComponent.h"
 #include "Core/LongNoonLog.h"
 #include "TimerManager.h"
 #include "Engine/World.h"
+#include "Engine/GameInstance.h"
 
 ABloomActor::ABloomActor()
 {
@@ -32,6 +34,22 @@ bool ABloomActor::TryReclaim(EReclamationVerb Verb, TMap<FName, int32>& OutDrops
 	}
 
 	UE_LOG(LogLongNoon, Verbose, TEXT("[Bloom] Reclaimed tier %d patch -> %d."), BloomTier, (int32)State);
+
+	// Advance the quest if this patch completes an objective (mirrors AGatherNode).
+	if (!CompletesObjective.IsNone())
+	{
+		if (const UWorld* World = GetWorld())
+		{
+			if (UGameInstance* GI = World->GetGameInstance())
+			{
+				if (ULongNoonQuestSubsystem* Quests = GI->GetSubsystem<ULongNoonQuestSubsystem>())
+				{
+					Quests->CompleteObjective(CompletesObjective);
+				}
+			}
+		}
+	}
+
 	return true;
 }
 

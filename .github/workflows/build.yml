@@ -71,5 +71,5 @@ jobs:
         # once the test queue is empty. Fails the job if tests fail.
         shell: pwsh
         run: |
-          & "$env:UE_ROOT\Engine\Binaries\Win64\UnrealEditor-Cmd.exe" "$env:PROJECT" -ExecCmds="Automation RunTests TheLongNoon; Quit" -unattended -nop4 -nosplash -log -testexit="Automation Test Queue Empty"
+          & "$env:UE_ROOT\Engine\Binaries\Win64\UnrealEditor-Cmd.exe" "$env:PROJECT" -ExecCmds="Automation RunTests TheLongNoon; Quit" -unattended -nop4 -nosplash -nullrhi -log -testexit="Automation Test Queue Empty"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

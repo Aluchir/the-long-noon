@@ -71,6 +71,8 @@ try: bloom.set_editor_property("bloom_tier", 1)
 except Exception as e: warn("bloom tier failed: %s" % e)
 try: bloom.set_editor_property("drop_table", {"mat_sunmoss": 2})
 except Exception as e: warn("bloom drop_table failed: %s" % e)
+try: bloom.set_editor_property("completes_objective", "prune_bloom")
+except Exception as e: warn("bloom completes_objective failed: %s" % e)
 log("placed bloom")
 
 # The Tinker NPC (data-driven dialogue loads on BeginPlay).
