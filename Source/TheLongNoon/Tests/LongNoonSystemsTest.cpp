@@ -178,6 +178,15 @@ bool FLongNoonLiteracyTest::RunTest(const FString& Parameters)
 	// The Gardener's word (tier 4) only at full literacy.
 	TestFalse(TEXT("tier-4 unreadable at literacy 3"), ULongNoonCodexSubsystem::IsLiteracyEnough(4, 3));
 	TestTrue(TEXT("tier-4 readable at literacy 4"), ULongNoonCodexSubsystem::IsLiteracyEnough(4, 4));
+
+	// Fragment-count -> literacy tier thresholds (2/5/10/15).
+	TestEqual(TEXT("0 fragments -> tier 0"), ULongNoonCodexSubsystem::LiteracyTierForFragmentCount(0), 0);
+	TestEqual(TEXT("2 fragments -> tier 1"), ULongNoonCodexSubsystem::LiteracyTierForFragmentCount(2), 1);
+	TestEqual(TEXT("4 fragments -> still tier 1"), ULongNoonCodexSubsystem::LiteracyTierForFragmentCount(4), 1);
+	TestEqual(TEXT("5 fragments -> tier 2"), ULongNoonCodexSubsystem::LiteracyTierForFragmentCount(5), 2);
+	TestEqual(TEXT("10 fragments -> tier 3"), ULongNoonCodexSubsystem::LiteracyTierForFragmentCount(10), 3);
+	TestEqual(TEXT("15 fragments -> tier 4"), ULongNoonCodexSubsystem::LiteracyTierForFragmentCount(15), 4);
+	TestEqual(TEXT("all 18 fragments -> capped tier 4"), ULongNoonCodexSubsystem::LiteracyTierForFragmentCount(18), 4);
 	return true;
 }
 

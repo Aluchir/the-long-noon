@@ -34,6 +34,10 @@ public:
 		return CurrentLiteracyTier >= RequiredLiteracyTier;
 	}
 
+	/** Literacy tier (0..4) earned for having found this many fragments. Pure/testable.
+	 *  Thresholds: 2 -> tier 1, 5 -> 2, 10 -> 3, 15 -> 4 (see docs/lore/forgotten-script.md). */
+	static int32 LiteracyTierForFragmentCount(int32 FragmentsFound);
+
 	/** Returns translated text if readable, otherwise the untranslated glyph text. */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Codex")
 	FText GetReadableText(const ULoreFragmentDef* Fragment) const;
