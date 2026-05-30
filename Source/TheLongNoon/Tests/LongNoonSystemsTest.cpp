@@ -8,6 +8,7 @@
 #include "Systems/LongNoonReclamationComponent.h"
 #include "Systems/LongNoonSaveGame.h"
 #include "Systems/LongNoonRegionSubsystem.h"
+#include "Systems/LongNoonCodexSubsystem.h"
 #include "Data/ToolDef.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -157,6 +158,24 @@ bool FLongNoonRegionGateTest::RunTest(const FString& Parameters)
 	TestTrue(TEXT("Seal traversal granted passes"),
 		ULongNoonRegionSubsystem::CanEnter(3, TEXT("Seal"), NAME_None, 3, WithSeal, NoCaps));
 
+	return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FLongNoonLiteracyTest, "TheLongNoon.Systems.LiteracyReveal",
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+
+bool FLongNoonLiteracyTest::RunTest(const FString& Parameters)
+{
+	// Tier-0 fragments are always readable.
+	TestTrue(TEXT("tier-0 readable at literacy 0"), ULongNoonCodexSubsystem::IsLiteracyEnough(0, 0));
+	// A tier-2 fragment is unreadable until literacy reaches 2, then stays readable.
+	TestFalse(TEXT("tier-2 unreadable at literacy 0"), ULongNoonCodexSubsystem::IsLiteracyEnough(2, 0));
+	TestFalse(TEXT("tier-2 unreadable at literacy 1"), ULongNoonCodexSubsystem::IsLiteracyEnough(2, 1));
+	TestTrue(TEXT("tier-2 readable at literacy 2"), ULongNoonCodexSubsystem::IsLiteracyEnough(2, 2));
+	TestTrue(TEXT("tier-2 readable at literacy 4"), ULongNoonCodexSubsystem::IsLiteracyEnough(2, 4));
+	// The Gardener's word (tier 4) only at full literacy.
+	TestFalse(TEXT("tier-4 unreadable at literacy 3"), ULongNoonCodexSubsystem::IsLiteracyEnough(4, 3));
+	TestTrue(TEXT("tier-4 readable at literacy 4"), ULongNoonCodexSubsystem::IsLiteracyEnough(4, 4));
 	return true;
 }
 #endif // WITH_AUTOMATION_TESTS

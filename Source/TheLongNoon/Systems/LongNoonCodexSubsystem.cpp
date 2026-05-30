@@ -27,7 +27,7 @@ bool ULongNoonCodexSubsystem::CanRead(const ULoreFragmentDef* Fragment) const
 
 	const ULongNoonGameInstance* GI = Cast<ULongNoonGameInstance>(GetGameInstance());
 	const int32 Literacy = GI ? GI->ScriptLiteracyTier : 0;
-	return Literacy >= Fragment->RequiredLiteracyTier;
+	return IsLiteracyEnough(Fragment->RequiredLiteracyTier, Literacy);
 }
 
 FText ULongNoonCodexSubsystem::GetReadableText(const ULoreFragmentDef* Fragment) const

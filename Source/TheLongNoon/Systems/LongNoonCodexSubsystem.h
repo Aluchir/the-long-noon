@@ -28,6 +28,12 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Codex")
 	bool CanRead(const ULoreFragmentDef* Fragment) const;
 
+	/** Pure literacy gate (no GameInstance); CanRead forwards to this. Unit-testable. */
+	static bool IsLiteracyEnough(int32 RequiredLiteracyTier, int32 CurrentLiteracyTier)
+	{
+		return CurrentLiteracyTier >= RequiredLiteracyTier;
+	}
+
 	/** Returns translated text if readable, otherwise the untranslated glyph text. */
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Codex")
 	FText GetReadableText(const ULoreFragmentDef* Fragment) const;

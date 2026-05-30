@@ -83,6 +83,17 @@ except Exception as e:
 tinker.set_actor_label("Tinker")
 log("placed Tinker NPC")
 
+# The Keeper NPC (tends the monument; first met in the Sunhollow).
+keeper = eas.spawn_actor_from_class(unreal.LongNoonNpc, unreal.Vector(250.0, -280.0, 90.0))
+set_mesh(keeper, CYL)
+keeper.set_actor_scale3d(unreal.Vector(1.0, 1.0, 1.8))
+try:
+    keeper.set_editor_property("npc_id", "npc_keeper")
+except Exception as e:
+    warn("keeper npc_id failed: %s" % e)
+keeper.set_actor_label("Keeper")
+log("placed Keeper NPC")
+
 eas.spawn_actor_from_class(unreal.PlayerStart, unreal.Vector(0.0, 0.0, 150.0)).set_actor_label("PlayerStart")
 
 # GameMode override.
