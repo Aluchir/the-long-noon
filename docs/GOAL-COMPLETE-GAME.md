@@ -24,7 +24,9 @@ Legend: 🤖 I drive headlessly/CLI/Python · 🤝 I scaffold, human decides/sup
 - Standalone playtest: `UnrealEditor.exe <uproject> /Game/Maps/<Map> -game -sm6 -windowed -ResX=1280 -ResY=720`. **`-sm6` is required** (matches the editor's shader cache; plain `-game` is SM5 and recompiles every shader → minutes of white screen).
 - **Use plain levels, not World Partition.** The ThirdPerson template WP map does not stream content in standalone (instant white void). Author levels as normal levels (see `Tools/build_flat_level.py`).
 - Editor asset/level scripting works via the FULL editor `-ExecutePythonScript=...` (the `-run=pythonscript` commandlet crashes on `LevelEditorSubsystem`). Close the editor first (asset locks).
-- Screenshot feedback: capture the game window with `CopyFromScreen` (reads composited windowed D3D; `PrintWindow` returns white for D3D and is useless here).
+- Screenshot feedback: capture the game window with `CopyFromScreen` (reads composited windowed D3D; `PrintWindow` returns white for D3D and is useless here). **Must** `$proc.Refresh()` the handle, then `AttachThreadInput` + `SetForegroundWindow` to actually focus it, then verify `MainWindowTitle` contains `PCD3D_SM6` before trusting the grab — otherwise you capture whatever app is foreground (e.g. a browser).
+- Building levels in Python: spawn the default `DirectionalLight`/`SkyLight`/`SkyAtmosphere` and DO NOT tweak the light via `get_component_by_class(...).set_light_color(...)` — doing so blacked out the scene. Plain default lights render the golden-hour look fine. Match `Tools/build_flat_level.py` / `build_sunhollow.py`.
+- `new_level` will not overwrite an existing `.umap`; `EditorAssetLibrary.delete_asset(pkg)` first, then `new_level` + `save_current_level`.
 
 ---
 
@@ -34,7 +36,7 @@ Legend: 🤖 I drive headlessly/CLI/Python · 🤝 I scaffold, human decides/sup
 - [x] C++ compiles on 5.7; module loads; automation tests pass.
 - [x] Character grafted (mannequin + anim + input), spawns, walks/looks in a lit 3D level (screenshot-verified).
 - [x] 🤖 Assign the 8 DataTables. Imported all CSVs as `DT_*` DataTables (`Tools/import_and_assign_data.py`) and assigned the `ULongNoonDataSettings` slots via `Config/DefaultGame.ini`. Verified: registry loads items=14/tools=9/recipes=13/regions=5/fragments=18/npcs=6/lines=39/builds=4 and the starting tool equips (no "no tool row").
-- [ ] 🤖 Build `L_Sunhollow_Greybox` as a plain level via Python: ground, golden-hour light, a few `AGatherNode` (mat_sunmoss), an `ABloomActor` (Prune), a `PlayerStart`, GameMode override.
+- [x] 🤖 Build `L_Sunhollow_Greybox` (plain level, `Tools/build_sunhollow.py`): ground, golden-hour light, 3 `AGatherNode` (mat_sunmoss, sphere meshes), an `ABloomActor` (Prune, cylinder), `PlayerStart`, GameMode override. Screenshot-verified rendering.
 - [ ] 🤖 Verify the loop in that level via screenshots: walk to a node and gather; prune the Bloom; confirm inventory/stamina/durability change (read via on-screen debug or log).
 - [ ] 🤝 Build `WBP_HUD` (UMG) on `ULongNoonHUDWidget` so Tend/prompt/lore show. (I can scaffold a minimal one via Python; visual design is human.)
 
