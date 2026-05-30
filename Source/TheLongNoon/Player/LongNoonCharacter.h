@@ -128,7 +128,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Movement")
 	float SprintSpeed = 650.0f;
 
-	/** Interact line-trace distance (cm). */
+	/** Interact line-trace distance (cm). Traced from the follow camera, so it must
+	 *  exceed the camera boom length (400) to reach objects in front of the character. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
-	float InteractReach = 300.0f;
+	float InteractReach = 700.0f;
 };

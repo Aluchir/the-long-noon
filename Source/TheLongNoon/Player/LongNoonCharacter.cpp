@@ -14,6 +14,7 @@
 #include "Systems/LongNoonTendComponent.h"
 #include "Core/Interactable.h"
 #include "Core/LongNoonEventSubsystem.h"
+#include "Core/LongNoonLog.h"
 #include "UI/LongNoonHUD.h"
 #include "Engine/World.h"
 #include "Engine/GameInstance.h"
@@ -230,6 +231,7 @@ void ALongNoonCharacter::StopSprint(const FInputActionValue& /*Value*/)
 
 void ALongNoonCharacter::Interact(const FInputActionValue& /*Value*/)
 {
+	UE_LOG(LogLongNoon, Log, TEXT("[Input] Interact pressed"));
 	if (!FollowCamera)
 	{
 		return;
@@ -256,8 +258,10 @@ void ALongNoonCharacter::Interact(const FInputActionValue& /*Value*/)
 
 void ALongNoonCharacter::Prune(const FInputActionValue& /*Value*/)
 {
+	UE_LOG(LogLongNoon, Log, TEXT("[Input] Prune pressed"));
 	if (Reclamation)
 	{
-		Reclamation->TryReclaimAhead();
+		const bool bReclaimed = Reclamation->TryReclaimAhead();
+		UE_LOG(LogLongNoon, Log, TEXT("[Input] Prune reclaim result = %s"), bReclaimed ? TEXT("true") : TEXT("false"));
 	}
 }

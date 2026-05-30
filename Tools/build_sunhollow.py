@@ -27,6 +27,12 @@ def set_mesh(actor, mesh):
     smc = actor.get_component_by_class(unreal.StaticMeshComponent)
     if smc:
         smc.set_static_mesh(mesh)
+        # Block the Visibility channel so the interact/reclaim line traces hit it.
+        try:
+            smc.set_collision_enabled(unreal.CollisionEnabled.QUERY_AND_PHYSICS)
+            smc.set_collision_profile_name("BlockAll")
+        except Exception as e:
+            warn("collision set failed: %s" % e)
     return smc
 
 # Ground slab (top at Z=0).
@@ -42,11 +48,12 @@ eas.spawn_actor_from_class(unreal.SkyLight, unreal.Vector(0.0, 0.0, 600.0)).set_
 eas.spawn_actor_from_class(unreal.SkyAtmosphere, unreal.Vector(0.0, 0.0, 0.0)).set_actor_label("SkyAtmosphere")
 
 # Gather nodes (visible spheres) carrying mat_sunmoss.
-gather_spots = [(400, 300), (700, -200), (200, -500)]
+gather_spots = [(300, 0), (500, 320), (760, -220)]  # (300,0) is directly ahead of spawn for interact testing
 gi = 0
 for (x, y) in gather_spots:
-    n = eas.spawn_actor_from_class(unreal.GatherNode, unreal.Vector(float(x), float(y), 50.0))
+    n = eas.spawn_actor_from_class(unreal.GatherNode, unreal.Vector(float(x), float(y), 90.0))
     set_mesh(n, SPHERE)
+    n.set_actor_scale3d(unreal.Vector(2.2, 2.2, 2.2))  # tall enough to intersect the eye-line trace
     n.set_actor_label("GatherNode_%d" % gi); gi += 1
     for prop, val in [("item_id", "mat_sunmoss"), ("quantity", 2), ("regrow_seconds", 30.0)]:
         try: n.set_editor_property(prop, val)

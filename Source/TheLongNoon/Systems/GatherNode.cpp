@@ -31,7 +31,7 @@ void AGatherNode::OnInteract_Implementation(AActor* Interactor)
 			World->GetTimerManager().SetTimer(RegrowTimer, this, &AGatherNode::Regrow, RegrowSeconds, false);
 		}
 
-		UE_LOG(LogLongNoon, Verbose, TEXT("[Gather] %d x %s gathered."), Quantity, *ItemId.ToString());
+		UE_LOG(LogLongNoon, Log, TEXT("[Gather] %d x %s gathered."), Quantity, *ItemId.ToString());
 	}
 }
 
