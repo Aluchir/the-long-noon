@@ -14,7 +14,12 @@ scripts.
   - Source: https://kenney.nl/assets/nature-kit
   - Imported to `Content/ThirdParty/NatureKit/` via `Tools/import_nature_kit.py`.
   - Flat per-material palette colors (no textures); trees, rocks, cliffs, bridges,
-    plants, crops, campfires, fences, and more.
+    plants, crops, campfires, fences, statues, signs, and more.
+
+- **Kenney Mini Characters** (12 humanoid characters + accessibility props) — by Kenney (kenney.nl). CC0.
+  - Source: https://kenney.nl/assets/mini-characters
+  - Imported to `Content/ThirdParty/Characters/` via `Tools/import_characters.py`.
+  - Used for NPCs (Tinker, Keeper, Gardener, ...). Imported as static (bind-pose) meshes.
 
 ## Audio
 
