@@ -5,6 +5,8 @@
 #include "Misc/AutomationTest.h"
 #include "Systems/LongNoonInventoryComponent.h"
 #include "Systems/LongNoonTendComponent.h"
+#include "Systems/LongNoonReclamationComponent.h"
+#include "Data/ToolDef.h"
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FLongNoonInventoryTest, "TheLongNoon.Systems.Inventory",
 	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
@@ -51,6 +53,36 @@ bool FLongNoonTendTest::RunTest(const FString& Parameters)
 	const bool bOverdraw = Tend->SpendStamina(1000.0f);
 	TestFalse(TEXT("overdraw reports not enough"), bOverdraw);
 	TestEqual(TEXT("stamina clamps at 0, never negative"), Tend->Stamina, 0.0f);
+
+	return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FLongNoonReclamationTest, "TheLongNoon.Systems.Reclamation",
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+
+bool FLongNoonReclamationTest::RunTest(const FString& Parameters)
+{
+	ULongNoonReclamationComponent* Recl = NewObject<ULongNoonReclamationComponent>();
+	TestNotNull(TEXT("reclamation created"), Recl);
+	TestFalse(TEXT("no tool initially"), Recl->HasTool());
+
+	UToolDef* Tool = NewObject<UToolDef>();
+	Tool->ToolId = TEXT("tool_test_blade");
+	Tool->Verbs.Add(EReclamationVerb::Prune);
+	Tool->MaxDurability = 80;
+	Recl->EquipTool(Tool);
+
+	TestTrue(TEXT("has tool after equip"), Recl->HasTool());
+	TestTrue(TEXT("can Prune (tool provides it)"), Recl->CanPerform(EReclamationVerb::Prune));
+	TestFalse(TEXT("cannot Seal (tool lacks it)"), Recl->CanPerform(EReclamationVerb::Seal));
+
+	const FEquippedTool Eq = Recl->GetEquippedTool();
+	TestEqual(TEXT("equipped id matches"), Eq.ToolId, FName(TEXT("tool_test_blade")));
+	TestEqual(TEXT("durability starts at max"), Eq.CurrentDurability, 80);
+
+	Recl->EquipTool(nullptr);
+	TestFalse(TEXT("unequip clears tool"), Recl->HasTool());
+	TestFalse(TEXT("cannot perform with no tool"), Recl->CanPerform(EReclamationVerb::Prune));
 
 	return true;
 }
