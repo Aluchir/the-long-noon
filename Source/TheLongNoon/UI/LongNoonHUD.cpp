@@ -61,3 +61,11 @@ void ALongNoonHUD::SetObjective(const FText& Objective)
 		HUDWidget->SetObjective(Objective);
 	}
 }
+
+void ALongNoonHUD::SetDialogue(const FText& Line)
+{
+	if (HUDWidget)
+	{
+		HUDWidget->SetDialogue(Line);
+	}
+}

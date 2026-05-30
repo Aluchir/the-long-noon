@@ -32,6 +32,14 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	/** Show a dialogue line on the player's HUD. */
+	UFUNCTION()
+	void HandleDialogueLine(const FText& Line);
+
+	/** Clear the dialogue line when the conversation ends. */
+	UFUNCTION()
+	void HandleDialogueEnded();
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "NPC")
 	TObjectPtr<UStaticMeshComponent> Mesh;
 

@@ -40,6 +40,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "HUD")
 	void SetObjective(const FText& Objective);
 
+	/** Set the NPC dialogue line (empty hides it). */
+	UFUNCTION(BlueprintCallable, Category = "HUD")
+	void SetDialogue(const FText& Line);
+
 protected:
 	virtual void BeginPlay() override;
 

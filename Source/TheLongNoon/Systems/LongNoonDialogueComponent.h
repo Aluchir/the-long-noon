@@ -56,6 +56,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Dialogue")
 	void Advance();
 
+	/** True while a conversation is in progress (a line is currently shown). */
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Dialogue")
+	bool IsConversing() const { return CurrentLine >= 0; }
+
 private:
 	int32 CurrentLine = -1;
 	bool bHasTalked = false;

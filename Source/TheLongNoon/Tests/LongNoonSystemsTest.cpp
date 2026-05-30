@@ -11,6 +11,7 @@
 #include "Systems/LongNoonCodexSubsystem.h"
 #include "Systems/LongNoonEndings.h"
 #include "Systems/LongNoonQuestSubsystem.h"
+#include "Systems/LongNoonDialogueComponent.h"
 #include "Data/ToolDef.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/GameInstance.h"
@@ -270,6 +271,26 @@ bool FLongNoonQuestFlowTest::RunTest(const FString& Parameters)
 	QS->CompleteObjective(TEXT("build_gate"));
 	TestTrue(TEXT("seeded quest complete after all four"), QS->IsActiveQuestComplete());
 	TestEqual(TEXT("seeded active = None when done"), QS->GetActiveQuestObjective(), FName(NAME_None));
+	return true;
+}
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FLongNoonDialogueTest, "TheLongNoon.Systems.Dialogue",
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+
+bool FLongNoonDialogueTest::RunTest(const FString& Parameters)
+{
+	ULongNoonDialogueComponent* Dlg = NewObject<ULongNoonDialogueComponent>();
+	Dlg->Lines = { FText::FromString(TEXT("one")), FText::FromString(TEXT("two")) };
+
+	TestFalse(TEXT("not conversing before start"), Dlg->IsConversing());
+	Dlg->StartDialogue();
+	TestTrue(TEXT("conversing on first line"), Dlg->IsConversing());
+	Dlg->Advance();
+	TestTrue(TEXT("still conversing on last line"), Dlg->IsConversing());
+	Dlg->Advance();
+	TestFalse(TEXT("conversation ends past the last line"), Dlg->IsConversing());
+	// Re-talk restarts from the top.
+	Dlg->StartDialogue();
+	TestTrue(TEXT("restart re-enters conversation"), Dlg->IsConversing());
 	return true;
 }
 #endif // WITH_AUTOMATION_TESTS

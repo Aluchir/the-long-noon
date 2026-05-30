@@ -40,6 +40,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "HUD")
 	void SetObjective(const FText& Objective);
 
+	/** Set the NPC dialogue line (bottom-centre); empty hides it. */
+	UFUNCTION(BlueprintCallable, Category = "HUD")
+	void SetDialogue(const FText& Line);
+
 protected:
 	virtual TSharedRef<SWidget> RebuildWidget() override;
 
@@ -50,6 +54,7 @@ protected:
 	UPROPERTY(Transient) TObjectPtr<UTextBlock> PromptText;
 	UPROPERTY(Transient) TObjectPtr<UTextBlock> ToastText;
 	UPROPERTY(Transient) TObjectPtr<UTextBlock> ObjectiveText;
+	UPROPERTY(Transient) TObjectPtr<UTextBlock> DialogueText;
 
 	/** Max meter value the bars normalise against (matches ULongNoonTendComponent). */
 	float MaxMeter = 100.0f;

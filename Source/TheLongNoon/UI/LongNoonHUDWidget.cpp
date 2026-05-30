@@ -70,6 +70,17 @@ void ULongNoonHUDWidget::BuildTree()
 		CS->SetPosition(FVector2D(40.0f, 92.0f));
 		CS->SetAutoSize(true);
 	}
+
+	// NPC dialogue line, lower-centre (above the interact prompt).
+	DialogueText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("DialogueText"));
+	DialogueText->SetText(FText::GetEmpty());
+	DialogueText->SetVisibility(ESlateVisibility::Collapsed);
+	if (UCanvasPanelSlot* CS = Root->AddChildToCanvas(DialogueText))
+	{
+		CS->SetAnchors(FAnchors(0.5f, 0.78f));
+		CS->SetAlignment(FVector2D(0.5f, 0.5f));
+		CS->SetAutoSize(true);
+	}
 }
 
 void ULongNoonHUDWidget::UpdateTend(float Stamina, float Focus, float Comfort)
@@ -117,4 +128,14 @@ void ULongNoonHUDWidget::SetObjective(const FText& Objective)
 	}
 	ObjectiveText->SetText(Objective);
 	ObjectiveText->SetVisibility(Objective.IsEmpty() ? ESlateVisibility::Collapsed : ESlateVisibility::HitTestInvisible);
+}
+
+void ULongNoonHUDWidget::SetDialogue(const FText& Line)
+{
+	if (!DialogueText)
+	{
+		return;
+	}
+	DialogueText->SetText(Line);
+	DialogueText->SetVisibility(Line.IsEmpty() ? ESlateVisibility::Collapsed : ESlateVisibility::HitTestInvisible);
 }

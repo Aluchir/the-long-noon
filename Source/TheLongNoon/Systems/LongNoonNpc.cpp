@@ -2,6 +2,9 @@
 #include "Systems/LongNoonDialogueComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Core/LongNoonLog.h"
+#include "UI/LongNoonHUD.h"
+#include "Engine/World.h"
+#include "GameFramework/PlayerController.h"
 
 ALongNoonNpc::ALongNoonNpc()
 {
@@ -21,6 +24,8 @@ void ALongNoonNpc::BeginPlay()
 	{
 		Dialogue->NpcId = NpcId;
 		const bool bOk = Dialogue->LoadFromData();
+		Dialogue->OnDialogueLine.AddUniqueDynamic(this, &ALongNoonNpc::HandleDialogueLine);
+		Dialogue->OnDialogueEnded.AddUniqueDynamic(this, &ALongNoonNpc::HandleDialogueEnded);
 		UE_LOG(LogLongNoon, Log, TEXT("[NPC] %s LoadFromData=%s lines=%d"),
 			*NpcId.ToString(), bOk ? TEXT("ok") : TEXT("FAIL"), Dialogue->Lines.Num());
 	}
@@ -28,11 +33,48 @@ void ALongNoonNpc::BeginPlay()
 
 void ALongNoonNpc::OnInteract_Implementation(AActor* /*Interactor*/)
 {
-	if (Dialogue)
+	if (!Dialogue)
+	{
+		return;
+	}
+	// First interact starts the talk; each subsequent interact advances a line.
+	if (Dialogue->IsConversing())
+	{
+		Dialogue->Advance();
+	}
+	else
 	{
 		Dialogue->StartDialogue();
 		UE_LOG(LogLongNoon, Log, TEXT("[NPC] %s talk started (%d lines)"),
 			*NpcId.ToString(), Dialogue->Lines.Num());
+	}
+}
+
+void ALongNoonNpc::HandleDialogueLine(const FText& Line)
+{
+	if (const UWorld* World = GetWorld())
+	{
+		if (const APlayerController* PC = World->GetFirstPlayerController())
+		{
+			if (ALongNoonHUD* HUD = Cast<ALongNoonHUD>(PC->GetHUD()))
+			{
+				HUD->SetDialogue(Line);
+			}
+		}
+	}
+}
+
+void ALongNoonNpc::HandleDialogueEnded()
+{
+	if (const UWorld* World = GetWorld())
+	{
+		if (const APlayerController* PC = World->GetFirstPlayerController())
+		{
+			if (ALongNoonHUD* HUD = Cast<ALongNoonHUD>(PC->GetHUD()))
+			{
+				HUD->SetDialogue(FText::GetEmpty());
+			}
+		}
 	}
 }
 
