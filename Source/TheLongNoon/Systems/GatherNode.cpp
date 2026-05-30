@@ -6,6 +6,9 @@
 #include "TimerManager.h"
 #include "Engine/World.h"
 #include "Engine/GameInstance.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundBase.h"
+#include "UObject/ConstructorHelpers.h"
 
 AGatherNode::AGatherNode()
 {
@@ -13,6 +16,13 @@ AGatherNode::AGatherNode()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GatherMesh"));
 	SetRootComponent(Mesh);
+
+	// Default gather cue: the CC0 "chop" SFX (Kenney RPG Audio). Editable per instance.
+	static ConstructorHelpers::FObjectFinder<USoundBase> ChopSound(TEXT("/Game/ThirdParty/Audio/SFX/chop.chop"));
+	if (ChopSound.Succeeded())
+	{
+		GatherSound = ChopSound.Object;
+	}
 }
 
 void AGatherNode::OnInteract_Implementation(AActor* Interactor)
@@ -34,6 +44,11 @@ void AGatherNode::OnInteract_Implementation(AActor* Interactor)
 		}
 
 		UE_LOG(LogLongNoon, Log, TEXT("[Gather] %d x %s gathered."), Quantity, *ItemId.ToString());
+
+		if (GatherSound)
+		{
+			UGameplayStatics::PlaySound2D(this, GatherSound);
+		}
 
 		// Advance the quest if this node completes an objective.
 		if (!CompletesObjective.IsNone())

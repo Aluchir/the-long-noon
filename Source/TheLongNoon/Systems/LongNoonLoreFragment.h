@@ -6,6 +6,7 @@
 #include "LongNoonLoreFragment.generated.h"
 
 class UStaticMeshComponent;
+class USoundBase;
 
 /**
  * A findable forgotten-script fragment in the world. Interacting registers it with
@@ -28,6 +29,10 @@ public:
 	/** If true, reading this also marks the Rememberer found (unlocks the Third Way). */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Lore")
 	bool bGrantsRememberer = false;
+
+	/** Sound played when read (defaults to the CC0 "bookOpen" cue). */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Lore")
+	TObjectPtr<USoundBase> ReadSound;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Lore")
 	bool bFound = false;

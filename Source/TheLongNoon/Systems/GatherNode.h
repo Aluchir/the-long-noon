@@ -6,6 +6,7 @@
 #include "GatherNode.generated.h"
 
 class UStaticMeshComponent;
+class USoundBase;
 
 /**
  * A harvestable point in the Bloom. Interacting gathers its material into the
@@ -32,6 +33,10 @@ public:
 	/** Optional quest objective id completed the first time this node is gathered. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gather")
 	FName CompletesObjective;
+
+	/** Sound played when gathered (defaults to the CC0 "chop" cue). */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Gather")
+	TObjectPtr<USoundBase> GatherSound;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Gather")
 	bool bAvailable = true;
