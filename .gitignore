@@ -41,3 +41,6 @@ secrets.ini
 
 # Claude Code session/harness state
 .claude/
+
+# Downloaded third-party asset source archives (imported into Content/ThirdParty)
+/ThirdParty/source/
