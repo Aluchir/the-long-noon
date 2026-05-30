@@ -86,7 +86,7 @@ The mechanical/greybox game is built + test-covered (9 tests; 5 region greyboxes
 
 ### Phase 7 — Ship
 - [ ] 🧑 Steam: provision real AppId (replace test 480), store page, capsule art, trailer.
-- [ ] 🤖 Package via `BuildCookRun` (Win64); smoke-test the cooked build.
+- [x] 🤖 Package via `BuildCookRun` (Win64) PROVEN: `RunUAT BuildCookRun -project=... -noP4 -platform=Win64 -clientconfig=Development -build -cook -stage -pak -map=/Game/Maps/L_Sunhollow_Greybox -nocompileeditor` -> BUILD SUCCESSFUL, ~863 MB standalone build at `Saved/StagedBuilds/Windows/TheLongNoon.exe` (paked, Oodle). The packaged exe launches + runs. (Top-level exe is a launcher; the game window is on the `Binaries/Win64/TheLongNoon.exe` child.)
 - [ ] 🧑 Age ratings, pricing, release. Post-launch patch plan.
 
 ---
