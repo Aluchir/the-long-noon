@@ -22,6 +22,14 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Region")
 	bool CanEnterRegion(const URegionDef* Region) const;
 
+	/**
+	 * Pure composite-gate evaluation (no GameInstance needed): tool tier met AND
+	 * the required traversal acquired AND the required gate-build completed.
+	 * CanEnterRegion forwards to this; kept static so it is unit-testable.
+	 */
+	static bool CanEnter(int32 RequiredToolTier, FName RequiredTraversal, FName RequiredGateBuild,
+		int32 CurrentToolTier, const TSet<FName>& Traversals, const TSet<FName>& GateBuilds);
+
 	/** Mark a region unlocked and broadcast it. */
 	UFUNCTION(BlueprintCallable, Category = "Region")
 	void UnlockRegion(const URegionDef* Region);

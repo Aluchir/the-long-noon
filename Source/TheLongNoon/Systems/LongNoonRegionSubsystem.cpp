@@ -3,6 +3,24 @@
 #include "Core/LongNoonGameInstance.h"
 #include "Core/LongNoonEventSubsystem.h"
 
+bool ULongNoonRegionSubsystem::CanEnter(int32 RequiredToolTier, FName RequiredTraversal, FName RequiredGateBuild,
+	int32 CurrentToolTier, const TSet<FName>& Traversals, const TSet<FName>& GateBuilds)
+{
+	if (CurrentToolTier < RequiredToolTier)
+	{
+		return false;
+	}
+	if (!RequiredTraversal.IsNone() && !Traversals.Contains(RequiredTraversal))
+	{
+		return false;
+	}
+	if (!RequiredGateBuild.IsNone() && !GateBuilds.Contains(RequiredGateBuild))
+	{
+		return false;
+	}
+	return true;
+}
+
 bool ULongNoonRegionSubsystem::CanEnterRegion(const URegionDef* Region) const
 {
 	if (!Region)
@@ -13,20 +31,8 @@ bool ULongNoonRegionSubsystem::CanEnterRegion(const URegionDef* Region) const
 	const ULongNoonGameInstance* GI = Cast<ULongNoonGameInstance>(GetGameInstance());
 	const int32 ToolTier = GI ? GI->MaxToolTier : 1;
 
-	if (ToolTier < Region->RequiredToolTier)
-	{
-		return false;
-	}
-	if (!Region->RequiredTraversal.IsNone() && !AcquiredTraversals.Contains(Region->RequiredTraversal))
-	{
-		return false;
-	}
-	if (!Region->RequiredGateBuild.IsNone() && !CompletedGateBuilds.Contains(Region->RequiredGateBuild))
-	{
-		return false;
-	}
-
-	return true;
+	return CanEnter(Region->RequiredToolTier, Region->RequiredTraversal, Region->RequiredGateBuild,
+		ToolTier, AcquiredTraversals, CompletedGateBuilds);
 }
 
 void ULongNoonRegionSubsystem::UnlockRegion(const URegionDef* Region)

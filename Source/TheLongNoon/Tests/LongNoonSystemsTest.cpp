@@ -7,6 +7,7 @@
 #include "Systems/LongNoonTendComponent.h"
 #include "Systems/LongNoonReclamationComponent.h"
 #include "Systems/LongNoonSaveGame.h"
+#include "Systems/LongNoonRegionSubsystem.h"
 #include "Data/ToolDef.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -124,6 +125,38 @@ bool FLongNoonSaveTest::RunTest(const FString& Parameters)
 		TestEqual(TEXT("current region round-trips"), Loaded->CurrentRegionId, FName(TEXT("region_sunhollow")));
 	}
 	UGameplayStatics::DeleteGameInSlot(Slot, 0);
+	return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FLongNoonRegionGateTest, "TheLongNoon.Systems.RegionGate",
+	EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::ProductFilter)
+
+bool FLongNoonRegionGateTest::RunTest(const FString& Parameters)
+{
+	TSet<FName> NoCaps;
+	TSet<FName> WithSeal; WithSeal.Add(TEXT("Seal"));
+	TSet<FName> WithChoke; WithChoke.Add(TEXT("gate_the_choke"));
+
+	// Sunhollow-like: req tier 1, no traversal, no build -> enter with tier 1.
+	TestTrue(TEXT("open region with tier 1"),
+		ULongNoonRegionSubsystem::CanEnter(1, NAME_None, NAME_None, 1, NoCaps, NoCaps));
+
+	// Tool tier too low blocks.
+	TestFalse(TEXT("tier 2 region blocked at tier 1"),
+		ULongNoonRegionSubsystem::CanEnter(2, NAME_None, NAME_None, 1, NoCaps, NoCaps));
+
+	// Missing gate-build blocks even with the tool tier.
+	TestFalse(TEXT("missing gate-build blocks"),
+		ULongNoonRegionSubsystem::CanEnter(1, NAME_None, TEXT("gate_the_choke"), 2, NoCaps, NoCaps));
+	TestTrue(TEXT("gate-build present passes"),
+		ULongNoonRegionSubsystem::CanEnter(1, NAME_None, TEXT("gate_the_choke"), 2, NoCaps, WithChoke));
+
+	// Missing traversal (Hush needs Seal) blocks; granting Seal passes.
+	TestFalse(TEXT("missing Seal traversal blocks"),
+		ULongNoonRegionSubsystem::CanEnter(3, TEXT("Seal"), NAME_None, 3, NoCaps, NoCaps));
+	TestTrue(TEXT("Seal traversal granted passes"),
+		ULongNoonRegionSubsystem::CanEnter(3, TEXT("Seal"), NAME_None, 3, WithSeal, NoCaps));
+
 	return true;
 }
 #endif // WITH_AUTOMATION_TESTS
