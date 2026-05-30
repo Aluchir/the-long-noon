@@ -20,6 +20,9 @@
 #include "Engine/World.h"
 #include "Engine/GameInstance.h"
 #include "GameFramework/PlayerController.h"
+#include "Kismet/GameplayStatics.h"
+#include "Sound/SoundBase.h"
+#include "UObject/ConstructorHelpers.h"
 #include "TimerManager.h"
 
 ALongNoonCharacter::ALongNoonCharacter()
@@ -55,6 +58,13 @@ ALongNoonCharacter::ALongNoonCharacter()
 	Crafting = CreateDefaultSubobject<ULongNoonCraftingComponent>(TEXT("Crafting"));
 	Building = CreateDefaultSubobject<ULongNoonBuildingComponent>(TEXT("Building"));
 	Tend = CreateDefaultSubobject<ULongNoonTendComponent>(TEXT("Tend"));
+
+	// Quest stingers (CC0 Kenney Music Jingles): a light pizzicato per objective,
+	// a warm sax flourish when a region quest completes. Editable per instance.
+	static ConstructorHelpers::FObjectFinder<USoundBase> ObjCue(TEXT("/Game/ThirdParty/Audio/Music/jingles_PIZZI00.jingles_PIZZI00"));
+	if (ObjCue.Succeeded()) { ObjectiveCue = ObjCue.Object; }
+	static ConstructorHelpers::FObjectFinder<USoundBase> DoneCue(TEXT("/Game/ThirdParty/Audio/Music/jingles_SAX00.jingles_SAX00"));
+	if (DoneCue.Succeeded()) { QuestCompleteCue = DoneCue.Object; }
 }
 
 void ALongNoonCharacter::BeginPlay()
@@ -153,6 +163,10 @@ void ALongNoonCharacter::HandleLoreFound(FName FragmentId)
 void ALongNoonCharacter::HandleObjectiveCompleted(FName /*ObjectiveId*/)
 {
 	RefreshObjectiveDisplay();
+	if (ObjectiveCue)
+	{
+		UGameplayStatics::PlaySound2D(this, ObjectiveCue);
+	}
 }
 
 void ALongNoonCharacter::HandleQuestStarted()
@@ -166,6 +180,10 @@ void ALongNoonCharacter::HandleQuestCompleted()
 	{
 		H->SetObjective(FText::GetEmpty());
 		H->ShowToast(NSLOCTEXT("LongNoon", "QuestDone", "The way is open. (Region quest complete.)"));
+	}
+	if (QuestCompleteCue)
+	{
+		UGameplayStatics::PlaySound2D(this, QuestCompleteCue);
 	}
 }
 

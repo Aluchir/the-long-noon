@@ -15,6 +15,7 @@ class ULongNoonCraftingComponent;
 class ULongNoonBuildingComponent;
 class ULongNoonTendComponent;
 class ALongNoonHUD;
+class USoundBase;
 
 /**
  * Third-person player character: the Newcomer. Camera boom + follow camera and
@@ -132,6 +133,14 @@ protected:
 	/** Reclamation tool equipped on spawn, looked up from the Tools DataTable. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Reclamation")
 	FName StartingToolId = TEXT("tool_pruning_blade");
+
+	/** Stinger played when a quest objective completes (CC0 pizzicato). */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Audio")
+	TObjectPtr<USoundBase> ObjectiveCue;
+
+	/** Stinger played when the region quest completes (CC0 sax flourish). */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Audio")
+	TObjectPtr<USoundBase> QuestCompleteCue;
 
 	/** Seconds between interact-focus polls (cozy game; no need for per-frame). */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Interaction")
