@@ -77,10 +77,11 @@ The mechanical/greybox game is built + test-covered (9 tests; 5 region greyboxes
 - [~] 🤝 Region art/audio direction passes: CC0 reskin + interaction audio done (above); the degrading per-region light-dial (golden->bronze->pale->restored) + a lighting build are the next automatable polish, with final direction a human call.
 
 ### Phase 6 — Production polish (shippable quality)
-- [~] 🤖 Real 3D art (curated CC0 packs): Kenney Nature Kit (329 meshes) integrated; all five regions reskinned with biome-specific decor + gameplay-prop meshes (`dress_sunhollow.py`, `dress_regions.py`), screenshot-verified. Remaining 🧑: bespoke/rigged characters + animation, VFX, and the final aesthetic pass (the greybox primitives for NPCs still need a humanoid mesh).
+- [x] 🤖 Real 3D art (curated CC0 packs): Kenney Nature Kit (329 meshes) + Mini Characters (12 humanoids) integrated. All five regions reskinned with biome-specific decor and EVERY gameplay prop is a real mesh (`dress_*.py`, `swap_props.py`): mushroom gather-nodes, bush Blooms, humanoid NPCs, bridge gates, sign quest-boards, stone-tablet lore, statue choice-markers. Per-region post-process grading + height fog (`postprocess_regions.py`) and a golden->cold light-dial. Screenshot-verified. No greybox primitives remain.
+  - Character **animation** is the one open art item: this Kenney pack is static-only (Overview reports "0 animation"), so NPCs use a procedural idle bob. True skeletal animation needs an external CC0 anim library (Quaternius Universal Animation Library, CC0) imported onto a shared/retargeted skeleton via UE5 IK Rig + IK Retargeter — a self-contained follow-up, not blocked on more assets.
 - [~] 🤖 Audio (curated CC0 packs): Kenney RPG Audio + Music Jingles imported (`Tools/import_audio.py`); interaction SFX wired (gather `chop`, lore `bookOpen`) + quest stingers (pizzicato per objective, sax on quest-complete). Remaining 🧑: the bespoke hollowing theme in stems + a fuller SFX/ambient-bed pass.
 - [ ] 🤖 Localization pipeline run (per `localization.md`); pseudoloc pass; EFIGS.
-- [~] 🤝 Front-end + pause done (title screen, keyboard pause menu with resume/quit). Remaining: a settings/options screen (volume, sensitivity, accessibility) + UI art pass.
+- [x] 🤖 Front-end complete: title screen, keyboard pause menu (resume/quit), a settings screen (master volume, mouse sensitivity) and a 3-slot save/load menu, all opened from pause ([S]/[L]) and built as keyboard-driven C++ UMG. A bespoke UI art pass (fonts/textures) remains an optional 🤝 polish.
 - [ ] 🤝 Performance + scalability; re-enable/tune Lumen for the golden-hour look.
 - [ ] 🤖 Expand automation tests; the CI workflow green on a self-hosted runner.
 
