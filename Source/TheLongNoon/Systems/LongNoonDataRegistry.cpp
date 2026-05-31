@@ -48,6 +48,11 @@ const FRecipeRow* ULongNoonDataRegistry::GetRecipe(FName RecipeId) const
 	return RecipeTable ? RecipeTable->FindRow<FRecipeRow>(RecipeId, TEXT("GetRecipe"), false) : nullptr;
 }
 
+TArray<FName> ULongNoonDataRegistry::GetRecipeIds() const
+{
+	return RecipeTable ? RecipeTable->GetRowNames() : TArray<FName>();
+}
+
 const FRegionRow* ULongNoonDataRegistry::GetRegion(FName RegionId) const
 {
 	return RegionTable ? RegionTable->FindRow<FRegionRow>(RegionId, TEXT("GetRegion"), false) : nullptr;

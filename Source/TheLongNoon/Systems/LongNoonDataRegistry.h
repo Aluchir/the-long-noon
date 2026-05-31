@@ -24,6 +24,10 @@ public:
 	const FItemRow* GetItem(FName ItemId) const;
 	const FToolRow* GetTool(FName ToolId) const;
 	const FRecipeRow* GetRecipe(FName RecipeId) const;
+
+	/** All recipe row ids (for crafting menus). */
+	UFUNCTION(BlueprintCallable, Category = "Data")
+	TArray<FName> GetRecipeIds() const;
 	const FRegionRow* GetRegion(FName RegionId) const;
 	const FLoreFragmentRow* GetFragment(FName FragmentId) const;
 	const FNpcRow* GetNpc(FName NpcId) const;

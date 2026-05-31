@@ -15,7 +15,8 @@ void ULongNoonSettingsWidget::NativeConstruct()
 
 	// Make sure the overlay can receive keyboard focus (so the arrow keys land here,
 	// not in the game). The owning code is expected to also SetWidgetToFocus on it.
-	bIsFocusable = true;
+	SetIsFocusable(true);
+	SetKeyboardFocus();
 
 	// Seed from the persisted settings (volume stored normalized 0..1; UI uses 0..100).
 	if (ULongNoonUserSettings* S = ULongNoonUserSettings::Load())
