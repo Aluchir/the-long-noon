@@ -129,7 +129,7 @@ set_mesh(board, CUBE)
 board.set_actor_scale3d(unreal.Vector(0.3, 1.2, 1.6))
 board.set_actor_label("QuestBoard")
 try:
-    board.set_editor_property("objectives", ["gather_sunmoss", "craft_blade", "prune_bloom", "build_gate"])
+    board.set_editor_property("objectives", ["gather_sunmoss", "craft_broth", "prune_bloom", "build_gate"])
 except Exception as e:
     warn("quest board objectives failed: %s" % e)
 log("placed quest board")

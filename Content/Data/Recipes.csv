@@ -2,7 +2,7 @@ Name,RequiredStation,Inputs,Output,OutputQuantity,StaminaCost,CompletesObjective
 recipe_pruning_blade,station_basic_bench,"mat_gentlestone:2;mat_softfiber:1",tool_pruning_blade,1,0.0,craft_blade
 recipe_field_hook,station_basic_bench,"mat_softfiber:2",util_field_hook,1,0.0,
 recipe_binding,station_basic_bench,"mat_softfiber:1;mat_resin:1",comp_binding,1,0.0,
-recipe_warm_broth,station_basic_bench,"mat_sunmoss:2",food_warmbroth,1,0.0,
+recipe_warm_broth,station_basic_bench,"mat_sunmoss:2",food_warmbroth,1,0.0,craft_broth
 recipe_stiller,station_forager_bench,"mat_swallowedwood:2;mat_resin:2;comp_binding:1",tool_stiller,1,5.0,
 recipe_resonance_hammer,station_forager_bench,"mat_swallowedwood:1;mat_gentlestone:2;mat_glowcap:1",tool_resonance_hammer,1,5.0,
 recipe_wayanchor,station_forager_bench,"mat_swallowedwood:3;mat_resin:2",util_wayanchor,1,0.0,
