@@ -40,13 +40,22 @@ Run from editor: `UnrealEditor.exe TheLongNoon.uproject /Game/Maps/L_MainMenu -g
 - **Package:** `RunUAT.bat BuildCookRun -project=<uproject> -noP4 -platform=Win64 -clientconfig=Development -build -cook -stage -pak -nocompileeditor -map=<all 6 maps joined with +>` (see `docs/tech/build-and-run.md`).
 - Screenshots collide with desktop focus; the game window only foregrounds reliably when the desktop is idle.
 
-## What's next (remaining, all optional polish)
-The mechanically + aesthetically complete game exists. Remaining items, none blocking a playable build:
-1. **Walk/locomotion anim** for moving NPCs/player (idle is done; add a walk blendspace from the imported `run`/`idle` clips, or retarget a fuller CC0 anim set — Quaternius Universal Animation Library).
-2. **Persist settings/saves across launches** (settings are in-session only; save slots work but wire an auto-load on Continue).
-3. **Balance pass** per `docs/design/balance-sheet.md`; gate-build/repair-kit consumption.
-4. **Bespoke aesthetic pass** (custom UI font/art, the forgotten-script glyph font, original score) — the only genuinely human/artist work; CC0 placeholders are in and credited.
-5. **Steam**: provision a real AppId (test 480 is set), store page, packaging to SteamPipe.
+## Interactive systems — all implemented + behavior-verified (PostMessage key tests)
+Every core system is reachable in-game with real input, not just rendered:
+- **Crafting**: `ALongNoonCraftingStation` bench (by the Tinker) opens `ULongNoonCraftingMenuWidget` (E); craft from gathered materials.
+- **Codex/journal**: pause -> `[J]` (`ULongNoonCodexWidget`); reads found lore as glyphs -> translation by literacy tier.
+- **Inventory**: pause -> `[I]` (`ULongNoonInventoryWidget`); items by display name + count.
+- **Ending sequence**: choice markers open `ULongNoonEndingWidget` (full-screen title+epilogue) -> Enter returns to title.
+- **Free building**: `[B]` places the current piece on the ground ahead, `[T]` cycles (campfire/fence/bush); `PlacePiece` spawns a Movable StaticMeshActor.
+- **Pause hub**: Esc -> [I] items / [J] codex / [S] settings / [L] save-load / [Q] quit. Settings persist via `ULongNoonUserSettings`; main menu `[C]` Continue loads slot 1.
+- **Opening tuned**: first prune lands at spawn; gather nodes + bench a step away; the Sunhollow craft objective is `craft_broth` (craftable from gathered sunmoss).
+
+## What's next (remaining)
+1. **Walk/locomotion anim** for moving NPCs/player (idle done; add a walk blendspace, or retarget a fuller CC0 anim set — Quaternius Universal Animation Library). NPCs wander but slide.
+2. **Per-region quest completability**: Sunhollow's loop is fully completable; verify/tune the other four regions' gather/craft objectives the same way.
+3. **Balance pass** per `docs/design/balance-sheet.md` (audited as matching; revisit with playtest).
+4. **Bespoke aesthetic pass** (custom UI font, the forgotten-script glyph font, original score) — the only genuinely human/artist work; CC0 placeholders are in and credited.
+5. **Steam**: provision a real AppId (test 480 is set), store page, SteamPipe — see `docs/tech/steam-setup.md`.
 
 ## Phase 2 status — COMPLETE (all headless work done)
 Sections F and G in `docs/GOAL.md` are finished:
