@@ -2,10 +2,12 @@
 #include "Systems/LongNoonEndings.h"
 #include "Core/LongNoonGameInstance.h"
 #include "Core/LongNoonLog.h"
-#include "UI/LongNoonHUD.h"
+#include "UI/LongNoonEndingWidget.h"
+#include "Blueprint/UserWidget.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/World.h"
 #include "Engine/GameInstance.h"
+#include "GameFramework/Pawn.h"
 #include "GameFramework/PlayerController.h"
 
 ALongNoonChoiceMarker::ALongNoonChoiceMarker()
@@ -15,7 +17,7 @@ ALongNoonChoiceMarker::ALongNoonChoiceMarker()
 	SetRootComponent(Mesh);
 }
 
-void ALongNoonChoiceMarker::OnInteract_Implementation(AActor* /*Interactor*/)
+void ALongNoonChoiceMarker::OnInteract_Implementation(AActor* Interactor)
 {
 	bool bRemembererFound = false;
 	if (const UWorld* World = GetWorld())
@@ -33,19 +35,32 @@ void ALongNoonChoiceMarker::OnInteract_Implementation(AActor* /*Interactor*/)
 
 	UE_LOG(LogLongNoon, Log, TEXT("[Ending] Marker chosen -> %s (rememberer=%s)"),
 		*Title.ToString(), bRemembererFound ? TEXT("yes") : TEXT("no"));
-	UE_LOG(LogLongNoon, Log, TEXT("[Ending] %s"), *Body.ToString());
 
-	// Surface the ending beat on the HUD if one is present.
-	if (const UWorld* World = GetWorld())
+	// Resolve the player controller (the interactor's, falling back to the first PC).
+	APlayerController* PC = nullptr;
+	if (const APawn* Pawn = Cast<APawn>(Interactor))
 	{
-		if (const APlayerController* PC = World->GetFirstPlayerController())
-		{
-			if (ALongNoonHUD* HUD = Cast<ALongNoonHUD>(PC->GetHUD()))
-			{
-				HUD->ShowToast(FText::Format(
-					NSLOCTEXT("LongNoon", "EndingToast", "{0}\n\n{1}"), Title, Body));
-			}
-		}
+		PC = Cast<APlayerController>(Pawn->GetController());
+	}
+	if (!PC && GetWorld())
+	{
+		PC = GetWorld()->GetFirstPlayerController();
+	}
+	if (!PC)
+	{
+		return;
+	}
+
+	// Show the full-screen ending sequence and hand it keyboard focus.
+	if (ULongNoonEndingWidget* End = CreateWidget<ULongNoonEndingWidget>(PC, ULongNoonEndingWidget::StaticClass()))
+	{
+		End->SetEnding(Title, Body);
+		End->AddToViewport(200);
+		FInputModeUIOnly Mode;
+		Mode.SetWidgetToFocus(End->TakeWidget());
+		Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+		PC->SetInputMode(Mode);
+		PC->bShowMouseCursor = true;
 	}
 }
 
