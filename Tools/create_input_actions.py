@@ -15,6 +15,8 @@ new_actions = [
     ("IA_Interact", "E",         "interact_action"),
     ("IA_Prune",    "F",         "prune_action"),
     ("IA_Pause",    "Escape",    "pause_action"),
+    ("IA_Build",    "B",         "build_action"),
+    ("IA_BuildCycle", "T",       "build_cycle_action"),
 ]
 
 # 1. Create + SAVE the action assets.

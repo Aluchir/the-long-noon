@@ -24,6 +24,9 @@
 #include "GameFramework/PlayerController.h"
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundBase.h"
+#include "Engine/StaticMesh.h"
+#include "Engine/StaticMeshActor.h"
+#include "Components/StaticMeshComponent.h"
 #include "UObject/ConstructorHelpers.h"
 #include "TimerManager.h"
 
@@ -67,6 +70,14 @@ ALongNoonCharacter::ALongNoonCharacter()
 	if (ObjCue.Succeeded()) { ObjectiveCue = ObjCue.Object; }
 	static ConstructorHelpers::FObjectFinder<USoundBase> DoneCue(TEXT("/Game/ThirdParty/Audio/Music/jingles_SAX00.jingles_SAX00"));
 	if (DoneCue.Succeeded()) { QuestCompleteCue = DoneCue.Object; }
+
+	// Placeable home/decor pieces (CC0 Nature Kit): cycle with T, drop with B.
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> P0(TEXT("/Game/ThirdParty/NatureKit/campfire_logs.campfire_logs"));
+	if (P0.Succeeded()) { BuildPieces.Add(P0.Object); }
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> P1(TEXT("/Game/ThirdParty/NatureKit/fence_planks.fence_planks"));
+	if (P1.Succeeded()) { BuildPieces.Add(P1.Object); }
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> P2(TEXT("/Game/ThirdParty/NatureKit/plant_bushLarge.plant_bushLarge"));
+	if (P2.Succeeded()) { BuildPieces.Add(P2.Object); }
 }
 
 void ALongNoonCharacter::BeginPlay()
@@ -263,6 +274,8 @@ void ALongNoonCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		if (InteractAction) { Input->BindAction(InteractAction, ETriggerEvent::Started, this, &ALongNoonCharacter::Interact); }
 		if (PruneAction)    { Input->BindAction(PruneAction, ETriggerEvent::Started, this, &ALongNoonCharacter::Prune); }
 		if (PauseAction)    { Input->BindAction(PauseAction, ETriggerEvent::Started, this, &ALongNoonCharacter::Pause); }
+		if (BuildAction)    { Input->BindAction(BuildAction, ETriggerEvent::Started, this, &ALongNoonCharacter::BuildPlace); }
+		if (BuildCycleAction) { Input->BindAction(BuildCycleAction, ETriggerEvent::Started, this, &ALongNoonCharacter::BuildCycle); }
 	}
 }
 
@@ -367,4 +380,58 @@ void ALongNoonCharacter::Pause(const FInputActionValue& /*Value*/)
 	Mode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
 	PC->SetInputMode(Mode);
 	PC->bShowMouseCursor = true;
+}
+
+void ALongNoonCharacter::BuildCycle(const FInputActionValue& /*Value*/)
+{
+	if (BuildPieces.Num() == 0)
+	{
+		return;
+	}
+	CurrentBuildPiece = (CurrentBuildPiece + 1) % BuildPieces.Num();
+	if (ALongNoonHUD* H = ResolveHUD())
+	{
+		const UStaticMesh* M = BuildPieces[CurrentBuildPiece];
+		H->ShowToast(FText::FromString(FString::Printf(TEXT("Build piece: %s   ([B] to place)"),
+			M ? *M->GetName() : TEXT("?"))));
+	}
+}
+
+void ALongNoonCharacter::BuildPlace(const FInputActionValue& /*Value*/)
+{
+	UWorld* World = GetWorld();
+	if (!World || !BuildPieces.IsValidIndex(CurrentBuildPiece) || !BuildPieces[CurrentBuildPiece])
+	{
+		return;
+	}
+
+	// Find a spot on the ground a short way ahead of the player.
+	const FVector Ahead = GetActorLocation() + GetActorForwardVector() * 250.0f;
+	const FVector TraceStart = Ahead + FVector(0.0f, 0.0f, 400.0f);
+	const FVector TraceEnd = Ahead - FVector(0.0f, 0.0f, 1000.0f);
+	FHitResult Hit;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	FVector Where = Ahead - FVector(0.0f, 0.0f, 88.0f); // fall back to ~ground if no hit
+	if (World->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, ECC_Visibility, Params))
+	{
+		Where = Hit.Location;
+	}
+
+	const FTransform Xform(FRotator(0.0f, FMath::Fmod(GetActorRotation().Yaw, 360.0f), 0.0f), Where);
+	AStaticMeshActor* Placed = World->SpawnActorDeferred<AStaticMeshActor>(AStaticMeshActor::StaticClass(), Xform);
+	if (Placed)
+	{
+		if (UStaticMeshComponent* SMC = Placed->GetStaticMeshComponent())
+		{
+			SMC->SetMobility(EComponentMobility::Movable);
+			SMC->SetStaticMesh(BuildPieces[CurrentBuildPiece]);
+		}
+		Placed->FinishSpawning(Xform);
+		UE_LOG(LogLongNoon, Log, TEXT("[Build] Placed %s."), *BuildPieces[CurrentBuildPiece]->GetName());
+		if (ALongNoonHUD* H = ResolveHUD())
+		{
+			H->ShowToast(NSLOCTEXT("LongNoon", "BuildPlaced", "Placed. ([T] to change piece)"));
+		}
+	}
 }

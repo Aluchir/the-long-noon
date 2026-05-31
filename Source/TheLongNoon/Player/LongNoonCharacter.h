@@ -84,6 +84,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
 	TObjectPtr<UInputAction> PauseAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	TObjectPtr<UInputAction> BuildAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	TObjectPtr<UInputAction> BuildCycleAction;
+
+	/** Placeable home/decor pieces, cycled with BuildCycle and dropped with Build. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Building")
+	TArray<TObjectPtr<UStaticMesh>> BuildPieces;
+
 	// Input handlers
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
@@ -92,6 +102,11 @@ protected:
 	void Interact(const FInputActionValue& Value);
 	void Prune(const FInputActionValue& Value);
 	void Pause(const FInputActionValue& Value);
+	void BuildPlace(const FInputActionValue& Value);
+	void BuildCycle(const FInputActionValue& Value);
+
+	/** Index into BuildPieces of the piece the next Build places. */
+	int32 CurrentBuildPiece = 0;
 
 	// --- HUD link (systems push display updates through ALongNoonHUD) ---
 	/** Subscribe components/events to the HUD and start the interact-focus poll. */
