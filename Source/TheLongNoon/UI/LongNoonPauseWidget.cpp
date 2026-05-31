@@ -2,6 +2,7 @@
 #include "UI/LongNoonUIStyle.h"
 #include "UI/LongNoonSettingsWidget.h"
 #include "UI/LongNoonSaveMenuWidget.h"
+#include "UI/LongNoonCodexWidget.h"
 #include "Blueprint/WidgetTree.h"
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
@@ -75,7 +76,7 @@ void ULongNoonPauseWidget::BuildTree()
 	}
 
 	HintText = WidgetTree->ConstructWidget<UTextBlock>(UTextBlock::StaticClass(), TEXT("PauseHint"));
-	HintText->SetText(NSLOCTEXT("LongNoon", "PauseHint", "[Esc] resume     [S] settings     [L] save / load     [Q] quit"));
+	HintText->SetText(NSLOCTEXT("LongNoon", "PauseHint", "[Esc] resume     [J] codex     [S] settings     [L] save / load     [Q] quit"));
 	LongNoonUI::StyleText(HintText, LongNoonUI::BodyFont(20.0f), LongNoonUI::Cream());
 	if (UCanvasPanelSlot* CS = Root->AddChildToCanvas(HintText))
 	{
@@ -106,6 +107,11 @@ FReply ULongNoonPauseWidget::NativeOnKeyDown(const FGeometry& InGeometry, const 
 	if (Key == EKeys::L)
 	{
 		OpenSubMenu<ULongNoonSaveMenuWidget>(GetOwningPlayer(), 110);
+		return FReply::Handled();
+	}
+	if (Key == EKeys::J)
+	{
+		OpenSubMenu<ULongNoonCodexWidget>(GetOwningPlayer(), 110);
 		return FReply::Handled();
 	}
 	return Super::NativeOnKeyDown(InGeometry, InKeyEvent);
